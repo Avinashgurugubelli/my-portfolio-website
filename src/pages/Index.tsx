@@ -6,6 +6,7 @@ import About from "@/components/About";
 import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
+import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,6 +31,7 @@ const Index = () => {
           <About />
           <Experience />
           <Skills />
+          <Certifications />
           <Projects />
           <Contact />
         </main>

@@ -1,0 +1,29 @@
+
+{
+  "certifications": [
+    {
+      "title": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "date": "June 2023",
+      "credentialId": "AWS-123456",
+      "credentialUrl": "https://www.youracclaim.com/badges/aws-certified",
+      "description": "Validates proficiency in designing distributed systems on AWS, following AWS architectural best practices."
+    },
+    {
+      "title": "Professional Scrum Master I",
+      "issuer": "Scrum.org",
+      "date": "April 2023",
+      "credentialId": "PSM-123456",
+      "credentialUrl": "https://www.scrum.org/certificates/verify",
+      "description": "Demonstrates understanding of Scrum framework and ability to apply Scrum in the real world."
+    },
+    {
+      "title": "Google Cloud Professional Data Engineer",
+      "issuer": "Google Cloud",
+      "date": "January 2023",
+      "credentialId": "GCP-123456",
+      "credentialUrl": "https://www.credential.net/google-cloud",
+      "description": "Validates expertise in designing, building, and maintaining data processing systems on Google Cloud."
+    }
+  ]
+}

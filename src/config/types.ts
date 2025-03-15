@@ -54,3 +54,17 @@ export type Project = {
 export type ProjectsData = {
   projects: Project[];
 };
+
+export type Certification = {
+  title: string;
+  issuer: string;
+  date: string;
+  credentialId?: string;
+  credentialUrl?: string;
+  description?: string;
+  imageUrl?: string;
+};
+
+export type CertificationsData = {
+  certifications: Certification[];
+};
