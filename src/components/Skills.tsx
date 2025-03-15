@@ -1,10 +1,18 @@
 
-import { skills } from "@/config/skills";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { SkillsData } from "@/config/types";
+import skillsJson from "@/config/skills.json";
 
 const Skills = () => {
+  const [skills, setSkills] = useState<SkillsData["skills"]>([]);
+
+  useEffect(() => {
+    setSkills(skillsJson.skills);
+  }, []);
+
   const container = {
     hidden: { opacity: 0 },
     show: {

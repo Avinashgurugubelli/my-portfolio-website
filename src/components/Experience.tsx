@@ -1,13 +1,21 @@
 
-import { useState } from "react";
-import { experiences } from "@/config/experience";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Experience, ExperienceData } from "@/config/types";
+import experienceJson from "@/config/experience.json";
 
-const Experience = () => {
+const ExperienceSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+
+  useEffect(() => {
+    setExperiences((experienceJson as ExperienceData).experiences);
+  }, []);
+
+  if (experiences.length === 0) return null;
 
   return (
     <section id="experience" className="py-24 px-6 md:px-10 bg-gradient-to-b from-background/95 to-background">
@@ -84,4 +92,4 @@ const Experience = () => {
   );
 };
 
-export default Experience;
+export default ExperienceSection;

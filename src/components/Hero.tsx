@@ -1,13 +1,17 @@
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowDownIcon } from "lucide-react";
-import { personalInfo } from "@/config/personal";
 import { Button } from "@/components/ui/button";
+import { PersonalInfo } from "@/config/types";
+import personalJson from "@/config/personal.json";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
 
   useEffect(() => {
+    setPersonalInfo(personalJson as PersonalInfo);
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       
@@ -28,6 +32,8 @@ const Hero = () => {
       document.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
+
+  if (!personalInfo) return null;
 
   return (
     <section

@@ -1,8 +1,18 @@
 
-import { personalInfo } from "@/config/personal";
+import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { PersonalInfo } from "@/config/types";
+import personalJson from "@/config/personal.json";
 
 const About = () => {
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
+
+  useEffect(() => {
+    setPersonalInfo(personalJson as PersonalInfo);
+  }, []);
+
+  if (!personalInfo) return null;
+
   return (
     <section id="about" className="py-24 px-6 md:px-10 bg-gradient-to-b from-background to-background/95">
       <div className="max-w-6xl mx-auto">

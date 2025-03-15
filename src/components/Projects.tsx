@@ -1,13 +1,21 @@
 
-import { useState } from "react";
-import { projects } from "@/config/projects";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { GithubIcon, ExternalLinkIcon } from "lucide-react";
+import { Project, ProjectsData } from "@/config/types";
+import projectsJson from "@/config/projects.json";
 
 const Projects = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    setProjects((projectsJson as ProjectsData).projects);
+  }, []);
+
+  if (projects.length === 0) return null;
 
   return (
     <section id="projects" className="py-24 px-6 md:px-10 bg-gradient-to-b from-background/95 to-background">

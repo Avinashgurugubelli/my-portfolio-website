@@ -1,12 +1,14 @@
 
-import { personalInfo } from "@/config/personal";
-import { socialLinks } from "@/config/social";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
 import { toast } from "sonner";
+import { PersonalInfo, SocialData, SocialLinkData } from "@/config/types";
+import personalJson from "@/config/personal.json";
+import socialJson from "@/config/social.json";
+import { GithubIcon, LinkedinIcon, TwitterIcon, MailIcon } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,13 @@ const Contact = () => {
     message: "",
   });
   const [loading, setLoading] = useState(false);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
+  const [socialLinks, setSocialLinks] = useState<SocialLinkData[]>([]);
+
+  useEffect(() => {
+    setPersonalInfo(personalJson as PersonalInfo);
+    setSocialLinks((socialJson as SocialData).socialLinks);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -32,6 +41,19 @@ const Contact = () => {
       setLoading(false);
     }, 1500);
   };
+
+  // Function to get the correct icon component
+  const getIconComponent = (iconName: string) => {
+    switch(iconName) {
+      case 'LinkedinIcon': return LinkedinIcon;
+      case 'GithubIcon': return GithubIcon;
+      case 'TwitterIcon': return TwitterIcon;
+      case 'MailIcon': return MailIcon;
+      default: return GithubIcon;
+    }
+  };
+
+  if (!personalInfo) return null;
 
   return (
     <section id="contact" className="py-24 px-6 md:px-10 bg-gradient-to-b from-background to-background/95">
@@ -67,7 +89,7 @@ const Contact = () => {
                     <p className="text-sm text-muted-foreground mb-4">Social Media</p>
                     <div className="flex flex-wrap gap-3">
                       {socialLinks.map((link, index) => {
-                        const Icon = link.icon;
+                        const Icon = getIconComponent(link.icon);
                         return (
                           <a
                             key={index}
