@@ -1,14 +1,18 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { personalInfo } from "@/config/personal";
+import { PersonalInfo } from "@/config/types";
+import personalJson from "@/config/personal.json";
 import { MenuIcon, XIcon } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
 
   useEffect(() => {
+    setPersonalInfo(personalJson as PersonalInfo);
+
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
       if (isScrolled !== scrolled) {
@@ -29,9 +33,12 @@ const Navbar = () => {
     { name: "About", path: "#about" },
     { name: "Experience", path: "#experience" },
     { name: "Skills", path: "#skills" },
+    { name: "Certifications", path: "#certifications" },
     { name: "Projects", path: "#projects" },
     { name: "Contact", path: "#contact" },
   ];
+
+  if (!personalInfo) return null;
 
   return (
     <header
