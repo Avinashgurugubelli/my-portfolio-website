@@ -9,6 +9,7 @@ export type PersonalInfo = {
   bio: string;
   about: string;
   resumeUrl: string;
+  phoneNumber?: string;
 };
 
 export type SkillCategory = {

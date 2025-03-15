@@ -41,7 +41,7 @@ const Hero = () => {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center py-20 px-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(15,23,42,0)_0%,rgba(15,23,42,0.5)_100%)]"
     >
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')] bg-cover bg-center opacity-10"></div>
+      {/* <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')] bg-cover bg-center opacity-10"></div> */}
       
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background"></div>
       
@@ -66,9 +66,12 @@ const Hero = () => {
           <Button size="lg" className="rounded-full px-8">
             Contact Me
           </Button>
-          <Button variant="outline" size="lg" className="rounded-full px-8">
-            View Resume
-          </Button>
+          <a href={personalInfo.resumeUrl} download>
+            <Button variant="outline" size="lg" className="rounded-full px-8">
+              View Resume
+            </Button>
+      </a>
+         
         </div>
       </div>
       

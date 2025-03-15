@@ -2,39 +2,38 @@
 {
   "experiences": [
     {
-      "title": "Software Developer Intern",
-      "company": "Google",
+      "title": "Lead Software Engineer",
+      "company": "Citrix",
       "location": "Bengaluru, India",
-      "date": "May 2023 - Present",
+      "date": "Jan 2023 - Present",
       "description": [
-        "Contributed to the development of Google's internal tools, improving efficiency by 40%.",
-        "Collaborated with cross-functional teams to deliver high-quality software solutions.",
-        "Implemented responsive design principles, ensuring compatibility across various devices and browsers.",
-        "Participated in code reviews and provided constructive feedback to maintain code quality."
+        "Redesigning and improving the user experience of the citrix workspace for browser and chrome app platforms.",
+        "Building new framework from scratch to render the UI dynamically by layouts and configurations instead of static code.",
+        "Improving the launch experience to the users by adopting modern methods like client side caching, web workers, service and shared workers.",
+        "Implemening the in-house logging and analytics platforms to handle the load at large scale to cut the 3rd patry integrations"
       ]
     },
     {
-      "title": "Full Stack Developer Intern",
-      "company": "TCS",
-      "location": "Mumbai, India",
-      "date": "Jan 2023 - Apr 2023",
+      "title": "Software Technologist II",
+      "company": "Philips",
+      "location": "Bengaluru, India",
+      "date": "Jan 2018 - Jan 2023",
       "description": [
-        "Developed and maintained frontend and backend components for client projects.",
-        "Worked with React.js for frontend development and Node.js for backend services.",
-        "Collaborated with designers to implement responsive and intuitive user interfaces.",
-        "Improved application performance by optimizing database queries and frontend rendering."
+        "Developing a framework from scratch by following best software design practices to render complex dynamic and configurable web pages without compromising Philips design standards.",
+        "Participating in team-led solutions.Reviewing peer's code for quality. Identify development issues, brainstorm solutions, and constantly improving the solution via testing.",
+        "Ramp-up team of size 10 to apply software engineering practices and implement automation across all elements of solution delivery",
+        "Improved application performance by optimizing database queries and frontend dashboards rendering."
       ]
     },
     {
-      "title": "Web Development Intern",
-      "company": "Startup India",
-      "location": "Remote",
-      "date": "Jun 2022 - Dec 2022",
+      "title": "Senior Systems Engineer",
+      "company": "Infosys",
+      "location": "Bengaluru, India",
+      "date": "July 2015 - Jan 2018",
       "description": [
-        "Built responsive and accessible web applications for various clients.",
-        "Integrated third-party APIs to enhance application functionality.",
-        "Implemented user authentication and authorization using JWT.",
-        "Participated in agile development processes, including daily stand-ups and sprint planning."
+        "Implemented Windows service developed to read e-mails from mail servers automatically and send acknowledgement mails after invoice processing",
+        "Implemented Form builder tool from scratch to create web forms easily and in a less amount of time. It combines the functionality of creating web forms and writing database logics as per the page requests using simple configurations",
+        "Implemented Market insight portals from scratch where the user can see the price trends of the different commodities from the configured websites in a graphical representation. And the user can also view the relevant news from the configured urls and the news will be curated based on keywords"
       ]
     }
   ]

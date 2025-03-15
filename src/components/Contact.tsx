@@ -79,7 +79,10 @@ const Contact = () => {
                       {personalInfo.email}
                     </a>
                   </div>
-                  
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Phone</p>
+                    <p className="font-medium">{personalInfo?.phoneNumber}</p>
+                  </div>
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Location</p>
                     <p className="font-medium">{personalInfo.location}</p>

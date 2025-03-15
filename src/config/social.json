@@ -8,17 +8,12 @@
     },
     {
       "name": "GitHub",
-      "url": "https://github.com/yourusername",
+      "url": "https://github.com/Avinashgurugubelli",
       "icon": "GithubIcon"
     },
     {
-      "name": "Twitter",
-      "url": "https://twitter.com/yourusername",
-      "icon": "TwitterIcon"
-    },
-    {
       "name": "Email",
-      "url": "mailto:goyal.avi2003@gmail.com",
+      "url": "mailto:avinashgurugubelli@gmail.com",
       "icon": "MailIcon"
     }
   ]

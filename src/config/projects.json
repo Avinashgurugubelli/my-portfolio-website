@@ -2,36 +2,54 @@
 {
   "projects": [
     {
-      "title": "E-Commerce Platform",
-      "description": "A full-featured e-commerce platform with product listings, cart functionality, user authentication, and payment processing.",
-      "tags": ["React", "Node.js", "MongoDB", "Stripe", "Redux"],
-      "imageUrl": "https://images.unsplash.com/photo-1472851294608-062f824d29cc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-      "demoUrl": "https://ecommerce-demo.example.com",
-      "githubUrl": "https://github.com/username/ecommerce-platform"
+      "title": "Web Builder | Personal Project",
+      "description": "Developed a configurable web page builder framework to easily render the static and dynamic web pages just by changing the JSON layouts. It also plugged with Authentication, Authorization, Mail, SMS services to enable the basic security and communication layer. Future scope is to make it more flexible to drive any workflow using workflow template concept",
+      "tags": ["React", "Node.js", "Javascript", "TypeScript", "Redux", "Tailwind", "radix-ui"],
+      "imageUrl": "../images/webPagebuilder.avif",
+      "demoUrl": "https://www.tekisworld.com/",
+      "githubUrl": ""
     },
     {
-      "title": "Task Management App",
-      "description": "A collaborative task management application with real-time updates, task assignment, and progress tracking.",
-      "tags": ["Next.js", "Firebase", "Tailwind CSS", "React Query"],
-      "imageUrl": "https://images.unsplash.com/photo-1540350394557-8d14678e7f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80",
-      "demoUrl": "https://task-app.example.com",
-      "githubUrl": "https://github.com/username/task-management"
+      "title": "Citrix Workspace For Chrome OS And Browser | @ Citrix, Bangalore",
+      "description": "Citrix digital workspace solutions empower companies to securely deliver the apps and data people need to be as productive as possible—no matter where they work or which devices they use.",
+      "tags": ["React", "Node.js", "Javascript", "TypeScript", "Redux", "Java", "WebGL", "WebAssembly"],
+      "imageUrl": "../images/cwa.jpg",
+      "demoUrl": "https://www.youtube.com/watch?v=CifQaYfqu_Q",
+      "githubUrl": "https://docs.citrix.com/en-us/citrix-workspace-app-for-chrome.html"
     },
     {
-      "title": "AI-Powered Content Creator",
-      "description": "An application that leverages AI to generate content for various platforms, with customization options and export capabilities.",
-      "tags": ["React", "Python", "OpenAI API", "Flask", "PostgreSQL"],
-      "imageUrl": "https://images.unsplash.com/photo-1677442135743-1c70eb68026a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1632&q=80",
-      "demoUrl": "https://ai-content.example.com",
-      "githubUrl": "https://github.com/username/ai-content-creator"
+      "title": "Citrix Telemetry and Analytics | @ Citrix, Bangalore",
+      "description": "Citrix digital workspace solutions empower companies to securely deliver the apps and data people need to be as productive as possible—no matter where they work or which devices they use.",
+      "tags": ["Java","Spring boot", "Kafka", "Docker", "Kubernetes", "Micro Services", "MongoDB", "PostgreSQL"],
+      "imageUrl": "../images/analytics.avif",
+      "demoUrl": "",
+      "githubUrl": ""
     },
     {
-      "title": "Fitness Tracking Dashboard",
-      "description": "A comprehensive fitness tracking application with workout plans, progress visualization, and nutritional guidance.",
-      "tags": ["TypeScript", "React", "Chart.js", "Node.js", "MongoDB"],
-      "imageUrl": "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-      "demoUrl": "https://fitness-dashboard.example.com",
-      "githubUrl": "https://github.com/username/fitness-tracker"
+      "title": "Intelli-Space Precision Medicine | @ Philips, Bangalore",
+      "description": "ISPM transforms and enhances the Tumor Board process. It streamlines preparation, enhances review and analysis,and empowers the cancer care team to reach clinical treatment decisions based upon rich dashboards, diagnostic images, reports, and structured patient data. The sessions can be attended virtually or in-person.",
+      "tags": ["Angular", "Type script", "JavaScript", "Jasmine", "Java", "Spring boot", "Python", "Flask", "Micro services", "Junit",
+      "Pytest", "Micro front ends", "Kafka", "JMS"],
+      "imageUrl": "../images/ISPM.webp",
+      "demoUrl": "https://www.philips.co.in/healthcare/product/HC841011/pathology-genomics-workspace",
+      "githubUrl": ""
+    },
+    {
+      "title": "Radiation Oncology Orchestrator | @ Philips, Bangalore",
+      "description": "This Application helps to manage complexity, improve efficiency, and enable operational excellence in radiotherapy departments. It also provides a harmonized way of working, integrating applications and automating workflow to help reduce the amount of time it takes from receiving a patient referral to the start of their treatment",
+      "tags": ["Angular", "Type script", "JavaScript", "Jasmine", "Java", "Spring boot","Micro services", "Junit", "Micro front ends", "Kafka", "JMS"],
+      "imageUrl": "../images/Roo.webp",
+      "demoUrl": "https://www.youtube.com/watch?v=7kKuuUCqhCE",
+      "githubUrl": ""
+    },
+    {
+      "title": "Spine Invoice processing | @ Infosys, Bangalore",
+      "description": "Spine is a Windows service developed to read e-mails from mail servers automatically and send acknowledgement mails after invoice processing, it also delivers a vast range of choices to user like saving mails in their physical drives, allowing only required file extension attachments to download and sending e-mails through web app.",
+      "tags": ["HTML 5", "CSS 3", "JavaScript", "J-Query", "Bootstrap", "Kendo-UI", "C#", "WCF", "Asp.Net Web API",
+      "LINQ", "Entity Framework", "Windows Forms", "Asp.net MVC", "ADO.Net", "SQL Server (2008 R2, 2012)"],
+      "imageUrl": "../images/spine.webp",
+      "demoUrl": "",
+      "githubUrl": ""
     }
   ]
 }

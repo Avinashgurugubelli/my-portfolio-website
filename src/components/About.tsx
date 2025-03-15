@@ -20,7 +20,7 @@ const About = () => {
           <div className="w-full md:w-2/5 lg:sticky lg:top-24">
             <div className="glass-card overflow-hidden h-full">
               <div className="aspect-square overflow-hidden">
-                <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')] bg-cover bg-center transform transition-transform duration-700 hover:scale-105"></div>
+                <div className="w-full h-full bg-[url('../images/profilePic.jpg')] bg-cover bg-center transform transition-transform duration-700 hover:scale-105"></div>
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-medium">{personalInfo.name}</h3>
@@ -32,8 +32,14 @@ const About = () => {
                     <p className="font-medium">{personalInfo.location}</p>
                   </div>
                   <div>
+                    <p className="text-muted-foreground">Phone</p>
+                    <p className="font-medium truncate">{personalInfo?.phoneNumber}</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-4 text-sm">
+                  <div>
                     <p className="text-muted-foreground">Email</p>
-                    <p className="font-medium truncate">{personalInfo.email}</p>
+                    <p className="font-medium truncate" title={personalInfo.email}>{personalInfo.email}</p>
                   </div>
                 </div>
               </div>

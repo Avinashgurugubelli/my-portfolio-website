@@ -3,11 +3,11 @@
   "skills": [
     {
       "category": "Frontend",
-      "skills": ["JavaScript", "TypeScript", "React", "Next.js", "HTML5", "CSS3", "Tailwind CSS", "Redux"]
+      "skills": ["JavaScript", "TypeScript", "React", "Next.js", "HTML5", "CSS3", "Tailwind CSS", "Redux", "Angular", "D3.js", "Chart js", "WASAM"]
     },
     {
       "category": "Backend",
-      "skills": ["Node.js", "Express", "Python", "Django", "REST API", "GraphQL"]
+      "skills": ["Node.js", "Express", "Python", "Flask", "REST API", "GraphQL", "Java", "Spring Boot", "Hibernate", "Kafka", "Rabbit MQ", "JDBC", "Micro Services", "Distributed Systems"]
     },
     {
       "category": "Database",
@@ -15,7 +15,19 @@
     },
     {
       "category": "DevOps & Tools",
-      "skills": ["Git", "GitHub", "Docker", "CI/CD", "AWS", "Vercel", "Netlify"]
+      "skills": ["Git", "GitHub", "Docker", "CI/CD", "AWS", "kubernetes", "Jenkins"]
+    },
+    {
+      "category": "Other Programming Skills",
+      "skills": ["Solid Principals", "Design Patterns", "Data Structures and Algorithms"]
+    },
+    {
+      "category": "Testing",
+      "skills": ["Selenium", "Protractor", "Junit", "Pytest", "Jasmine", "Jest"]
+    },
+    {
+      "category": "Current Exploring Skills",
+      "skills": ["Artificial Intelligence (AI)", "Machine Learning (ML)", "Generative AI"]
     }
   ]
 }

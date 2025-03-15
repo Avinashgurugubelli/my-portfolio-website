@@ -2,28 +2,35 @@
 {
   "certifications": [
     {
-      "title": "AWS Certified Solutions Architect",
+      "title": "Developing on AWS with AWS Jam",
       "issuer": "Amazon Web Services",
-      "date": "June 2023",
-      "credentialId": "AWS-123456",
-      "credentialUrl": "https://www.youracclaim.com/badges/aws-certified",
+      "date": "Sep 2022",
+      "credentialId": "",
+      "credentialUrl": "",
       "description": "Validates proficiency in designing distributed systems on AWS, following AWS architectural best practices."
     },
     {
-      "title": "Professional Scrum Master I",
-      "issuer": "Scrum.org",
-      "date": "April 2023",
-      "credentialId": "PSM-123456",
-      "credentialUrl": "https://www.scrum.org/certificates/verify",
-      "description": "Demonstrates understanding of Scrum framework and ability to apply Scrum in the real world."
+      "title": "Developing ASP.NET MVC Web Applications",
+      "issuer": "Microsoft",
+      "date": "Dec 2017",
+      "credentialId": "Exam 486",
+      "credentialUrl": "https://www.credly.com/badges/760a5789-aeb6-4190-9618-3b153a4af584/linked_in_profile?trk=public_profile_see-credential",
+      "description": "Developing ASP.NET MVC Web Applications validates a candidate’s ability to design the user experience, security solutions, and application architecture as well as troubleshoot and debug web applications."
     },
     {
-      "title": "Google Cloud Professional Data Engineer",
-      "issuer": "Google Cloud",
-      "date": "January 2023",
-      "credentialId": "GCP-123456",
-      "credentialUrl": "https://www.credential.net/google-cloud",
-      "description": "Validates expertise in designing, building, and maintaining data processing systems on Google Cloud."
+      "title": "MCSA: Web Applications",
+      "issuer": "Microsoft",
+      "date": "Dec 2017",
+      "credentialId": "Exam 486",
+      "credentialUrl": "https://www.credly.com/badges/0078737c-49d3-4cfb-8068-4c0f9e9d956a/linked_in_profile?trk=public_profile_certification-title",
+      "description": "Earners of the MCSA: Web Applications certification have demonstrated the skills required to implement modern web apps. They are qualified for a position as a web developer or web administrator"
+    },
+    {
+      "title": "Microsoft Certified C# Professional",
+      "issuer": "Microsoft",
+      "date": "Nov 2017",
+      "credentialId": "Credential ID G437-2425",
+      "description": "programming essential business logic for a variety of application types, hardware, and software platforms using C#"
     }
   ]
 }
