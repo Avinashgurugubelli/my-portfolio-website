@@ -1,6 +1,7 @@
 {
   "name": "avinash_gurugubelli_portfolio",
-  "private": true,
+  "homepage": "https://github.com/Avinashgurugubelli/my-portfolio-website",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
