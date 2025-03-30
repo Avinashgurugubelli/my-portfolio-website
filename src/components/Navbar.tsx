@@ -59,15 +59,23 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.path.startsWith("#") ? link.path : undefined}
-                to={!link.path.startsWith("#") ? link.path : undefined}
-                as={!link.path.startsWith("#") ? Link : undefined}
-                className="text-sm font-medium text-primary/80 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-              >
-                {link.name}
-              </a>
+              link.path.startsWith("#") ? (
+                <a
+                  key={link.name}
+                  href={link.path}
+                  className="text-sm font-medium text-primary/80 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className="text-sm font-medium text-primary/80 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
           </nav>
 
