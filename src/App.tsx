@@ -1,14 +1,17 @@
 
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import Blogs from "./pages/Blogs";
-import BlogCategory from "./pages/BlogCategory";
-import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
+
+// Lazy load blog-related components
+const Blogs = lazy(() => import("./pages/Blogs"));
+const BlogCategory = lazy(() => import("./pages/BlogCategory"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -21,9 +24,21 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/blogs/:categoryId" element={<BlogCategory />} />
-            <Route path="/blogs/:categoryId/:postId" element={<BlogPost />} />
+            <Route path="/blogs" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading blogs...</div>}>
+                <Blogs />
+              </Suspense>
+            } />
+            <Route path="/blogs/:categoryId" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading category...</div>}>
+                <BlogCategory />
+              </Suspense>
+            } />
+            <Route path="/blogs/:categoryId/:postId" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading article...</div>}>
+                <BlogPost />
+              </Suspense>
+            } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

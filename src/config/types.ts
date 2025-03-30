@@ -75,7 +75,9 @@ export type BlogPost = {
   title: string;
   description: string;
   date: string;
-  content: string;
+  contentPath?: string;  // Path to the markdown file
+  contentUrl?: string;   // URL to the markdown file (e.g., GitHub raw URL)
+  content?: string;      // Fallback inline content if no path/url is provided
 };
 
 export type BlogCategory = {

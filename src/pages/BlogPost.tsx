@@ -1,15 +1,44 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftIcon, CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { BlogsData, BlogCategory, BlogPost } from "@/config/types";
 import blogsJson from "@/config/blogs.json";
 import ReactMarkdown from "react-markdown";
+import { loadMarkdownContent } from "@/utils/markdownLoader";
+import { useQuery } from "@tanstack/react-query";
+
+const BlogContent = ({ post }: { post: BlogPost }) => {
+  const { data: content, isLoading, error } = useQuery({
+    queryKey: ['blogContent', post.id],
+    queryFn: () => loadMarkdownContent(post),
+    staleTime: 1000 * 60 * 60, // Cache for 1 hour
+  });
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-5/6" />
+        <Skeleton className="h-6 w-4/6" />
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-3/6" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-destructive">Error loading content: {(error as Error).message}</div>;
+  }
+
+  return <ReactMarkdown>{content || ''}</ReactMarkdown>;
+};
 
 const BlogPostPage = () => {
   const { categoryId, postId } = useParams<{ categoryId: string; postId: string }>();
@@ -93,7 +122,9 @@ const BlogPostPage = () => {
               </header>
 
               <div className="prose dark:prose-invert max-w-none">
-                <ReactMarkdown>{post.content}</ReactMarkdown>
+                <Suspense fallback={<div>Loading...</div>}>
+                  <BlogContent post={post} />
+                </Suspense>
               </div>
             </article>
           </div>
