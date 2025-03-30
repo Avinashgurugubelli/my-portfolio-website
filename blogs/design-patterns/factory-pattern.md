@@ -1,4 +1,3 @@
-
 # Factory Pattern
 
 The Factory pattern provides an interface for creating objects without specifying their concrete classes.
