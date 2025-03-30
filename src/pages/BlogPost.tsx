@@ -1,5 +1,5 @@
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftIcon, CalendarIcon } from "lucide-react";
@@ -14,6 +14,7 @@ import ReactMarkdown from "react-markdown";
 import { loadMarkdownContent } from "@/utils/markdownLoader";
 import { useQuery } from "@tanstack/react-query";
 
+// Separate component to handle markdown content loading
 const BlogContent = ({ post }: { post: BlogPost }) => {
   const { data: content, isLoading, error } = useQuery({
     queryKey: ['blogContent', post.id],
@@ -37,7 +38,11 @@ const BlogContent = ({ post }: { post: BlogPost }) => {
     return <div className="text-destructive">Error loading content: {(error as Error).message}</div>;
   }
 
-  return <ReactMarkdown>{content || ''}</ReactMarkdown>;
+  return (
+    <div className="prose dark:prose-invert max-w-none">
+      <ReactMarkdown>{content || ''}</ReactMarkdown>
+    </div>
+  );
 };
 
 const BlogPostPage = () => {
@@ -63,7 +68,13 @@ const BlogPostPage = () => {
     }
   }, [blogsData, categoryId, postId]);
 
-  if (!category || !post) return null;
+  if (!category || !post) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading blog post...</p>
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence>
@@ -121,11 +132,8 @@ const BlogPostPage = () => {
                 <Separator className="my-6" />
               </header>
 
-              <div className="prose dark:prose-invert max-w-none">
-                <Suspense fallback={<div>Loading...</div>}>
-                  <BlogContent post={post} />
-                </Suspense>
-              </div>
+              {/* Blog content */}
+              <BlogContent post={post} />
             </article>
           </div>
         </main>
