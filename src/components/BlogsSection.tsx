@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { BlogsData, BlogCategory } from "@/config/types";
+import { BlogsData, BlogCategory } from "@/models/blog";
 import blogsJson from "@/config/blogs.json";
 
 const BlogsSection = () => {

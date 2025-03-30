@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { BlogsData } from "@/config/types";
+import { BlogsData } from "@/models/blog";
 import blogsJson from "@/config/blogs.json";
 
 const Blogs = () => {
@@ -36,7 +35,7 @@ const Blogs = () => {
               <div className="text-center mb-16">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog</h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Explore articles on various topics ranging from design patterns to the latest in React development.
+                  Explore articles on various topics. Stay tuned for more content!
                 </p>
               </div>
 

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { BlogsData, BlogCategory, BlogPost } from "@/config/types";
+import { BlogsData, BlogCategory, BlogPost } from "@/models/blog";
 import blogsJson from "@/config/blogs.json";
 import ReactMarkdown from "react-markdown";
 import { loadMarkdownContent } from "@/utils/markdownLoader";

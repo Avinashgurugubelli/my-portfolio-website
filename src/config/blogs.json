@@ -1,50 +1,49 @@
-
 {
-  "categories": [
-    {
-      "id": "design-patterns",
-      "title": "Design Patterns",
-      "description": "Explore software design patterns and best practices",
-      "image": "/placeholder.svg",
-      "posts": [
-        {
-          "id": "singleton-pattern",
-          "title": "Singleton Pattern",
-          "description": "Understanding the Singleton Design Pattern",
-          "date": "2023-05-15",
-          "contentPath": "/blogs/design-patterns/singleton-pattern.md"
-        },
-        {
-          "id": "factory-pattern",
-          "title": "Factory Pattern",
-          "description": "Creating objects without specifying exact class",
-          "date": "2023-06-20",
-          "contentPath": "/blogs/design-patterns/factory-pattern.md"
-        }
-      ]
-    },
-    {
-      "id": "react",
-      "title": "React",
-      "description": "Tutorials and guides for React development",
-      "image": "/placeholder.svg",
-      "posts": [
-        {
-          "id": "react-hooks",
-          "title": "Understanding React Hooks",
-          "description": "A comprehensive guide to React Hooks",
-          "date": "2023-07-10",
-          "contentPath": "/blogs/react/react-hooks.md"
-        },
-        {
-          "id": "react-performance",
-          "title": "React Performance Optimization",
-          "description": "Techniques to optimize React applications",
-          "date": "2023-08-05",
-          "contentUrl": "https://raw.githubusercontent.com/yourusername/your-blog-repo/main/react-performance.md",
-          "content": "# React Performance Optimization\n\nOptimizing performance in React applications is crucial for providing a good user experience.\n\n## Memoization with React.memo\n\n```jsx\nimport React from 'react';\n\nconst MyComponent = React.memo(function MyComponent(props) {\n  // Only re-renders if props change\n  return (\n    <div>\n      {props.name}\n    </div>\n  );\n});\n```\n\n## Using useCallback\n\n```jsx\nimport React, { useState, useCallback } from 'react';\n\nfunction ParentComponent() {\n  const [count, setCount] = useState(0);\n  \n  // This function is memoized and only changes if dependencies change\n  const handleClick = useCallback(() => {\n    setCount(count + 1);\n  }, [count]);\n\n  return (\n    <div>\n      <ChildComponent onClick={handleClick} />\n      <p>Count: {count}</p>\n    </div>\n  );\n}\n```\n\n## Using useMemo\n\n```jsx\nimport React, { useMemo } from 'react';\n\nfunction ExpensiveComponent({ a, b }) {\n  // This computation is memoized and only recalculated if a or b change\n  const result = useMemo(() => {\n    return computeExpensiveValue(a, b);\n  }, [a, b]);\n\n  return <div>{result}</div>;\n}\n```\n"
-        }
-      ]
-    }
-  ]
-}
+    "categories": [
+      {
+        "id": "design-patterns",
+        "title": "Design Patterns",
+        "description": "Explore software design patterns and best practices",
+        "image": "/placeholder.svg",
+        "posts": [
+          {
+            "id": "singleton-pattern",
+            "title": "Singleton Pattern",
+            "description": "Understanding the Singleton Design Pattern",
+            "date": "2023-05-15",
+            "contentPath": "/blogs/design-patterns/singleton-pattern.md"
+          },
+          {
+            "id": "factory-pattern",
+            "title": "Factory Pattern",
+            "description": "Creating objects without specifying exact class",
+            "date": "2023-06-20",
+            "contentPath": "/blogs/design-patterns/factory-pattern.md"
+          }
+        ]
+      },
+      {
+        "id": "react",
+        "title": "React",
+        "description": "Tutorials and guides for React development",
+        "image": "/placeholder.svg",
+        "posts": [
+          {
+            "id": "react-hooks",
+            "title": "Understanding React Hooks",
+            "description": "A comprehensive guide to React Hooks",
+            "date": "2023-07-10",
+            "contentPath": "/blogs/react/react-hooks.md"
+          },
+          {
+            "id": "react-performance",
+            "title": "React Performance Optimization",
+            "description": "Techniques to optimize React applications",
+            "date": "2023-08-05",
+            "contentUrl": "https://raw.githubusercontent.com/yourusername/your-blog-repo/main/react-performance.md",
+            "content": "# React Performance Optimization\n\nOptimizing performance in React applications is crucial for providing a good user experience.\n\n## Memoization with React.memo\n\n```jsx\nimport React from 'react';\n\nconst MyComponent = React.memo(function MyComponent(props) {\n  // Only re-renders if props change\n  return (\n    <div>\n      {props.name}\n    </div>\n  );\n});\n```\n\n## Using useCallback\n\n```jsx\nimport React, { useState, useCallback } from 'react';\n\nfunction ParentComponent() {\n  const [count, setCount] = useState(0);\n  \n  // This function is memoized and only changes if dependencies change\n  const handleClick = useCallback(() => {\n    setCount(count + 1);\n  }, [count]);\n\n  return (\n    <div>\n      <ChildComponent onClick={handleClick} />\n      <p>Count: {count}</p>\n    </div>\n  );\n}\n```\n\n## Using useMemo\n\n```jsx\nimport React, { useMemo } from 'react';\n\nfunction ExpensiveComponent({ a, b }) {\n  // This computation is memoized and only recalculated if a or b change\n  const result = useMemo(() => {\n    return computeExpensiveValue(a, b);\n  }, [a, b]);\n\n  return <div>{result}</div>;\n}\n```\n"
+          }
+        ]
+      }
+    ]
+  }

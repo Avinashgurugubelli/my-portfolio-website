@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { BlogsData, BlogCategory } from "@/config/types";
+import { BlogsData, BlogCategory } from "@/models/blog";
 import blogsJson from "@/config/blogs.json";
 
 const BlogCategoryPage = () => {
