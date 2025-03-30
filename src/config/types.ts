@@ -69,3 +69,23 @@ export type Certification = {
 export type CertificationsData = {
   certifications: Certification[];
 };
+
+export type BlogPost = {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  content: string;
+};
+
+export type BlogCategory = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  posts: BlogPost[];
+};
+
+export type BlogsData = {
+  categories: BlogCategory[];
+};

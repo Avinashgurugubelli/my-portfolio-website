@@ -1,0 +1,49 @@
+
+{
+  "categories": [
+    {
+      "id": "design-patterns",
+      "title": "Design Patterns",
+      "description": "Explore software design patterns and best practices",
+      "image": "/placeholder.svg",
+      "posts": [
+        {
+          "id": "singleton-pattern",
+          "title": "Singleton Pattern",
+          "description": "Understanding the Singleton Design Pattern",
+          "date": "2023-05-15",
+          "content": "# Singleton Pattern\n\nThe Singleton pattern ensures a class has only one instance and provides a global point of access to it.\n\n## Implementation\n\n```typescript\nclass Singleton {\n  private static instance: Singleton;\n\n  private constructor() {}\n\n  public static getInstance(): Singleton {\n    if (!Singleton.instance) {\n      Singleton.instance = new Singleton();\n    }\n    return Singleton.instance;\n  }\n}\n```\n\n## When to Use\n\nUse the Singleton pattern when:\n\n- Exactly one instance of a class is needed\n- The instance needs to be accessible globally\n- The instance should be extensible by subclassing\n\n## Pros and Cons\n\n### Pros\n- Controlled access to sole instance\n- Reduced namespace\n- Permits refinement of operations and representation\n\n### Cons\n- Can make unit testing difficult\n- Can hide dependencies\n"
+        },
+        {
+          "id": "factory-pattern",
+          "title": "Factory Pattern",
+          "description": "Creating objects without specifying exact class",
+          "date": "2023-06-20",
+          "content": "# Factory Pattern\n\nThe Factory pattern provides an interface for creating objects without specifying their concrete classes.\n\n## Implementation\n\n```typescript\nabstract class Product {\n  abstract operation(): string;\n}\n\nclass ConcreteProductA extends Product {\n  operation(): string {\n    return 'Result of ConcreteProductA';\n  }\n}\n\nclass ConcreteProductB extends Product {\n  operation(): string {\n    return 'Result of ConcreteProductB';\n  }\n}\n\nclass Factory {\n  createProduct(type: string): Product {\n    if (type === 'A') {\n      return new ConcreteProductA();\n    } else {\n      return new ConcreteProductB();\n    }\n  }\n}\n```\n\n## When to Use\n\nUse the Factory pattern when:\n\n- A class can't anticipate the class of objects it must create\n- A class wants its subclasses to specify the objects it creates\n- Classes delegate responsibility to one of several helper subclasses, and you want to localize the knowledge of which helper subclass is the delegate\n"
+        }
+      ]
+    },
+    {
+      "id": "react",
+      "title": "React",
+      "description": "Tutorials and guides for React development",
+      "image": "/placeholder.svg",
+      "posts": [
+        {
+          "id": "react-hooks",
+          "title": "Understanding React Hooks",
+          "description": "A comprehensive guide to React Hooks",
+          "date": "2023-07-10",
+          "content": "# Understanding React Hooks\n\nReact Hooks are functions that let you use state and other React features without writing a class component.\n\n## useState\n\n```jsx\nimport React, { useState } from 'react';\n\nfunction Counter() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}\n```\n\n## useEffect\n\n```jsx\nimport React, { useState, useEffect } from 'react';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n\n  useEffect(() => {\n    document.title = `You clicked ${count} times`;\n  }, [count]);\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}\n```\n\n## useContext\n\n```jsx\nimport React, { useContext } from 'react';\nconst ThemeContext = React.createContext('light');\n\nfunction ThemedButton() {\n  const theme = useContext(ThemeContext);\n  return <button className={theme}>Themed Button</button>;\n}\n```\n"
+        },
+        {
+          "id": "react-performance",
+          "title": "React Performance Optimization",
+          "description": "Techniques to optimize React applications",
+          "date": "2023-08-05",
+          "content": "# React Performance Optimization\n\nOptimizing performance in React applications is crucial for providing a good user experience.\n\n## Memoization with React.memo\n\n```jsx\nimport React from 'react';\n\nconst MyComponent = React.memo(function MyComponent(props) {\n  // Only re-renders if props change\n  return (\n    <div>\n      {props.name}\n    </div>\n  );\n});\n```\n\n## Using useCallback\n\n```jsx\nimport React, { useState, useCallback } from 'react';\n\nfunction ParentComponent() {\n  const [count, setCount] = useState(0);\n  \n  // This function is memoized and only changes if dependencies change\n  const handleClick = useCallback(() => {\n    setCount(count + 1);\n  }, [count]);\n\n  return (\n    <div>\n      <ChildComponent onClick={handleClick} />\n      <p>Count: {count}</p>\n    </div>\n  );\n}\n```\n\n## Using useMemo\n\n```jsx\nimport React, { useMemo } from 'react';\n\nfunction ExpensiveComponent({ a, b }) {\n  // This computation is memoized and only recalculated if a or b change\n  const result = useMemo(() => {\n    return computeExpensiveValue(a, b);\n  }, [a, b]);\n\n  return <div>{result}</div>;\n}\n```\n"
+        }
+      ]
+    }
+  ]
+}
