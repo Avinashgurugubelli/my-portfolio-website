@@ -33,14 +33,14 @@ const Hero = () => {
     };
   }, []);
 
+  if (!personalInfo) return null;
+
   const handleContactClick = () => {
     const contactSection = document.getElementById('contact');
     if (contactSection) {
       contactSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  if (!personalInfo) return null;
 
   return (
     <section
@@ -70,14 +70,14 @@ const Hero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <Button size="lg" className="rounded-full px-8" onClick={handleContactClick}>
+        <Button size="lg" className="rounded-full px-8" onClick={handleContactClick}>
             Contact Me
           </Button>
           <a href={personalInfo.resumeUrl} download>
             <Button variant="outline" size="lg" className="rounded-full px-8">
               View Resume
             </Button>
-          </a>
+      </a>
          
         </div>
       </div>
