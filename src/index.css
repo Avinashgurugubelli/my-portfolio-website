@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Add this rule at the beginning of the file */
+#root {
+  overflow-x: hidden;
+}
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
