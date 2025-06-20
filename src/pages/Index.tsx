@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -26,7 +27,7 @@ const Index = () => {
         className="min-h-screen bg-background text-foreground relative"
       >
         <Navbar />
-        <main>
+        <main className="pt-[120px]"> {/* Add padding to account for fixed navbar */}
           <Hero />
           <About />
           <Experience />
