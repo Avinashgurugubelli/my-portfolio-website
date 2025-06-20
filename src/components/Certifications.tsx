@@ -5,7 +5,7 @@ import { GraduationCap, Award, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Certification, CertificationsData } from "@/config/types";
+import { Certification, CertificationsData } from "@/models/blog";
 import certificationsJson from "@/config/certifications.json";
 
 const Certifications = () => {

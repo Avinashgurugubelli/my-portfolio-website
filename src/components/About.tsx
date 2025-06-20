@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { PersonalInfo } from "@/config/types";
+import { PersonalInfo } from "@/models/blog";
 import personalJson from "@/config/personal.json";
 
 const About = () => {

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { SkillsData } from "@/config/types";
+import { SkillsData } from "@/models/blog";
 import skillsJson from "@/config/skills.json";
 
 const Skills = () => {

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Experience, ExperienceData } from "@/config/types";
+import { Experience, ExperienceData } from "@/models/blog";
 import experienceJson from "@/config/experience.json";
 
 const ExperienceSection = () => {

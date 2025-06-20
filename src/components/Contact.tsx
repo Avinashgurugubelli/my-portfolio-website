@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { PersonalInfo, SocialData, SocialLinkData } from "@/config/types";
+import { PersonalInfo, SocialData, SocialLinkData } from "@/models/blog";
 import personalJson from "@/config/personal.json";
 import socialJson from "@/config/social.json";
 import { GithubIcon, LinkedinIcon, TwitterIcon, MailIcon } from 'lucide-react';

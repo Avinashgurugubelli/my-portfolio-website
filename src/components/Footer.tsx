@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
-import { PersonalInfo, SocialData, SocialLinkData } from "@/config/types";
+import { PersonalInfo, SocialData, SocialLinkData } from "@/models/blog";
 import personalJson from "@/config/personal.json";
 import socialJson from "@/config/social.json";
 import { GithubIcon, LinkedinIcon, TwitterIcon, MailIcon } from 'lucide-react';

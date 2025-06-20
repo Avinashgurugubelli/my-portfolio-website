@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PersonalInfo } from "@/config/types";
+import { PersonalInfo } from "@/models/blog";
 import personalJson from "@/config/personal.json";
 
 const Hero = () => {
