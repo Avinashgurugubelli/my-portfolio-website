@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -17,10 +18,10 @@ const BlogsSection = () => {
   if (!blogsData) return null;
 
   return (
-    <section id="blogs" className="py-20 px-4 bg-slate-50 dark:bg-slate-900/20">
+    <section id="blogs" className="py-20 px-4 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Blog</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Blog</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Explore my blog where I share insights about technology, coding practices, and industry trends.
           </p>
@@ -35,16 +36,16 @@ const BlogsSection = () => {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
+              <Card className="h-full flex flex-col hover:shadow-lg transition-shadow bg-card border-border">
                 <CardHeader>
-                  <CardTitle>{category.title}</CardTitle>
-                  <CardDescription>{category.description}</CardDescription>
+                  <CardTitle className="text-card-foreground">{category.title}</CardTitle>
+                  <CardDescription className="text-muted-foreground">{category.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <div className="space-y-2">
                     {category.posts.slice(0, 2).map((post) => (
-                      <div key={post.id} className="border-b pb-2 last:border-0">
-                        <h4 className="font-medium">{post.title}</h4>
+                      <div key={post.id} className="border-b border-border pb-2 last:border-0">
+                        <h4 className="font-medium text-card-foreground">{post.title}</h4>
                         <p className="text-sm text-muted-foreground">{post.description}</p>
                       </div>
                     ))}
