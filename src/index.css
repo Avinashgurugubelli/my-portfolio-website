@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -168,5 +169,27 @@
   
   .text-gradient {
     @apply bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent;
+  }
+
+  /* Typewriter cursor animation */
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  
+  .typewriter-cursor {
+    animation: blink 1s infinite;
+  }
+
+  /* Enhanced gradient animations */
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
   }
 }

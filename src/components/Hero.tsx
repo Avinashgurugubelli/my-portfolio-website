@@ -3,14 +3,27 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PersonalInfo } from "@/models/blog";
+import { useTypewriter } from "@/hooks/useTypewriter";
 import personalJson from "@/config/personal.json";
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
+  const [showTypewriter, setShowTypewriter] = useState(false);
+
+  const { displayText } = useTypewriter({
+    text: personalInfo?.bio || "",
+    speed: 30,
+    delay: 1000
+  });
 
   useEffect(() => {
     setPersonalInfo(personalJson as PersonalInfo);
+    
+    // Start typewriter effect after name animation
+    const timer = setTimeout(() => {
+      setShowTypewriter(true);
+    }, 1500);
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
@@ -30,6 +43,7 @@ const Hero = () => {
     document.addEventListener("mousemove", handleMouseMove);
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
+      clearTimeout(timer);
     };
   }, []);
 
@@ -46,48 +60,69 @@ const Hero = () => {
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center py-20 px-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(15,23,42,0)_0%,rgba(15,23,42,0.5)_100%)]"
+      className="relative min-h-screen flex items-center justify-center py-20 px-4 overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"
     >
-      {/* <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')] bg-cover bg-center opacity-10"></div> */}
+      {/* Animated background gradients */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
       
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background/80"></div>
       
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         <div className="mb-6 inline-block">
-          <div className="relative px-4 py-1.5 text-xs font-medium rounded-full bg-primary/10 border border-primary/20 text-primary/80 animate-fade-in">
+          <div className="relative px-6 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 text-primary/90 animate-fade-in backdrop-blur-sm">
             <span className="relative z-10">{personalInfo.title}</span>
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 animate-shimmer" style={{ backgroundSize: '200% 100%', backgroundPosition: '0 0' }}></span>
+            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-purple-500/10 animate-shimmer" style={{ backgroundSize: '200% 100%', backgroundPosition: '0 0' }}></span>
           </div>
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight animate-slide-up">
-          <span>Hi, I'm </span>
-          <span className="text-gradient">{personalInfo.name}</span>
+        <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight animate-slide-up">
+          <span className="bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent">Hi, I'm </span>
+          <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-pulse">{personalInfo.name}</span>
         </h1>
         
-        <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          {personalInfo.bio}
-        </p>
+        <div className="min-h-[4rem] flex items-center justify-center mb-10">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            {showTypewriter ? (
+              <>
+                {displayText}
+                <span className="animate-pulse">|</span>
+              </>
+            ) : (
+              <span className="opacity-0">Loading...</span>
+            )}
+          </p>
+        </div>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-        <Button size="lg" className="rounded-full px-8" onClick={handleContactClick}>
+          <Button 
+            size="lg" 
+            className="rounded-full px-8 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            onClick={handleContactClick}
+          >
             Contact Me
           </Button>
           <a href={personalInfo.resumeUrl} download>
-            <Button variant="outline" size="lg" className="rounded-full px-8">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="rounded-full px-8 border-purple-500/50 hover:border-purple-400 hover:bg-purple-500/10 transition-all duration-300 transform hover:scale-105"
+            >
               View Resume
             </Button>
-      </a>
-         
+          </a>
         </div>
       </div>
       
       <a
         href="#about"
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-primary/60 hover:text-primary transition-colors"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-primary/60 hover:text-primary transition-colors group"
       >
-        <span className="text-sm font-medium mb-2">Scroll Down</span>
-        <ArrowDownIcon className="h-5 w-5 animate-bounce" />
+        <span className="text-sm font-medium mb-2 group-hover:text-purple-400 transition-colors">Scroll Down</span>
+        <ArrowDownIcon className="h-5 w-5 animate-bounce group-hover:text-purple-400 transition-colors" />
       </a>
     </section>
   );
