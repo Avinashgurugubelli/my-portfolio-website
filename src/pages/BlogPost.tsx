@@ -12,6 +12,7 @@ import blogsJson from "@/config/blogs.json";
 import ReactMarkdown from "react-markdown";
 import { loadMarkdownContent } from "@/utils/markdownLoader";
 import { useQuery } from "@tanstack/react-query";
+import remarkGfm from 'remark-gfm'
 
 // Separate component to handle markdown content loading
 const BlogContent = ({ post }: { post: BlogPost }) => {
@@ -39,7 +40,7 @@ const BlogContent = ({ post }: { post: BlogPost }) => {
 
   return (
     <div className="prose dark:prose-invert max-w-none">
-      <ReactMarkdown>{content || ''}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content || ''}</ReactMarkdown>
     </div>
   );
 };
