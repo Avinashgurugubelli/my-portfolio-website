@@ -14,8 +14,7 @@ import { loadMarkdownContent } from "@/utils/markdownLoader";
 import { useQuery } from "@tanstack/react-query";
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
-// import 'highlight.js/styles/github.css'; // Import your preferred highlight.js theme
+import remarkSlug from 'remark-slug';
 
 // Separate component to handle markdown content loading
 const BlogContent = ({ post }: { post: BlogPost }) => {
@@ -41,12 +40,10 @@ const BlogContent = ({ post }: { post: BlogPost }) => {
     return <div className="text-destructive">Error loading content: {(error as Error).message}</div>;
   }
 
-  // const processedContent = (content || '').replace(/\n/g, '  \n'); // FORCE line breaks
-
   return (
     <div className="prose dark:prose-invert max-w-none">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkSlug]}
         rehypePlugins={[rehypeHighlight]}
       >{(content || '')}</ReactMarkdown>
     </div>
