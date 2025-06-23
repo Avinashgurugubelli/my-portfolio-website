@@ -11,16 +11,14 @@
             "title": "Storage and Retrieval",
             "description": "Understanding storage and retrieval systems",
             "date": "June 20, 2025",
-            "contentUrl": "https://raw.githubusercontent.com/Avinashgurugubelli/system-design/blob/main/03.StorageAndRetrival.md",
-            "content": ""
+            "contentPath": "/blogs/system-design/03.StorageAndRetrival.md"
           },
           {
             "id": "Encoding and Evolution",
             "title": "Encoding and Evolution",
             "description": "Exploring encoding techniques and system evolution",
             "date": "June 23, 2025",
-            "contentUrl": "https://raw.githubusercontent.com/Avinashgurugubelli/system-design/main/04.EncodingAndEvolution.md",
-            "content": ""
+            "contentPath": "/blogs/system-design/04.EncodingAndEvolution.md"
           }
         ]
       },

@@ -12,7 +12,10 @@ import blogsJson from "@/config/blogs.json";
 import ReactMarkdown from "react-markdown";
 import { loadMarkdownContent } from "@/utils/markdownLoader";
 import { useQuery } from "@tanstack/react-query";
-import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+// import 'highlight.js/styles/github.css'; // Import your preferred highlight.js theme
 
 // Separate component to handle markdown content loading
 const BlogContent = ({ post }: { post: BlogPost }) => {
@@ -38,9 +41,14 @@ const BlogContent = ({ post }: { post: BlogPost }) => {
     return <div className="text-destructive">Error loading content: {(error as Error).message}</div>;
   }
 
+  // const processedContent = (content || '').replace(/\n/g, '  \n'); // FORCE line breaks
+
   return (
     <div className="prose dark:prose-invert max-w-none">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content || ''}</ReactMarkdown>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeHighlight]}
+      >{(content || '')}</ReactMarkdown>
     </div>
   );
 };
@@ -101,12 +109,11 @@ const BlogPostPage = () => {
               </div>
               <nav className="space-y-2">
                 {category.posts.map(p => (
-                  <Link 
-                    key={p.id} 
+                  <Link
+                    key={p.id}
                     to={`/blogs/${categoryId}/${p.id}`}
-                    className={`block p-2 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors ${
-                      p.id === postId ? 'bg-accent/50 font-medium' : ''
-                    }`}
+                    className={`block p-2 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors ${p.id === postId ? 'bg-accent/50 font-medium' : ''
+                      }`}
                   >
                     {p.title}
                   </Link>
