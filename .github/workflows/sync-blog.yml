@@ -23,27 +23,17 @@ jobs:
       - name: Fetch latest blog artifact
         run: |
           echo "Fetching from repo: $REPO"
-          run_id=$(gh run list -R $REPO \
-            --workflow="Build and Publish Markdown" \
-            --branch=main \
-            --limit=1 \
-            --json databaseId \
-            --jq '.[0].databaseId')
-
+          run_id=$(gh run list -R $REPO --workflow="Build and Publish Markdown" --branch=main --limit=1 --json databaseId --jq '.[0].databaseId')
           echo "Latest Run ID: $run_id"
           echo "Expecting artifact: ${ARTIFACT_PREFIX}${BLOG_VERSION}"
-
-          gh run download $run_id \
-            -R $REPO \
-            -n ${ARTIFACT_PREFIX}${BLOG_VERSION} \
-            -D blog-temp
+          gh run download $run_id -R $REPO -n ${ARTIFACT_PREFIX}${BLOG_VERSION} -D blog-temp
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BLOG_VERSION: ${{ env.BLOG_VERSION }}
           ARTIFACT_PREFIX: ${{ env.ARTIFACT_PREFIX }}
           REPO: ${{ env.REPO }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Unzip artifact into public/blogs
+      - name: Copy artifact into public/blogs
         run: |
           mkdir -p public/blogs
-          unzip blog-temp/${ARTIFACT_PREFIX}${BLOG_VERSION}.zip -d public/blogs
+          cp -r blog-temp/* public/blogs
