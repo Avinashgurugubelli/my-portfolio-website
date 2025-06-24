@@ -10,7 +10,7 @@ interface MobileMenuProps {
   isOpen: boolean;
   navLinks: NavLink[];
   closeMenu: () => void;
-  handleNavigation: (path: string) => void;
+  handleNavigation: (path: string, section: string) => void;
 }
 
 const MobileMenu = ({ isOpen, navLinks, closeMenu, handleNavigation }: MobileMenuProps) => {
@@ -29,7 +29,9 @@ const MobileMenu = ({ isOpen, navLinks, closeMenu, handleNavigation }: MobileMen
               className="text-2xl font-medium text-primary/80 hover:text-primary transition-colors"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigation(link.path);
+                // Extract section from path (remove /# prefix)
+                const section = link.path.replace("/#", "");
+                handleNavigation(link.path, section);
               }}
             >
               {link.name}

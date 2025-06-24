@@ -173,7 +173,7 @@ const NestedBlogs = () => {
       console.log("Path segments:", pathSegments);
       
       // Find the item based on the path
-      let currentItems = blogsData.blogs;
+      let currentItems: BlogItem[] = blogsData.blogs;
       let foundItem: BlogDirectory | BlogFile | null = null;
       
       for (const segment of pathSegments) {
@@ -247,7 +247,7 @@ const NestedBlogs = () => {
               <ScrollArea className="h-[calc(100vh-220px)]">
                 <div className="p-4">
                   <BlogTree 
-                    items={blogsData.blogs}
+                    items={blogsData.blogs as BlogItem[]}
                     onItemClick={handleItemClick}
                     selectedPath={selectedPath}
                   />
