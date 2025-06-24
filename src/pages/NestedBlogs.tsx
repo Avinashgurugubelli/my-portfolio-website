@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeftIcon, CalendarIcon, UserIcon, BookOpenIcon } from "lucide-react";
+import { ArrowLeftIcon, CalendarIcon, UserIcon, BookOpenIcon, ChevronRightIcon, ChevronDownIcon, FolderIcon, FileTextIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -54,18 +54,26 @@ const BlogTree = ({
                 <CollapsibleTrigger asChild>
                   <Button
                     variant="ghost"
-                    className={`w-full justify-start text-left h-auto p-2 ${
+                    className={`w-full justify-start text-left h-auto p-2 hover:bg-accent/50 ${
                       selectedPath === item.label ? 'bg-accent' : ''
                     }`}
                     onClick={() => onItemClick(item)}
                   >
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{item.title}</div>
-                      {item.description && (
-                        <div className="text-xs text-muted-foreground truncate mt-1">
-                          {item.description}
-                        </div>
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      {openDirectories.has(item.label) ? (
+                        <ChevronDownIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      ) : (
+                        <ChevronRightIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       )}
+                      <FolderIcon className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-sm truncate">{item.title}</div>
+                        {item.description && (
+                          <div className="text-xs text-muted-foreground truncate mt-1">
+                            {item.description}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </Button>
                 </CollapsibleTrigger>
@@ -84,13 +92,17 @@ const BlogTree = ({
           ) : (
             <Button
               variant="ghost"
-              className={`w-full justify-start text-left h-auto p-2 ${
+              className={`w-full justify-start text-left h-auto p-2 hover:bg-accent/50 ${
                 selectedPath === item.path ? 'bg-accent' : ''
               }`}
               onClick={() => onItemClick(item)}
             >
-              <div className="flex-1 min-w-0">
-                <div className="font-medium text-sm truncate">{item.title}</div>
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <div className="w-4 flex-shrink-0" /> {/* Spacing for alignment */}
+                <FileTextIcon className="h-4 w-4 text-green-500 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-sm truncate">{item.title}</div>
+                </div>
               </div>
             </Button>
           )}
@@ -164,33 +176,44 @@ const NestedBlogs = () => {
     setBlogsData(nestedBlogsJson as NestedBlogsData);
   }, []);
 
+  // Helper function to find item by path
+  const findItemByPath = (items: BlogItem[], pathSegments: string[]): BlogDirectory | BlogFile | null => {
+    if (pathSegments.length === 0) return null;
+    
+    const currentSegment = decodeURIComponent(pathSegments[0]);
+    const item = items.find(item => 
+      item.label === currentSegment || 
+      item.title === currentSegment ||
+      (item.type === "file" && item.path.includes(currentSegment))
+    );
+    
+    if (!item) return null;
+    
+    if (pathSegments.length === 1) {
+      return item;
+    }
+    
+    if (item.type === "directory" && item.children) {
+      return findItemByPath(item.children, pathSegments.slice(1));
+    }
+    
+    return null;
+  };
+
   // Handle direct URL access
   useEffect(() => {
     console.log("Wildcard path:", wildcardPath);
     if (wildcardPath && blogsData) {
-      // Parse the path and find the corresponding item
       const pathSegments = wildcardPath.split('/').filter(Boolean);
       console.log("Path segments:", pathSegments);
       
-      // Find the item based on the path
-      let currentItems: BlogItem[] = blogsData.blogs;
-      let foundItem: BlogDirectory | BlogFile | null = null;
-      
-      for (const segment of pathSegments) {
-        const item = currentItems.find(item => item.label === segment);
-        if (item) {
-          foundItem = item;
-          if (item.type === "directory" && item.children) {
-            currentItems = item.children;
-          }
-        } else {
-          break;
-        }
-      }
+      const foundItem = findItemByPath(blogsData.blogs as BlogItem[], pathSegments);
       
       if (foundItem) {
         setSelectedItem(foundItem);
         setSelectedPath(foundItem.type === "file" ? foundItem.path : foundItem.label);
+      } else {
+        console.log("Item not found for path:", pathSegments);
       }
     }
   }, [wildcardPath, blogsData]);
@@ -200,11 +223,36 @@ const NestedBlogs = () => {
     const newPath = item.type === "file" ? item.path : item.label;
     setSelectedPath(newPath);
     
-    // Update URL without page reload
+    // Create a clean URL path for navigation
     const urlPath = item.type === "file" ? 
-      item.path.replace(/^\/blogs\//, '').replace(/\.md$/, '') : 
-      item.label;
-    navigate(`/nested-blogs/${urlPath}`, { replace: true });
+      item.title.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '%20') : 
+      item.title.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '%20');
+    
+    // Find parent directory for better URL structure
+    const parentPath = findParentPath(blogsData?.blogs as BlogItem[] || [], item);
+    const fullPath = parentPath ? `${parentPath}/${urlPath}` : urlPath;
+    
+    navigate(`/nested-blogs/${fullPath}`, { replace: true });
+  };
+
+  const findParentPath = (items: BlogItem[], targetItem: BlogDirectory | BlogFile, currentPath = ""): string | null => {
+    for (const item of items) {
+      if (item === targetItem) {
+        return currentPath;
+      }
+      
+      if (item.type === "directory" && item.children) {
+        const childPath = currentPath ? 
+          `${currentPath}/${item.title.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '%20')}` : 
+          item.title.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '%20');
+        
+        const result = findParentPath(item.children, targetItem, childPath);
+        if (result !== null) {
+          return result;
+        }
+      }
+    }
+    return null;
   };
 
   if (!blogsData) {
@@ -241,7 +289,10 @@ const NestedBlogs = () => {
                     Back to Blogs
                   </Button>
                 </div>
-                <h2 className="text-lg font-semibold">Blog Structure</h2>
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <FolderIcon className="h-5 w-5 text-blue-500" />
+                  Blog Structure
+                </h2>
               </div>
               
               <ScrollArea className="h-[calc(100vh-220px)]">
