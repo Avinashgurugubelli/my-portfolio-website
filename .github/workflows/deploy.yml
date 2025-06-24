@@ -5,26 +5,56 @@ on:
     branches:
       - main
     paths:
-      - 'package.json'                # when app version changes
-      - 'scripts/sdk-versions.json'   # when blog version config changes
+      - 'package.json'
+      - 'scripts/sdk-versions.json'
 
 jobs:
-  call-sync-blog:
-    uses: ./.github/workflows/sync-blog.yml
-
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: call-sync-blog
 
     steps:
-      - name: Checkout repo
+      - name: Checkout portfolio repo
         uses: actions/checkout@v3
 
-      - name: Install deps
+      - name: List files after checkout
+        run: ls -R .
+
+      - name: Read SDK Versions
+        id: sdk_versions
+        run: |
+          BLOG_VERSION=$(jq -r '.blogs.version' scripts/sdk-versions.json)
+          ARTIFACT_PREFIX=$(jq -r '.blogs.artifactPrefix' scripts/sdk-versions.json)
+          REPO=$(jq -r '.blogs.repo' scripts/sdk-versions.json)
+          echo "BLOG_VERSION=$BLOG_VERSION" >> $GITHUB_ENV
+          echo "ARTIFACT_PREFIX=$ARTIFACT_PREFIX" >> $GITHUB_ENV
+          echo "REPO=$REPO" >> $GITHUB_ENV
+
+      - name: Fetch latest blog artifact
+        run: |
+          echo "Fetching from repo: https://github.com/$REPO"
+          run_id=$(gh run list -R $REPO --workflow="Build and Publish Markdown" --branch=main --limit=1 --json databaseId --jq '.[0].databaseId')
+          echo "Latest Run ID: $run_id"
+          echo "Expecting artifact: ${ARTIFACT_PREFIX}${BLOG_VERSION}"
+          gh run download $run_id -R $REPO -n ${ARTIFACT_PREFIX}${BLOG_VERSION} -D blog-temp
+          echo "Downloaded files in blog-temp:"
+          ls -R blog-temp
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Unzip artifact into public/blogs
+        run: |
+          unzip "blog-temp/${ARTIFACT_PREFIX}${BLOG_VERSION}.zip" -d public/blogs
+          echo "Files in public/blogs after unzip:"
+          ls -R public/blogs
+
+      - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
       - name: Build
         run: npm run build
+
+      - name: List dist folder before deploy
+        run: ls -R dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
