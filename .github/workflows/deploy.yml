@@ -9,26 +9,79 @@ on:
       - 'scripts/sdk-versions.json'
 
 jobs:
-  sync-blog:
-    uses: ./.github/workflows/sync-blog.yml  # Reuse the sync-blog job
-
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: sync-blog  # Wait for blog sync to finish
 
     steps:
-      # - name: Checkout portfolio repo
-      #   uses: actions/checkout@v3
+      # 1. Checkout portfolio repo
+      - name: Checkout portfolio repo
+        uses: actions/checkout@v3
 
+      - name: List files after checkout
+        run: ls -R .
+
+      # 2. Read SDK Versions
+      - name: Read SDK Versions
+        id: sdk_versions
+        run: |
+          BLOG_VERSION=$(jq -r '.blogs.version' scripts/sdk-versions.json)
+          ARTIFACT_PREFIX=$(jq -r '.blogs.artifactPrefix' scripts/sdk-versions.json)
+          REPO=$(jq -r '.blogs.repo' scripts/sdk-versions.json)
+          
+          echo "BLOG_VERSION=$BLOG_VERSION" >> $GITHUB_ENV
+          echo "ARTIFACT_PREFIX=$ARTIFACT_PREFIX" >> $GITHUB_ENV
+          echo "REPO=$REPO" >> $GITHUB_ENV
+
+          echo "Fetched: Version=$BLOG_VERSION, Prefix=$ARTIFACT_PREFIX, Repo=$REPO"
+
+      # 3. Fetch latest blog artifact from avi-tech-blogs
+      - name: Fetch latest blog artifact
+        run: |
+          echo "Fetching from repo: https://github.com/$REPO"
+
+          run_id=$(gh run list -R $REPO \
+            --workflow="Build and Publish Markdown" \
+            --branch=main \
+            --limit=1 \
+            --json databaseId \
+            --jq '.[0].databaseId')
+
+          echo "Latest Run ID: $run_id"
+          echo "Expecting artifact: ${ARTIFACT_PREFIX}${BLOG_VERSION}"
+
+          gh run download $run_id \
+            -R $REPO \
+            -n ${ARTIFACT_PREFIX}${BLOG_VERSION} \
+            -D blog-temp
+
+          echo "Downloaded files in blog-temp:"
+          ls -R blog-temp
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 4. Sync blog content into public/blogs
+      - name: Copy blog artifact into public/blogs
+        run: |
+          echo "Cleaning public/blogs..."
+          rm -rf public/blogs/*
+          echo "Copying downloaded blog files..."
+          cp -r blog-temp/* public/blogs/
+          echo "Files in public/blogs after copy:"
+          ls -R public/blogs
+
+      # 5. Install dependencies
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
+      # 6. Build the project
       - name: Build
         run: npm run build
 
-      - name: List dist folder before deploy
+      # 7. List dist before deploy
+      - name: List dist folder
         run: ls -R dist
 
+      # 8. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
