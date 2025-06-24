@@ -1,3 +1,4 @@
+
 import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -11,6 +12,7 @@ import NotFound from "./pages/NotFound";
 const Blogs = lazy(() => import("./pages/Blogs"));
 const BlogCategory = lazy(() => import("./pages/BlogCategory"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const NestedBlogs = lazy(() => import("./pages/NestedBlogs"));
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -26,6 +28,11 @@ const App = () => {
             <Route path="/blogs" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading blogs...</div>}>
                 <Blogs />
+              </Suspense>
+            } />
+            <Route path="/nested-blogs/*" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading nested blogs...</div>}>
+                <NestedBlogs />
               </Suspense>
             } />
             <Route path="/blogs/:categoryId" element={

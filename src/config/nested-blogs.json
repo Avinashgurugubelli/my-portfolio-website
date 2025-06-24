@@ -1,0 +1,104 @@
+
+{
+  "blogs": [
+    {
+      "label": "01.system-design",
+      "type": "directory",
+      "title": "System Design Deep Dive",
+      "description": "This blog post provides an in-depth exploration of system design principles and patterns used in building scalable distributed systems.",
+      "author": "Avinash Gurugubelli",
+      "indexUrl": "/blogs/system-design/index.md",
+      "references": [
+        {
+          "title": "Designing Data-Intensive Applications",
+          "author": "Martin Kleppmann",
+          "link": "https://dataintensive.net/"
+        },
+        {
+          "title": "System Design Interview",
+          "author": "Alex Xu",
+          "link": ""
+        }
+      ],
+      "children": [
+        {
+          "label": "01.general",
+          "type": "directory",
+          "title": "General System Design Principles",
+          "description": "Fundamental concepts and principles that guide system design decisions",
+          "children": [
+            {
+              "label": "scalability-principles.md",
+              "type": "file",
+              "path": "/blogs/system-design/01.general/scalability-principles.md",
+              "title": "Scalability Principles and Patterns"
+            },
+            {
+              "label": "consistency-models.md",
+              "type": "file",
+              "path": "/blogs/system-design/01.general/consistency-models.md",
+              "title": "Understanding Consistency Models"
+            }
+          ]
+        },
+        {
+          "label": "02.storage",
+          "type": "directory",
+          "title": "Storage Systems",
+          "description": "Deep dive into various storage systems and their trade-offs",
+          "children": [
+            {
+              "label": "graph-db-vs-triple-store.md",
+              "type": "file",
+              "path": "/blogs/system-design/02.storage/graph-db-vs-triple-store.md",
+              "title": "Applications of Property Graphs vs Triple Stores (RDF)"
+            },
+            {
+              "label": "nosql-databases.md",
+              "type": "file",
+              "path": "/blogs/system-design/02.storage/nosql-databases.md",
+              "title": "NoSQL Database Types and Use Cases"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "02.design-patterns",
+      "type": "directory",
+      "title": "Design Patterns",
+      "description": "Software design patterns and best practices for building maintainable applications",
+      "author": "Avinash Gurugubelli",
+      "indexUrl": "/blogs/design-patterns/index.md",
+      "references": [
+        {
+          "title": "Design Patterns: Elements of Reusable Object-Oriented Software",
+          "author": "Gang of Four",
+          "link": ""
+        }
+      ],
+      "children": [
+        {
+          "label": "creational",
+          "type": "directory",
+          "title": "Creational Patterns",
+          "description": "Patterns that deal with object creation mechanisms",
+          "children": [
+            {
+              "label": "singleton-pattern.md",
+              "type": "file",
+              "path": "/blogs/design-patterns/singleton-pattern.md",
+              "title": "Singleton Pattern"
+            },
+            {
+              "label": "factory-pattern.md",
+              "type": "file",
+              "path": "/blogs/design-patterns/factory-pattern.md",
+              "title": "Factory Pattern"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

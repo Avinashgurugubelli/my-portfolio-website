@@ -67,14 +67,47 @@ export type PersonalInfo = {
     certifications: Certification[];
   };
   
+  export type BlogReference = {
+    title: string;
+    author: string;
+    link: string;
+  };
+  
+  export type BlogFile = {
+    label: string;
+    type: "file";
+    path: string;
+    title: string;
+    description?: string;
+    date?: string;
+  };
+  
+  export type BlogDirectory = {
+    label: string;
+    type: "directory";
+    title: string;
+    description?: string;
+    author?: string;
+    indexUrl?: string;
+    references?: BlogReference[];
+    children?: (BlogFile | BlogDirectory)[];
+  };
+  
+  export type BlogItem = BlogFile | BlogDirectory;
+  
+  export type NestedBlogsData = {
+    blogs: BlogDirectory[];
+  };
+  
+  // Legacy types for backward compatibility
   export type BlogPost = {
     id: string;
     title: string;
     description: string;
     date: string;
-    contentPath?: string;  // Path to the markdown file
-    contentUrl?: string;   // URL to the markdown file (e.g., GitHub raw URL)
-    content?: string;      // Fallback inline content if no path/url is provided
+    contentPath?: string;
+    contentUrl?: string;
+    content?: string;
   };
   
   export type BlogCategory = {
