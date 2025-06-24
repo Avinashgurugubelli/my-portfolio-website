@@ -10,9 +10,20 @@ jobs:
       - name: Checkout portfolio repo
         uses: actions/checkout@v3
 
+      - name: Read blog config from sdk-versions.json
+        id: blog_config
+        run: |
+          BLOG_VERSION=$(node -p "require('./scripts/sdk-versions.json').blogs.version")
+          ARTIFACT_PREFIX=$(node -p "require('./scripts/sdk-versions.json').blogs.artifactPrefix")
+          REPO=$(node -p "require('./scripts/sdk-versions.json').blogs.repo")
+          echo "BLOG_VERSION=$BLOG_VERSION" >> $GITHUB_ENV
+          echo "ARTIFACT_PREFIX=$ARTIFACT_PREFIX" >> $GITHUB_ENV
+          echo "REPO=$REPO" >> $GITHUB_ENV
+
       - name: Fetch latest blog artifact
         run: |
-          run_id=$(gh run list -R Avinashgurugubelli/avi-tech-blogs \
+          echo "Fetching from repo: $REPO"
+          run_id=$(gh run list -R $REPO \
             --workflow="Build and Publish Markdown" \
             --branch=main \
             --limit=1 \
@@ -20,18 +31,19 @@ jobs:
             --jq '.[0].databaseId')
 
           echo "Latest Run ID: $run_id"
-
-          VERSION=$(node -p "require('./package.json').version")
-          echo "Expecting artifact: avi-blogs-v$VERSION"
+          echo "Expecting artifact: ${ARTIFACT_PREFIX}${BLOG_VERSION}"
 
           gh run download $run_id \
-            -R Avinashgurugubelli/avi-tech-blogs \
-            -n avi-blogs-v$VERSION \
+            -R $REPO \
+            -n ${ARTIFACT_PREFIX}${BLOG_VERSION} \
             -D blog-temp
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BLOG_VERSION: ${{ env.BLOG_VERSION }}
+          ARTIFACT_PREFIX: ${{ env.ARTIFACT_PREFIX }}
+          REPO: ${{ env.REPO }}
 
       - name: Unzip artifact into public/blogs
         run: |
           mkdir -p public/blogs
-          unzip blog-temp/blog-out.zip -d public/blogs
+          unzip blog-temp/${ARTIFACT_PREFIX}${BLOG_VERSION}.zip -d public/blogs

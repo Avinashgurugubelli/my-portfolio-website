@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'package.json' # Only if version changes
+      - 'package.json'                # when app version changes
+      - 'scripts/sdk-versions.json'   # when blog version config changes
 
 jobs:
   call-sync-blog:

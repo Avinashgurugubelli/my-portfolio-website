@@ -1,0 +1,10 @@
+{
+  "blogs": {
+    "name": "avi-tech-blogs",
+    "description": "A collection of technical blogs covering various topics in software development, system design, and programming. etc.",
+    "gitUrl": "https://github.com",
+    "repo": "Avinashgurugubelli/avi-tech-blogs",
+    "version": "2.0.2",
+    "artifactPrefix": "avi-blogs-v"
+  }
+}
