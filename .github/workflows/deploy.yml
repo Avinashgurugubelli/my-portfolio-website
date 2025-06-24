@@ -17,8 +17,8 @@ jobs:
     needs: sync-blog  # Wait for blog sync to finish
 
     steps:
-      - name: Checkout portfolio repo
-        uses: actions/checkout@v3
+      # - name: Checkout portfolio repo
+      #   uses: actions/checkout@v3
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
