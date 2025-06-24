@@ -23,7 +23,7 @@ const NestedBlogs = () => {
     setBlogsData(nestedBlogsJson as NestedBlogsData);
   }, []);
 
-  // Helper function to find item by path with better matching
+  // Improved helper function to find item by path
   const findItemByPath = (items: BlogItem[], pathSegments: string[]): BlogDirectory | BlogFile | null => {
     if (pathSegments.length === 0) return null;
     
@@ -32,23 +32,19 @@ const NestedBlogs = () => {
     console.log("Looking for segment:", currentSegment);
     
     const item = items.find(item => {
-      const matches = [
-        item.label === currentSegment,
-        item.title === currentSegment,
-        item.title.toLowerCase() === currentSegment.toLowerCase(),
-        item.title.replace(/\s+/g, ' ').trim() === currentSegment.replace(/\s+/g, ' ').trim(),
-        item.title.replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim().toLowerCase() === 
-          currentSegment.replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim().toLowerCase()
-      ];
+      // Try multiple matching strategies
+      const titleMatch = item.title.toLowerCase() === currentSegment.toLowerCase();
+      const labelMatch = item.label === currentSegment;
+      const urlEncodedMatch = encodeURIComponent(item.title) === pathSegments[0];
       
+      // For files, also check path-based matching
       if (item.type === "file") {
-        matches.push(
-          item.path.includes(currentSegment),
-          item.path.split('/').pop()?.replace('.md', '') === currentSegment
-        );
+        const pathMatch = item.path.includes(currentSegment);
+        const filenameMatch = item.path.split('/').pop()?.replace('.md', '') === currentSegment;
+        return titleMatch || labelMatch || urlEncodedMatch || pathMatch || filenameMatch;
       }
       
-      return matches.some(Boolean);
+      return titleMatch || labelMatch || urlEncodedMatch;
     });
     
     console.log("Found item:", item);
@@ -81,14 +77,18 @@ const NestedBlogs = () => {
         setSelectedPath(foundItem.type === "file" ? foundItem.path : foundItem.label);
       } else {
         console.log("Item not found for path:", pathSegments);
-        // Try alternative approach - find by title matching
-        const findByTitle = (items: BlogItem[], title: string): BlogItem | null => {
+        // Fallback: try to find by partial title match
+        const findByPartialTitle = (items: BlogItem[], searchTerm: string): BlogItem | null => {
           for (const item of items) {
-            if (item.title.toLowerCase().replace(/\s+/g, '').includes(title.toLowerCase().replace(/\s+/g, ''))) {
+            const normalizedTitle = item.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+            const normalizedSearch = searchTerm.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+            
+            if (normalizedTitle.includes(normalizedSearch) || normalizedSearch.includes(normalizedTitle)) {
               return item;
             }
+            
             if (item.type === "directory" && item.children) {
-              const found = findByTitle(item.children, title);
+              const found = findByPartialTitle(item.children, searchTerm);
               if (found) return found;
             }
           }
@@ -96,7 +96,7 @@ const NestedBlogs = () => {
         };
         
         const lastSegment = pathSegments[pathSegments.length - 1];
-        const alternativeItem = findByTitle(blogsData.blogs as BlogItem[], lastSegment);
+        const alternativeItem = findByPartialTitle(blogsData.blogs as BlogItem[], lastSegment);
         if (alternativeItem) {
           setSelectedItem(alternativeItem);
           setSelectedPath(alternativeItem.type === "file" ? alternativeItem.path : alternativeItem.label);
@@ -110,11 +110,12 @@ const NestedBlogs = () => {
     const newPath = item.type === "file" ? item.path : item.label;
     setSelectedPath(newPath);
     
-    // Create URL path for navigation
+    // Create URL path for navigation - use the title for better URLs
     const urlPath = encodeURIComponent(item.title);
     const parentPath = findParentPath(blogsData?.blogs as BlogItem[] || [], item);
     const fullPath = parentPath ? `${parentPath}/${urlPath}` : urlPath;
     
+    console.log("Navigating to:", fullPath);
     navigate(`/nested-blogs/${fullPath}`, { replace: true });
   };
 

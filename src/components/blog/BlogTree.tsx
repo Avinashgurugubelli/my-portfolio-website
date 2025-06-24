@@ -21,7 +21,8 @@ export const BlogTree = ({
 }: BlogTreeProps) => {
   const [openDirectories, setOpenDirectories] = useState<Set<string>>(new Set());
 
-  const toggleDirectory = (label: string) => {
+  const toggleDirectory = (label: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     const newSet = new Set(openDirectories);
     if (newSet.has(label)) {
       newSet.delete(label);
@@ -29,6 +30,11 @@ export const BlogTree = ({
       newSet.add(label);
     }
     setOpenDirectories(newSet);
+  };
+
+  const handleItemClick = (item: BlogItem, e: React.MouseEvent) => {
+    e.preventDefault();
+    onItemClick(item);
   };
 
   return (
@@ -39,25 +45,42 @@ export const BlogTree = ({
             {item.type === "directory" ? (
               <Collapsible 
                 open={openDirectories.has(item.label)}
-                onOpenChange={() => toggleDirectory(item.label)}
+                onOpenChange={(open) => {
+                  const newSet = new Set(openDirectories);
+                  if (open) {
+                    newSet.add(item.label);
+                  } else {
+                    newSet.delete(item.label);
+                  }
+                  setOpenDirectories(newSet);
+                }}
               >
                 <div className="space-y-1">
-                  <CollapsibleTrigger asChild>
+                  <div className="flex items-center">
+                    <CollapsibleTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-auto p-1 hover:bg-accent/50"
+                        onClick={(e) => toggleDirectory(item.label, e)}
+                      >
+                        {openDirectories.has(item.label) ? (
+                          <ChevronDownIcon className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <ChevronRightIcon className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </Button>
+                    </CollapsibleTrigger>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
                           variant="ghost"
-                          className={`w-full justify-start text-left h-auto p-2 hover:bg-accent/50 ${
+                          className={`flex-1 justify-start text-left h-auto p-2 hover:bg-accent/50 ${
                             selectedPath === item.label ? 'bg-accent' : ''
                           }`}
-                          onClick={() => onItemClick(item)}
+                          onClick={(e) => handleItemClick(item, e)}
                         >
                           <div className="flex items-center gap-2 flex-1 min-w-0">
-                            {openDirectories.has(item.label) ? (
-                              <ChevronDownIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            ) : (
-                              <ChevronRightIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                            )}
                             <FolderIcon className="h-4 w-4 text-blue-500 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
                               <div className="font-medium text-sm truncate">{item.title}</div>
@@ -77,7 +100,7 @@ export const BlogTree = ({
                         )}
                       </TooltipContent>
                     </Tooltip>
-                  </CollapsibleTrigger>
+                  </div>
                   <CollapsibleContent>
                     {item.children && (
                       <BlogTree 
@@ -98,7 +121,7 @@ export const BlogTree = ({
                     className={`w-full justify-start text-left h-auto p-2 hover:bg-accent/50 ${
                       selectedPath === item.path ? 'bg-accent' : ''
                     }`}
-                    onClick={() => onItemClick(item)}
+                    onClick={(e) => handleItemClick(item, e)}
                   >
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       <div className="w-4 flex-shrink-0" />
