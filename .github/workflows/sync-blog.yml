@@ -1,0 +1,23 @@
+name: Sync Blog Content
+
+on:
+  workflow_call:
+
+jobs:
+  sync-blog-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout portfolio repo
+        uses: actions/checkout@v3
+
+      - name: Fetch latest blog artifact
+        run: |
+          run_id=$(gh run list -R Avinashgurugubelli/avi-tech-blogs --workflow=build --limit=1 --json databaseId --jq '.[0].databaseId')
+          gh run download $run_id -R Avinashgurugubelli/avi-tech-blogs -n blog-out -D blog-temp
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Unzip artifact into public/blogs
+        run: |
+          mkdir -p public/blogs
+          unzip blog-temp/blog-out.zip -d public/blogs

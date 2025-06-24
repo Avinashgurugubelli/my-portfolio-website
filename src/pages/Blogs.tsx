@@ -30,7 +30,7 @@ const Blogs = () => {
       >
         <Navbar />
         <main>
-          <section className="py-20 px-4 mt-16">
+          <section className="py-20 px-4 mt-30">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-16">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog</h1>
