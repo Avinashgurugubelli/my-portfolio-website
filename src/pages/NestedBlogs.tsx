@@ -11,11 +11,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { NestedBlogsData, BlogDirectory, BlogFile, BlogItem } from "@/models/blog";
+import nestedBlogsJson from "@/config/nested-blogs.json";
 import ReactMarkdown from "react-markdown";
 import { useQuery } from "@tanstack/react-query";
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
-import remarkSlug from 'remark-slug';
 
 // Blog tree component for sidebar
 const BlogTree = ({ 
@@ -143,7 +143,7 @@ const BlogContent = ({ item, path }: { item: BlogDirectory | BlogFile; path?: st
   return (
     <div className="prose dark:prose-invert max-w-none">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkSlug]}
+        remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
       >
         {content || '# Content not found\n\nThe requested content could not be loaded.'}
@@ -161,28 +161,7 @@ const NestedBlogs = () => {
 
   // Load nested blogs data
   useEffect(() => {
-    // For now, we'll use the existing blogs.json and transform it
-    // In the future, you can replace this with your nested structure
-    import("@/config/blogs.json").then((data) => {
-      // Transform existing data to nested structure for demo
-      const transformedData: NestedBlogsData = {
-        blogs: data.categories.map(category => ({
-          label: category.id,
-          type: "directory" as const,
-          title: category.title,
-          description: category.description,
-          author: "Avinash Gurugubelli",
-          children: category.posts.map(post => ({
-            label: post.id,
-            type: "file" as const,
-            path: post.contentPath || `/blogs/${category.id}/${post.id}.md`,
-            title: post.title,
-            description: post.description,
-          }))
-        }))
-      };
-      setBlogsData(transformedData);
-    });
+    setBlogsData(nestedBlogsJson as NestedBlogsData);
   }, []);
 
   // Handle direct URL access

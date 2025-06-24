@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MenuIcon, XIcon } from "lucide-react";
@@ -58,6 +59,11 @@ const Navbar = () => {
     }
   };
 
+  const navLinks = navItems.map(item => ({
+    name: item.name,
+    path: item.href
+  }));
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -108,10 +114,26 @@ const Navbar = () => {
             </div>
 
             {/* Mobile menu button */}
-            <MobileMenu />
+            <div className="lg:hidden">
+              <button
+                onClick={toggleMenu}
+                className="p-2 rounded-md text-foreground hover:bg-accent"
+                aria-label="Toggle menu"
+              >
+                {isOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Menu */}
+      <MobileMenu 
+        isOpen={isOpen}
+        navLinks={navLinks}
+        closeMenu={closeMenu}
+        handleNavigation={handleNavigation}
+      />
     </div>
   );
 };

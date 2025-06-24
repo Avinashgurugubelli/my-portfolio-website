@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +15,6 @@ import { loadMarkdownContent } from "@/utils/markdownLoader";
 import { useQuery } from "@tanstack/react-query";
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
-import remarkSlug from 'remark-slug';
 
 // Separate component to handle markdown content loading
 const BlogContent = ({ post }: { post: BlogPost }) => {
@@ -43,7 +43,7 @@ const BlogContent = ({ post }: { post: BlogPost }) => {
   return (
     <div className="prose dark:prose-invert max-w-none">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkSlug]}
+        remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
       >{(content || '')}</ReactMarkdown>
     </div>
@@ -91,7 +91,7 @@ const BlogPostPage = () => {
         className="min-h-screen bg-background text-foreground relative"
       >
         <Navbar />
-        <main className="pt-16">
+        <main className="pt-[120px]">
           <div className="flex flex-col lg:flex-row max-w-7xl mx-auto">
             {/* Sidebar with article index */}
             <aside className="w-full lg:w-64 p-6 lg:min-h-screen border-r">
