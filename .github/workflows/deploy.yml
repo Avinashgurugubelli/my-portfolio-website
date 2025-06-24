@@ -62,10 +62,8 @@ jobs:
       # 4. Sync blog content into public/blogs
       - name: Copy blog artifact into public/blogs
         run: |
-          echo "Cleaning public/blogs..."
-          rm -rf public/blogs/*
-          echo "Copying downloaded blog files..."
-          cp -r blog-temp/* public/blogs/
+          echo "Copying downloaded blog files (blogs/*) into public/blogs..."
+          cp -r blog-temp/blogs/* public/blogs/
           echo "Files in public/blogs after copy:"
           ls -R public/blogs
 
