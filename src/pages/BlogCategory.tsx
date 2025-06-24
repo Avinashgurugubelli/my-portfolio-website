@@ -21,8 +21,31 @@ const BlogCategoryPage = () => {
 
   useEffect(() => {
     if (blogsData && categoryId) {
-      const foundCategory = blogsData.categories.find(cat => cat.id === categoryId);
-      setCategory(foundCategory || null);
+      let foundCategory = blogsData.categories.find(cat => cat.id === categoryId);
+      if (foundCategory) {
+        const indexUrl = foundCategory.indexUrl;
+        // If the category has an indexUrl, we can fetch the content
+        if (indexUrl) {
+          fetch(indexUrl)
+            .then(response => response.text())
+            .then(content => {
+              // Assuming the content is in a format that can be parsed
+              // You might want to parse it or handle it as needed
+              try {
+                foundCategory.children = JSON.parse(content).children || [];
+              } catch (error) {
+                foundCategory.children = [];
+              }
+              setCategory(foundCategory || null);
+            })
+            .catch(error => console.error("Error fetching category content:", error));
+        }
+      }
+      else {
+        setCategory(foundCategory || null);
+      }
+
+
     }
   }, [blogsData, categoryId]);
 
@@ -54,7 +77,7 @@ const BlogCategoryPage = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {category.posts.map((post, index) => (
+                {category.children.map((post, index) => (
                   <motion.div
                     key={post.id}
                     initial={{ opacity: 0, y: 20 }}

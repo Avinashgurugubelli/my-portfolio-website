@@ -67,7 +67,7 @@ const BlogPostPage = () => {
       setCategory(foundCategory || null);
 
       if (foundCategory && postId) {
-        const foundPost = foundCategory.posts.find(p => p.id === postId);
+        const foundPost = foundCategory.children.find(p => p.id === postId);
         setPost(foundPost || null);
       }
     }
@@ -105,7 +105,7 @@ const BlogPostPage = () => {
                 <Separator className="mb-4" />
               </div>
               <nav className="space-y-2">
-                {category.posts.map(p => (
+                {category.children.map(p => (
                   <Link
                     key={p.id}
                     to={`/blogs/${categoryId}/${p.id}`}

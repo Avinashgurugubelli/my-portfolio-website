@@ -15,6 +15,8 @@ const Blogs = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // if the blog data has indexUrl, we can use it to fetch the content
     setBlogsData(blogsJson as BlogsData);
   }, []);
 
@@ -34,13 +36,13 @@ const Blogs = () => {
           <section className="py-20 px-4 mt-30">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-16">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4">Blog</h1>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">Blogs</h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
                   Explore articles on various topics. Stay tuned for more content!
                 </p>
                 
                 {/* New Nested Blog Structure Link */}
-                <div className="mb-12">
+                {/* <div className="mb-12">
                   <Link to="/nested-blogs">
                     <Button size="lg" className="gap-2">
                       <TreePineIcon className="h-5 w-5" />
@@ -51,7 +53,9 @@ const Blogs = () => {
                   <p className="text-sm text-muted-foreground mt-2">
                     Browse blogs in a hierarchical tree structure with improved navigation
                   </p>
-                </div>
+                </div> */}
+
+
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -70,7 +74,7 @@ const Blogs = () => {
                       </CardHeader>
                       <CardContent className="flex-grow">
                         <div className="space-y-4">
-                          {category.posts.slice(0, 3).map((post) => (
+                          {category?.children?.slice(0, 3).map((post) => (
                             <div key={post.id} className="border-b pb-3 last:border-0">
                               <h4 className="font-medium text-lg">{post.title}</h4>
                               <p className="text-sm text-muted-foreground mb-2">{post.description}</p>

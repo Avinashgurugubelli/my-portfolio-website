@@ -108,6 +108,7 @@ export type PersonalInfo = {
     contentPath?: string;
     contentUrl?: string;
     content?: string;
+    
   };
   
   export type BlogCategory = {
@@ -115,7 +116,8 @@ export type PersonalInfo = {
     title: string;
     description: string;
     image: string;
-    posts: BlogPost[];
+    children: BlogPost[];
+    indexUrl?: string;
   };
   
   export type BlogsData = {

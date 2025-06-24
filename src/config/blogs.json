@@ -3,31 +3,16 @@
       {
         "id": "system-design",
         "title": "System Design",
-        "description": "Learn about system design principles and patterns",
+        "description": "Explore comprehensive guides and in-depth articles on System Design principles, patterns, and best practices. This section covers critical topics such as scalability, reliability, fault tolerance, and maintainability essential for building robust and high-performance distributed systems. From beginner-friendly introductions to advanced architecture discussions, each article aims to simplify complex concepts with real-world examples, case studies, and practical insights.",
         "image": "/placeholder.svg",
-        "posts": [
-          {
-            "id": "Storage and Retrieval",
-            "title": "Storage and Retrieval",
-            "description": "Understanding storage and retrieval systems",
-            "date": "June 20, 2025",
-            "contentPath": "/blogs/system-design/03.StorageAndRetrival.md"
-          },
-          {
-            "id": "Encoding and Evolution",
-            "title": "Encoding and Evolution",
-            "description": "Exploring encoding techniques and system evolution",
-            "date": "June 23, 2025",
-            "contentPath": "/blogs/system-design/04.EncodingAndEvolution.md"
-          }
-        ]
+        "indexUrl": "/blogs/01.system-design/index.json"
       },
       {
         "id": "design-patterns",
         "title": "Design Patterns",
         "description": "Explore software design patterns and best practices",
         "image": "/placeholder.svg",
-        "posts": [
+        "children": [
           {
             "id": "singleton-pattern",
             "title": "Singleton Pattern",
@@ -49,7 +34,7 @@
         "title": "React",
         "description": "Tutorials and guides for React development",
         "image": "/placeholder.svg",
-        "posts": [
+        "children": [
           {
             "id": "react-hooks",
             "title": "Understanding React Hooks",

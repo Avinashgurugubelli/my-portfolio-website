@@ -21,8 +21,8 @@ const Navbar = () => {
     { name: 'Projects', href: '/#projects', section: 'projects' },
     { name: 'Skills', href: '/#skills', section: 'skills' },
     { name: 'Certifications', href: '/#certifications', section: 'certifications' },
-    { name: 'Blog', href: '/blogs', section: 'blogs' },
-    { name: 'Nested Blogs', href: '/nested-blogs', section: 'nested-blogs' },
+    { name: 'Blogs', href: '/blogs', section: 'blogs' },
+    // { name: 'Nested Blogs', href: '/nested-blogs', section: 'nested-blogs' },
     { name: 'Contact', href: '/#contact', section: 'contact' },
   ];
 
@@ -78,16 +78,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/* Contact Ribbon */}
-      <div className="bg-primary text-primary-foreground py-2 px-4 text-center text-sm">
-        <span className="font-medium">Let's connect!</span>
-        <a href="mailto:avinash.gurugubelli@gmail.com" className="ml-2 underline hover:no-underline">
-          avinash.gurugubelli@gmail.com
-        </a>
-        <span className="mx-2">|</span>
-        <a href="tel:+16145537717" className="underline hover:no-underline">
-          +1 (614) 553-7717
-        </a>
-      </div>
+      <ContactRibbon />
       
       {/* Main Navigation */}
       <nav className={`border-b transition-all duration-300 ${
