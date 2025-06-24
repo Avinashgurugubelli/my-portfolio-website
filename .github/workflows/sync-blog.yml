@@ -12,8 +12,22 @@ jobs:
 
       - name: Fetch latest blog artifact
         run: |
-          run_id=$(gh run list -R Avinashgurugubelli/avi-tech-blogs --workflow=build --limit=1 --json databaseId --jq '.[0].databaseId')
-          gh run download $run_id -R Avinashgurugubelli/avi-tech-blogs -n blog-out -D blog-temp
+          run_id=$(gh run list -R Avinashgurugubelli/avi-tech-blogs \
+            --workflow="Build and Publish Markdown" \
+            --branch=main \
+            --limit=1 \
+            --json databaseId \
+            --jq '.[0].databaseId')
+
+          echo "Latest Run ID: $run_id"
+
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Expecting artifact: avi-blogs-v$VERSION"
+
+          gh run download $run_id \
+            -R Avinashgurugubelli/avi-tech-blogs \
+            -n avi-blogs-v$VERSION \
+            -D blog-temp
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
