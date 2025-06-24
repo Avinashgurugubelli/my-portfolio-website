@@ -1,11 +1,12 @@
 name: Sync Blog Content
 
 on:
-  workflow_call:
+  workflow_call:  # Called from deploy.yml
 
 jobs:
   sync-blog-content:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout portfolio repo
         uses: actions/checkout@v3
@@ -16,24 +17,24 @@ jobs:
           BLOG_VERSION=$(jq -r '.blogs.version' scripts/sdk-versions.json)
           ARTIFACT_PREFIX=$(jq -r '.blogs.artifactPrefix' scripts/sdk-versions.json)
           REPO=$(jq -r '.blogs.repo' scripts/sdk-versions.json)
-          
+
           echo "BLOG_VERSION=$BLOG_VERSION" >> $GITHUB_ENV
           echo "ARTIFACT_PREFIX=$ARTIFACT_PREFIX" >> $GITHUB_ENV
           echo "REPO=$REPO" >> $GITHUB_ENV
-          
+
           echo "Fetched config: Version=$BLOG_VERSION, Prefix=$ARTIFACT_PREFIX, Repo=$REPO"
 
       - name: Fetch latest blog artifact
         run: |
           echo "Fetching from repo: $REPO"
-          
+
           run_id=$(gh run list -R $REPO \
             --workflow="Build and Publish Markdown" \
             --branch=main \
             --limit=1 \
             --json databaseId \
             --jq '.[0].databaseId')
-          
+
           echo "Latest Run ID: $run_id"
           echo "Expecting artifact: ${ARTIFACT_PREFIX}${BLOG_VERSION}"
 
@@ -41,7 +42,7 @@ jobs:
             -R $REPO \
             -n ${ARTIFACT_PREFIX}${BLOG_VERSION} \
             -D blog-temp
-          
+
           echo "Downloaded files in blog-temp:"
           ls -R blog-temp
         env:
