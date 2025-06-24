@@ -24,28 +24,42 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Main routes */}
             <Route path="/" element={<Index />} />
+            
+            {/* Blog routes */}
             <Route path="/blogs" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading blogs...</div>}>
                 <Blogs />
               </Suspense>
             } />
-            <Route path="/nested-blogs/*" element={
-              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading nested blogs...</div>}>
-                <NestedBlogs />
-              </Suspense>
-            } />
+            
             <Route path="/blogs/:categoryId" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading category...</div>}>
                 <BlogCategory />
               </Suspense>
             } />
+            
             <Route path="/blogs/:categoryId/:postId" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading article...</div>}>
                 <BlogPost />
               </Suspense>
             } />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            
+            {/* Nested blogs route - must come after specific blog routes */}
+            <Route path="/nested-blogs" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading nested blogs...</div>}>
+                <NestedBlogs />
+              </Suspense>
+            } />
+            
+            <Route path="/nested-blogs/*" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading nested blogs...</div>}>
+                <NestedBlogs />
+              </Suspense>
+            } />
+            
+            {/* Catch-all route - MUST be last */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

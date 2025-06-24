@@ -33,29 +33,31 @@ const Navbar = () => {
   const handleNavClick = (e: React.MouseEvent, href: string, section: string) => {
     e.preventDefault();
     closeMenu();
-    handleNavigation(href, section);
-  };
-
-  const handleNavigation = (path: string, section: string) => {
-    closeMenu();
     
-    // Fix for navigating to hash links from other pages
-    if (path.startsWith('/#') && location.pathname !== '/') {
-      navigate('/');
-      // Use a small timeout to ensure the navigation completes before scrolling
-      setTimeout(() => {
-        const element = document.querySelector(path.substring(1));
+    // Handle blog routes directly
+    if (href === '/blogs' || href === '/nested-blogs') {
+      navigate(href);
+      return;
+    }
+    
+    // Handle hash-based navigation
+    if (href.startsWith('/#')) {
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          const element = document.querySelector(href.substring(1));
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else {
+        const element = document.querySelector(href.substring(1));
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100);
-    } 
-    // For hash links on the home page
-    else if (path.startsWith('/#') && location.pathname === '/') {
-      const element = document.querySelector(path.substring(1));
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
       }
+    } else {
+      navigate(href);
     }
   };
 
@@ -132,7 +134,29 @@ const Navbar = () => {
         isOpen={isOpen}
         navLinks={navLinks}
         closeMenu={closeMenu}
-        handleNavigation={handleNavigation}
+        handleNavigation={(path: string, section: string) => {
+          closeMenu();
+          if (path === '/blogs' || path === '/nested-blogs') {
+            navigate(path);
+          } else if (path.startsWith('/#')) {
+            if (location.pathname !== '/') {
+              navigate('/');
+              setTimeout(() => {
+                const element = document.querySelector(path.substring(1));
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }, 100);
+            } else {
+              const element = document.querySelector(path.substring(1));
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }
+          } else {
+            navigate(path);
+          }
+        }}
       />
     </div>
   );

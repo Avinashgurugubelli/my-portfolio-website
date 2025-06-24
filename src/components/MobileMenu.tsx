@@ -22,30 +22,16 @@ const MobileMenu = ({ isOpen, navLinks, closeMenu, handleNavigation }: MobileMen
     >
       <div className="flex flex-col items-center justify-center h-full space-y-8">
         {navLinks.map((link) => (
-          link.path.startsWith("/#") ? (
-            <a
-              key={link.name}
-              href="#"
-              className="text-2xl font-medium text-primary/80 hover:text-primary transition-colors"
-              onClick={(e) => {
-                e.preventDefault();
-                // Extract section from path (remove /# prefix)
-                const section = link.path.replace("/#", "");
-                handleNavigation(link.path, section);
-              }}
-            >
-              {link.name}
-            </a>
-          ) : (
-            <Link
-              key={link.name}
-              to={link.path}
-              className="text-2xl font-medium text-primary/80 hover:text-primary transition-colors"
-              onClick={closeMenu}
-            >
-              {link.name}
-            </Link>
-          )
+          <button
+            key={link.name}
+            className="text-2xl font-medium text-primary/80 hover:text-primary transition-colors"
+            onClick={() => {
+              const section = link.path.startsWith('/#') ? link.path.replace("/#", "") : link.name.toLowerCase();
+              handleNavigation(link.path, section);
+            }}
+          >
+            {link.name}
+          </button>
         ))}
       </div>
     </div>
