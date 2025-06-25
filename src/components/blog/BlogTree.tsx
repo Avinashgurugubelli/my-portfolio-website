@@ -64,6 +64,8 @@ export const BlogTree = ({
 
   const handleItemClick = (item: BlogItem, e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    
     // Only call onItemClick for files, not directories
     if (item.type === "file") {
       onItemClick(item);

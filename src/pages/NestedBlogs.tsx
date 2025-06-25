@@ -134,17 +134,18 @@ const NestedBlogs = () => {
   }, [wildcardPath, blogsData]);
 
   const handleItemClick = (item: BlogDirectory | BlogFile) => {
+    // Only update content, don't navigate
     setSelectedItem(item);
     const newPath = item.type === "file" ? item.path : item.id;
     setSelectedPath(newPath);
     
-    // Create URL path for navigation - use the title for better URLs
+    // Update URL without navigation for deep linking support
     const urlPath = encodeURIComponent(item.title);
     const parentPath = findParentPath(blogsData?.blogs as BlogItem[] || [], item);
     const fullPath = parentPath ? `${parentPath}/${urlPath}` : urlPath;
     
-    console.log("Navigating to:", fullPath);
-    navigate(`/nested-blogs/${fullPath}`, { replace: true });
+    console.log("Updating URL to:", fullPath);
+    window.history.replaceState(null, '', `/nested-blogs/${fullPath}`);
   };
 
   const findParentPath = (items: BlogItem[], targetItem: BlogDirectory | BlogFile, currentPath = ""): string | null => {

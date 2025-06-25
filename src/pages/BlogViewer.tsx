@@ -91,12 +91,13 @@ const BlogViewer = () => {
   }, [wildcardPath, blogItems]);
 
   const handleItemClick = (item: BlogItem) => {
+    // Only update content, don't navigate
     setSelectedItem(item);
     setSelectedPath(item.type === "file" ? item.path : item.id);
     
-    // Update URL
+    // Update URL without navigation for deep linking support
     const itemPath = BlogService.generateBlogPath(item);
-    navigate(`/blogs/${categoryId}/${itemPath}`, { replace: true });
+    window.history.replaceState(null, '', `/blogs/${categoryId}/${itemPath}`);
   };
 
   if (!category) {
