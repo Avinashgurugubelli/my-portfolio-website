@@ -74,7 +74,7 @@ const Blogs = () => {
                       </CardHeader>
                       <CardContent className="flex-grow">
                         <div className="space-y-4">
-                          {category?.children?.slice(0, 3).map((post) => (
+                          {category.children && category.children.slice(0, 3).map((post) => (
                             <div key={post.id} className="border-b pb-3 last:border-0">
                               <h4 className="font-medium text-lg">{post.title}</h4>
                               <p className="text-sm text-muted-foreground mb-2">{post.description}</p>
@@ -87,6 +87,11 @@ const Blogs = () => {
                               </p>
                             </div>
                           ))}
+                          {!category.children && (
+                            <div className="text-sm text-muted-foreground">
+                              More articles coming soon...
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                       <CardFooter>
