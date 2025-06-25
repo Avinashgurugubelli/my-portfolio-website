@@ -1,6 +1,9 @@
 
 import { BlogCategory, BlogsData, NestedBlogIndex, BlogItem } from "@/models/blog";
 
+// read json from /config/blogs.json
+import blobData  from './../config/blogs.json';
+
 /**
  * Service for handling blog data operations
  */
@@ -9,11 +12,17 @@ export class BlogService {
    * Fetch the main blogs configuration
    */
   static async fetchBlogsData(): Promise<BlogsData> {
-    const response = await fetch('/config/blogs.json');
-    if (!response.ok) {
-      throw new Error('Failed to fetch blogs data');
-    }
-    return response.json();
+    // const response = await fetch('/config/blogs.json');
+    // console.log('Fetching blogs data from:', response.url);
+    // console.log('Response status:', response.status);
+    // console.log('Response headers:', response.headers);
+    // console.log('Response type:', response.headers.get('content-type'));
+    // console.log('Response blob data:', blobData.categories);
+    // console.log('Response:', await response.json());
+    // if (!response.ok) {
+    //   throw new Error('Failed to fetch blogs data');
+    // }
+    return Promise.resolve(blobData as BlogsData);
   }
 
   /**

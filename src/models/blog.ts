@@ -110,8 +110,8 @@ export type PersonalInfo = {
   export type BlogCategory = {
     id: string;
     title: string;
-    description: string;
-    image: string;
+    description?: string;
+    image?: string;
     indexUrl?: string; // For nested structure
     children?: BlogPost[]; // For simple articles
   };
@@ -120,7 +120,7 @@ export type PersonalInfo = {
   export type BlogPost = {
     id: string;
     title: string;
-    description: string;
+    description?: string;
     date: string;
     path?: string;
     contentPath?: string;

@@ -66,7 +66,7 @@ const BlogPostPage = () => {
       const foundCategory = blogsData.categories.find(cat => cat.id === categoryId);
       setCategory(foundCategory || null);
 
-      if (foundCategory && postId) {
+      if (foundCategory && postId && foundCategory.children) {
         const foundPost = foundCategory.children.find(p => p.id === postId);
         setPost(foundPost || null);
       }
