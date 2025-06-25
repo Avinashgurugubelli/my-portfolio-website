@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronRightIcon, ChevronDownIcon, FolderIcon, FileTextIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -21,6 +21,36 @@ export const BlogTree = ({
 }: BlogTreeProps) => {
   const [openDirectories, setOpenDirectories] = useState<Set<string>>(new Set());
 
+  // Auto-expand directories that contain the selected file
+  useEffect(() => {
+    if (selectedPath) {
+      const expandPath = (items: BlogItem[], currentPath: string[] = []): void => {
+        items.forEach(item => {
+          if (item.type === "directory" && item.children) {
+            const hasSelectedChild = findSelectedChild(item.children, selectedPath);
+            if (hasSelectedChild) {
+              setOpenDirectories(prev => new Set(prev).add(item.id));
+              expandPath(item.children, [...currentPath, item.id]);
+            }
+          }
+        });
+      };
+      expandPath(items);
+    }
+  }, [selectedPath, items]);
+
+  const findSelectedChild = (items: BlogItem[], targetPath: string): boolean => {
+    return items.some(item => {
+      if (item.type === "file" && item.path === targetPath) {
+        return true;
+      }
+      if (item.type === "directory" && item.children) {
+        return findSelectedChild(item.children, targetPath);
+      }
+      return false;
+    });
+  };
+
   const toggleDirectory = (itemId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const newSet = new Set(openDirectories);
@@ -34,7 +64,10 @@ export const BlogTree = ({
 
   const handleItemClick = (item: BlogItem, e: React.MouseEvent) => {
     e.preventDefault();
-    onItemClick(item);
+    // Only call onItemClick for files, not directories
+    if (item.type === "file") {
+      onItemClick(item);
+    }
   };
 
   return (
@@ -73,25 +106,17 @@ export const BlogTree = ({
                     </CollapsibleTrigger>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className={`flex-1 justify-start text-left h-auto p-2 hover:bg-accent/50 ${
-                            selectedPath === item.id ? 'bg-accent' : ''
-                          }`}
-                          onClick={(e) => handleItemClick(item, e)}
-                        >
-                          <div className="flex items-center gap-2 flex-1 min-w-0">
-                            <FolderIcon className="h-4 w-4 text-blue-500 flex-shrink-0" />
-                            <div className="flex-1 min-w-0">
-                              <div className="font-medium text-sm truncate">{item.title}</div>
-                              {item.description && (
-                                <div className="text-xs text-muted-foreground truncate mt-1">
-                                  {item.description}
-                                </div>
-                              )}
-                            </div>
+                        <div className="flex items-center gap-2 flex-1 min-w-0 p-2">
+                          <FolderIcon className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm truncate">{item.title}</div>
+                            {item.description && (
+                              <div className="text-xs text-muted-foreground truncate mt-1">
+                                {item.description}
+                              </div>
+                            )}
                           </div>
-                        </Button>
+                        </div>
                       </TooltipTrigger>
                       <TooltipContent side="right" className="max-w-xs">
                         <div className="font-medium">{item.title}</div>

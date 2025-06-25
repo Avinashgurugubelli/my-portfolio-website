@@ -33,6 +33,20 @@ const BlogViewer = () => {
     staleTime: 1000 * 60 * 60, // Cache for 1 hour
   });
 
+  // Helper function to find first file in the tree
+  const findFirstFile = (items: BlogItem[]): BlogItem | null => {
+    for (const item of items) {
+      if (item.type === "file") {
+        return item;
+      }
+      if (item.type === "directory" && item.children) {
+        const found = findFirstFile(item.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
   // Set up blog items based on structure type
   useEffect(() => {
     if (nestedIndex) {
@@ -51,6 +65,17 @@ const BlogViewer = () => {
       setBlogItems(convertedItems);
     }
   }, [nestedIndex, category]);
+
+  // Auto-select first article when blog items are loaded and no URL path
+  useEffect(() => {
+    if (blogItems.length > 0 && !wildcardPath) {
+      const firstFile = findFirstFile(blogItems);
+      if (firstFile) {
+        setSelectedItem(firstFile);
+        setSelectedPath(firstFile.type === "file" ? firstFile.path : firstFile.id);
+      }
+    }
+  }, [blogItems, wildcardPath]);
 
   // Handle direct URL access
   useEffect(() => {

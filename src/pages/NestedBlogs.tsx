@@ -2,8 +2,10 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeftIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
 import { NestedBlogsData, BlogDirectory, BlogFile, BlogItem } from "@/models/blog";
 import nestedBlogsJson from "@/config/nested-blogs.json";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
@@ -18,12 +20,37 @@ const NestedBlogs = () => {
   const [selectedItem, setSelectedItem] = useState<BlogDirectory | BlogFile | null>(null);
   const [selectedPath, setSelectedPath] = useState<string>("");
 
+  // Helper function to find first file in the tree
+  const findFirstFile = (items: BlogItem[]): BlogItem | null => {
+    for (const item of items) {
+      if (item.type === "file") {
+        return item;
+      }
+      if (item.type === "directory" && item.children) {
+        const found = findFirstFile(item.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+
   // Load nested blogs data
   useEffect(() => {
     console.log("Loading nested blogs data...");
     console.log("Nested blogs JSON:", nestedBlogsJson);
     setBlogsData(nestedBlogsJson as NestedBlogsData);
   }, []);
+
+  // Auto-select first article when data is loaded and no URL path
+  useEffect(() => {
+    if (blogsData && !wildcardPath) {
+      const firstFile = findFirstFile(blogsData.blogs as BlogItem[]);
+      if (firstFile) {
+        setSelectedItem(firstFile);
+        setSelectedPath(firstFile.type === "file" ? firstFile.path : firstFile.id);
+      }
+    }
+  }, [blogsData, wildcardPath]);
 
   // Improved helper function to find item by path
   const findItemByPath = (items: BlogItem[], pathSegments: string[]): BlogDirectory | BlogFile | null => {
@@ -162,7 +189,25 @@ const NestedBlogs = () => {
         <Navbar />
         <main className="pt-[120px]">
           <div className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
-            <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-120px)]">
+            <div className="p-4 border-b border-border">
+              <div className="flex items-center gap-4 mb-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/blogs')}
+                  className="gap-2"
+                >
+                  <ArrowLeftIcon className="h-4 w-4" />
+                  Back to Blogs
+                </Button>
+                <div>
+                  <h1 className="text-2xl font-bold">Nested Blogs</h1>
+                  <p className="text-muted-foreground">Explore the nested blog structure</p>
+                </div>
+              </div>
+            </div>
+
+            <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)]">
               <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
                 <BlogSidebar 
                   blogItems={blogsData.blogs as BlogItem[]}
