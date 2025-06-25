@@ -2,30 +2,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BlogDirectory, BlogFile } from "@/models/blog";
+import { BlogService } from "@/services/blogService";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 
 interface BlogContentProps {
   item: BlogDirectory | BlogFile;
-  path?: string;
 }
 
-export const BlogContent = ({ item, path }: BlogContentProps) => {
-  const contentUrl = item.type === "directory" ? item.indexUrl : (item as BlogFile).path;
-  
+export const BlogContent = ({ item }: BlogContentProps) => {
   const { data: content, isLoading, error } = useQuery({
-    queryKey: ['nestedBlogContent', contentUrl || path],
+    queryKey: ['blogContent', item.type === "file" ? item.path : item.id],
     queryFn: async () => {
-      if (!contentUrl && !path) return '';
-      const url = contentUrl || path;
-      const response = await fetch(url.startsWith('/') ? url : `/${url}`);
-      if (!response.ok) {
-        throw new Error(`Failed to load content: ${response.statusText}`);
+      if (item.type === "file" && item.path) {
+        return BlogService.fetchBlogContent(item.path);
       }
-      return response.text();
+      return '# Welcome\n\nSelect a file from the sidebar to view its content.';
     },
-    enabled: !!(contentUrl || path),
+    enabled: true,
     staleTime: 1000 * 60 * 60, // Cache for 1 hour
   });
 

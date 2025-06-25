@@ -1,3 +1,4 @@
+
 export type PersonalInfo = {
     name: string;
     title: string;
@@ -67,59 +68,70 @@ export type PersonalInfo = {
     certifications: Certification[];
   };
   
+  // New enhanced blog structure
   export type BlogReference = {
     title: string;
-    author: string;
-    link: string;
+    author?: string;
+    authors?: string[];
+    publisher?: string;
+    year?: number;
+    url?: string;
+    Link?: string;
   };
   
   export type BlogFile = {
-    label: string;
+    id: string;
     type: "file";
     path: string;
     title: string;
     description?: string;
     date?: string;
+    createdOn?: string;
+    author?: string;
+    tags?: string[];
+    references?: BlogReference[];
   };
   
   export type BlogDirectory = {
-    label: string;
+    id: string;
     type: "directory";
     title: string;
     description?: string;
     author?: string;
-    indexUrl?: string;
+    date?: string;
+    createdOn?: string;
+    References?: BlogReference[];
     references?: BlogReference[];
     children?: (BlogFile | BlogDirectory)[];
   };
   
   export type BlogItem = BlogFile | BlogDirectory;
   
-  export type NestedBlogsData = {
-    blogs: BlogDirectory[];
-  };
-  
-  // Legacy types for backward compatibility
-  export type BlogPost = {
-    id: string;
-    title: string;
-    description: string;
-    date: string;
-    contentPath?: string;
-    contentUrl?: string;
-    content?: string;
-    
-  };
-  
+  // Main blog category for the listing page
   export type BlogCategory = {
     id: string;
     title: string;
     description: string;
     image: string;
-    children: BlogPost[];
-    indexUrl?: string;
+    indexUrl?: string; // For nested structure
+    children?: BlogPost[]; // For simple articles
+  };
+  
+  // Simple blog post for backward compatibility
+  export type BlogPost = {
+    id: string;
+    title: string;
+    description: string;
+    date: string;
+    path?: string;
+    contentPath?: string;
+    contentUrl?: string;
+    content?: string;
   };
   
   export type BlogsData = {
     categories: BlogCategory[];
   };
+  
+  // For nested blog index files
+  export type NestedBlogIndex = BlogDirectory;

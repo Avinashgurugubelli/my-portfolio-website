@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 
 // Lazy load blog-related components
 const Blogs = lazy(() => import("./pages/Blogs"));
+const BlogViewer = lazy(() => import("./pages/BlogViewer"));
 const BlogCategory = lazy(() => import("./pages/BlogCategory"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const NestedBlogs = lazy(() => import("./pages/NestedBlogs"));
@@ -34,19 +35,27 @@ const App = () => {
               </Suspense>
             } />
             
+            {/* New unified blog viewer route */}
             <Route path="/blogs/:categoryId" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading category...</div>}>
-                <BlogCategory />
+                <BlogViewer />
               </Suspense>
             } />
             
+            <Route path="/blogs/:categoryId/*" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading article...</div>}>
+                <BlogViewer />
+              </Suspense>
+            } />
+            
+            {/* Legacy blog routes for backward compatibility */}
             <Route path="/blogs/:categoryId/:postId" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading article...</div>}>
                 <BlogPost />
               </Suspense>
             } />
             
-            {/* Nested blogs route - must come after specific blog routes */}
+            {/* Nested blogs route */}
             <Route path="/nested-blogs" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading nested blogs...</div>}>
                 <NestedBlogs />

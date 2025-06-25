@@ -1,26 +1,61 @@
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRightIcon, TreePineIcon } from "lucide-react";
+import { ArrowRightIcon, FolderIcon, FileTextIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { BlogsData } from "@/models/blog";
-import blogsJson from "@/config/blogs.json";
+import { BlogsData, BlogCategory } from "@/models/blog";
+import { BlogService } from "@/services/blogService";
 
 const Blogs = () => {
   const [blogsData, setBlogsData] = useState<BlogsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // if the blog data has indexUrl, we can use it to fetch the content
-    setBlogsData(blogsJson as BlogsData);
+    loadBlogsData();
   }, []);
 
-  if (!blogsData) return null;
+  const loadBlogsData = async () => {
+    try {
+      const data = await BlogService.fetchBlogsData();
+      setBlogsData(data);
+    } catch (error) {
+      console.error('Failed to load blogs data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCategoryClick = (category: BlogCategory) => {
+    if (category.indexUrl) {
+      // Navigate to nested blog structure
+      navigate(`/blogs/${category.id}`);
+    } else if (category.children && category.children.length > 0) {
+      // Navigate to simple article listing
+      navigate(`/blogs/${category.id}`);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading blogs...</p>
+      </div>
+    );
+  }
+
+  if (!blogsData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Failed to load blogs</p>
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence>
@@ -38,24 +73,8 @@ const Blogs = () => {
               <div className="text-center mb-16">
                 <h1 className="text-4xl md:text-5xl font-bold mb-4">Blogs</h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-                  Explore articles on various topics. Stay tuned for more content!
+                  Explore articles on various topics. Dive deep into comprehensive guides and tutorials.
                 </p>
-                
-                {/* New Nested Blog Structure Link */}
-                {/* <div className="mb-12">
-                  <Link to="/nested-blogs">
-                    <Button size="lg" className="gap-2">
-                      <TreePineIcon className="h-5 w-5" />
-                      Explore Nested Blog Structure
-                      <ArrowRightIcon className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Browse blogs in a hierarchical tree structure with improved navigation
-                  </p>
-                </div> */}
-
-
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -67,8 +86,19 @@ const Blogs = () => {
                     transition={{ duration: 0.5, delay: 0.1 * blogsData.categories.indexOf(category) }}
                     viewport={{ once: true }}
                   >
-                    <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow">
+                    <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                          onClick={() => handleCategoryClick(category)}>
                       <CardHeader>
+                        <div className="flex items-center gap-2 mb-2">
+                          {category.indexUrl ? (
+                            <FolderIcon className="h-5 w-5 text-blue-500" />
+                          ) : (
+                            <FileTextIcon className="h-5 w-5 text-green-500" />
+                          )}
+                          <span className="text-xs text-muted-foreground">
+                            {category.indexUrl ? 'Nested Structure' : 'Articles'}
+                          </span>
+                        </div>
                         <CardTitle className="text-2xl">{category.title}</CardTitle>
                         <CardDescription>{category.description}</CardDescription>
                       </CardHeader>
@@ -87,7 +117,12 @@ const Blogs = () => {
                               </p>
                             </div>
                           ))}
-                          {!category.children && (
+                          {!category.children && category.indexUrl && (
+                            <div className="text-sm text-muted-foreground">
+                              Click to explore nested structure...
+                            </div>
+                          )}
+                          {!category.children && !category.indexUrl && (
                             <div className="text-sm text-muted-foreground">
                               More articles coming soon...
                             </div>
@@ -95,11 +130,10 @@ const Blogs = () => {
                         </div>
                       </CardContent>
                       <CardFooter>
-                        <Link to={`/blogs/${category.id}`} className="w-full">
-                          <Button variant="outline" className="gap-2 w-full">
-                            View All {category.title} Articles <ArrowRightIcon className="h-4 w-4" />
-                          </Button>
-                        </Link>
+                        <Button variant="outline" className="gap-2 w-full">
+                          {category.indexUrl ? 'Explore Structure' : 'View Articles'} 
+                          <ArrowRightIcon className="h-4 w-4" />
+                        </Button>
                       </CardFooter>
                     </Card>
                   </motion.div>
