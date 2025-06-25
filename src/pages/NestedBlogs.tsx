@@ -20,6 +20,8 @@ const NestedBlogs = () => {
 
   // Load nested blogs data
   useEffect(() => {
+    console.log("Loading nested blogs data...");
+    console.log("Nested blogs JSON:", nestedBlogsJson);
     setBlogsData(nestedBlogsJson as NestedBlogsData);
   }, []);
 
@@ -145,6 +147,8 @@ const NestedBlogs = () => {
       </div>
     );
   }
+
+  console.log("Rendering with blogs data:", blogsData);
 
   return (
     <AnimatePresence>
