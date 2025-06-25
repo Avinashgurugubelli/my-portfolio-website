@@ -34,17 +34,17 @@ const NestedBlogs = () => {
     const item = items.find(item => {
       // Try multiple matching strategies
       const titleMatch = item.title.toLowerCase() === currentSegment.toLowerCase();
-      const labelMatch = item.label === currentSegment;
+      const idMatch = item.id === currentSegment;
       const urlEncodedMatch = encodeURIComponent(item.title) === pathSegments[0];
       
       // For files, also check path-based matching
       if (item.type === "file") {
         const pathMatch = item.path.includes(currentSegment);
         const filenameMatch = item.path.split('/').pop()?.replace('.md', '') === currentSegment;
-        return titleMatch || labelMatch || urlEncodedMatch || pathMatch || filenameMatch;
+        return titleMatch || idMatch || urlEncodedMatch || pathMatch || filenameMatch;
       }
       
-      return titleMatch || labelMatch || urlEncodedMatch;
+      return titleMatch || idMatch || urlEncodedMatch;
     });
     
     console.log("Found item:", item);
@@ -74,10 +74,9 @@ const NestedBlogs = () => {
       if (foundItem) {
         console.log("Found item:", foundItem);
         setSelectedItem(foundItem);
-        setSelectedPath(foundItem.type === "file" ? foundItem.path : foundItem.label);
+        setSelectedPath(foundItem.type === "file" ? foundItem.path : foundItem.id);
       } else {
         console.log("Item not found for path:", pathSegments);
-        // Fallback: try to find by partial title match
         const findByPartialTitle = (items: BlogItem[], searchTerm: string): BlogItem | null => {
           for (const item of items) {
             const normalizedTitle = item.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
@@ -99,7 +98,7 @@ const NestedBlogs = () => {
         const alternativeItem = findByPartialTitle(blogsData.blogs as BlogItem[], lastSegment);
         if (alternativeItem) {
           setSelectedItem(alternativeItem);
-          setSelectedPath(alternativeItem.type === "file" ? alternativeItem.path : alternativeItem.label);
+          setSelectedPath(alternativeItem.type === "file" ? alternativeItem.path : alternativeItem.id);
         }
       }
     }
@@ -107,7 +106,7 @@ const NestedBlogs = () => {
 
   const handleItemClick = (item: BlogDirectory | BlogFile) => {
     setSelectedItem(item);
-    const newPath = item.type === "file" ? item.path : item.label;
+    const newPath = item.type === "file" ? item.path : item.id;
     setSelectedPath(newPath);
     
     // Create URL path for navigation - use the title for better URLs

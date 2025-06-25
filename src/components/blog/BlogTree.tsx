@@ -21,13 +21,13 @@ export const BlogTree = ({
 }: BlogTreeProps) => {
   const [openDirectories, setOpenDirectories] = useState<Set<string>>(new Set());
 
-  const toggleDirectory = (label: string, e: React.MouseEvent) => {
+  const toggleDirectory = (itemId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const newSet = new Set(openDirectories);
-    if (newSet.has(label)) {
-      newSet.delete(label);
+    if (newSet.has(itemId)) {
+      newSet.delete(itemId);
     } else {
-      newSet.add(label);
+      newSet.add(itemId);
     }
     setOpenDirectories(newSet);
   };
@@ -41,16 +41,16 @@ export const BlogTree = ({
     <TooltipProvider>
       <div className={`space-y-1 ${level > 0 ? 'ml-4 border-l border-border pl-2' : ''}`}>
         {items.map((item) => (
-          <div key={item.label}>
+          <div key={item.id}>
             {item.type === "directory" ? (
               <Collapsible 
-                open={openDirectories.has(item.label)}
+                open={openDirectories.has(item.id)}
                 onOpenChange={(open) => {
                   const newSet = new Set(openDirectories);
                   if (open) {
-                    newSet.add(item.label);
+                    newSet.add(item.id);
                   } else {
-                    newSet.delete(item.label);
+                    newSet.delete(item.id);
                   }
                   setOpenDirectories(newSet);
                 }}
@@ -62,9 +62,9 @@ export const BlogTree = ({
                         variant="ghost"
                         size="sm"
                         className="h-auto p-1 hover:bg-accent/50"
-                        onClick={(e) => toggleDirectory(item.label, e)}
+                        onClick={(e) => toggleDirectory(item.id, e)}
                       >
-                        {openDirectories.has(item.label) ? (
+                        {openDirectories.has(item.id) ? (
                           <ChevronDownIcon className="h-4 w-4 text-muted-foreground" />
                         ) : (
                           <ChevronRightIcon className="h-4 w-4 text-muted-foreground" />
@@ -76,7 +76,7 @@ export const BlogTree = ({
                         <Button
                           variant="ghost"
                           className={`flex-1 justify-start text-left h-auto p-2 hover:bg-accent/50 ${
-                            selectedPath === item.label ? 'bg-accent' : ''
+                            selectedPath === item.id ? 'bg-accent' : ''
                           }`}
                           onClick={(e) => handleItemClick(item, e)}
                         >

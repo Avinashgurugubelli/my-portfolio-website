@@ -68,7 +68,7 @@ export type PersonalInfo = {
     certifications: Certification[];
   };
   
-  // New enhanced blog structure
+  // New enhanced blog structure with consistent camelCase
   export type BlogReference = {
     title: string;
     author?: string;
@@ -76,7 +76,7 @@ export type PersonalInfo = {
     publisher?: string;
     year?: number;
     url?: string;
-    Link?: string;
+    link?: string;
   };
   
   export type BlogFile = {
@@ -100,7 +100,6 @@ export type PersonalInfo = {
     author?: string;
     date?: string;
     createdOn?: string;
-    References?: BlogReference[];
     references?: BlogReference[];
     children?: (BlogFile | BlogDirectory)[];
   };
@@ -135,3 +134,8 @@ export type PersonalInfo = {
   
   // For nested blog index files
   export type NestedBlogIndex = BlogDirectory;
+
+  // Add NestedBlogsData type for compatibility
+  export type NestedBlogsData = {
+    blogs: BlogDirectory[];
+  };
