@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -49,6 +48,7 @@ const BlogViewer = () => {
 
   // Set up blog items based on structure type
   useEffect(() => {
+    console.log("Setting up blog items. NestedIndex:", nestedIndex, "Category:", category);
     if (nestedIndex) {
       // Nested structure
       setBlogItems(nestedIndex.children || []);
@@ -68,8 +68,10 @@ const BlogViewer = () => {
 
   // Auto-select first article when blog items are loaded and no URL path
   useEffect(() => {
+    console.log("Auto-selecting first article. BlogItems length:", blogItems.length, "WildcardPath:", wildcardPath);
     if (blogItems.length > 0 && !wildcardPath) {
       const firstFile = findFirstFile(blogItems);
+      console.log("First file found:", firstFile);
       if (firstFile) {
         setSelectedItem(firstFile);
         setSelectedPath(firstFile.type === "file" ? firstFile.path : firstFile.id);
@@ -77,27 +79,45 @@ const BlogViewer = () => {
     }
   }, [blogItems, wildcardPath]);
 
-  // Handle direct URL access
+  // Handle direct URL access with improved logging
   useEffect(() => {
+    console.log("Handling direct URL access. WildcardPath:", wildcardPath, "BlogItems length:", blogItems.length);
     if (wildcardPath && blogItems.length > 0) {
       const pathSegments = wildcardPath.split('/').filter(Boolean);
+      console.log("Path segments for direct access:", pathSegments);
+      
       const foundItem = BlogService.findBlogItemByPath(blogItems, pathSegments);
+      console.log("Found item for direct URL:", foundItem);
       
       if (foundItem) {
         setSelectedItem(foundItem);
         setSelectedPath(foundItem.type === "file" ? foundItem.path : foundItem.id);
+      } else {
+        console.log("Item not found, falling back to first file");
+        const firstFile = findFirstFile(blogItems);
+        if (firstFile) {
+          setSelectedItem(firstFile);
+          setSelectedPath(firstFile.type === "file" ? firstFile.path : firstFile.id);
+        }
       }
     }
   }, [wildcardPath, blogItems]);
 
   const handleItemClick = (item: BlogItem) => {
+    console.log("Item clicked:", item);
     // Only update content, don't navigate
     setSelectedItem(item);
     setSelectedPath(item.type === "file" ? item.path : item.id);
     
     // Update URL without navigation for deep linking support
-    const itemPath = BlogService.generateBlogPath(item);
-    window.history.replaceState(null, '', `/blogs/${categoryId}/${itemPath}`);
+    const fullPath = BlogService.findItemPath(blogItems, item);
+    console.log("Generated full path for item:", fullPath);
+    
+    if (fullPath) {
+      const urlPath = fullPath.join('/');
+      console.log("Updating URL to:", `/blogs/${categoryId}/${urlPath}`);
+      window.history.replaceState(null, '', `/blogs/${categoryId}/${urlPath}`);
+    }
   };
 
   if (!category) {
