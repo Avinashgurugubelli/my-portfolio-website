@@ -5,37 +5,40 @@
     {
       "label": "01.system-design",
       "type": "directory",
-      "Title": "System Design Deep Dive",
-      "Description": "This blog post provides an in-depth exploration of system design, covering key concepts such as scalability, reliability, and maintainability. It discusses the principles and best practices for designing robust software systems, with a focus on real-world applications.",
-      "Author": "Avinash Gurugubelli",
-      "References": [
+      "title": "System Design Deep Dive",
+      "description": "This blog post provides an in-depth exploration of system design, covering key concepts such as scalability, reliability, and maintainability. It discusses the principles and best practices for designing robust software systems, with a focus on real-world applications.",
+      "author": "Avinash Gurugubelli",
+      "references": [
         {
-          "Title": "Designing Data-Intensive Applications",
-          "Author": "Martin Kleppmann",
-          "Link": ""
+          "title": "Designing Data-Intensive Applications",
+          "author": "Martin Kleppmann",
+          "link": ""
         }
       ],
+      "id": "system-design-deep-dive",
       "children": [
         {
           "label": "01.general",
           "type": "directory",
-          "Title": "General System Design Principles",
-          "Description": "This blog post introduces the fundamental principles of system design, focusing on scalability, reliability, and maintainability. It provides an overview of key concepts and best practices for designing robust software systems.",
-          "Author": "Avinash Gurugubelli",
-          "References": [
+          "title": "General System Design Principles",
+          "description": "This blog post introduces the fundamental principles of system design, focusing on scalability, reliability, and maintainability. It provides an overview of key concepts and best practices for designing robust software systems.",
+          "author": "Avinash Gurugubelli",
+          "references": [
             {
-              "Title": "Designing Data-Intensive Applications",
-              "Author": "Martin Kleppmann",
-              "Link": ""
+              "title": "Designing Data-Intensive Applications",
+              "author": "Martin Kleppmann",
+              "link": ""
             }
           ],
+          "id": "general-system-design-principles",
           "children": [
             {
+              "id": "01-0-graph-db-vs-triple-store-notes-md",
               "label": "01.0.graph-db-vs-triple-store-notes.md",
               "type": "file",
               "path": "blogs/01.system-design/01.general/01.0.graph-db-vs-triple-store-notes.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Applications of Property Graphs vs Triple Stores (RDF)",
               "description": "A comparative analysis of applications for Property Graphs and Triple Stores (RDF), highlighting their strengths in various domains.",
@@ -59,11 +62,12 @@
               ]
             },
             {
+              "id": "02-0-graph-query-examples-md",
               "label": "02.0.graph-query-examples.md",
               "type": "file",
               "path": "blogs/01.system-design/01.general/02.0.graph-query-examples.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Sample Query Comparison: SQL, CQL (Cypher), SPARQL",
               "description": "A comparative analysis of SQL, CQL (Cypher), and SPARQL queries for a common graph query problem.",
@@ -87,11 +91,12 @@
               ]
             },
             {
+              "id": "02-1-horizontal-scaling-practice-md",
               "label": "02.1.horizontal-scaling-practice.md",
               "type": "file",
               "path": "blogs/01.system-design/01.general/02.1.horizontal-scaling-practice.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Horizontal Scaling Practice Guide",
               "description": "A practical guide to horizontal scaling with hands-on examples using Node.js, MongoDB, Kafka, and Redis.",
@@ -122,11 +127,12 @@
           "type": "directory",
           "children": [
             {
+              "id": "03-0-storage-and-retrival-md",
               "label": "03.0.storage-and-retrival.md",
               "type": "file",
               "path": "blogs/01.system-design/03.storage-and-retrival/03.0.storage-and-retrival.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Storage and Retrieval",
               "description": "A comprehensive guide to storage and retrieval systems, covering indexing structures, transaction processing, and data warehousing.",
@@ -152,11 +158,12 @@
               ]
             },
             {
+              "id": "03-1-column-storage-summary-md",
               "label": "03.1.Column-storage-summary.md",
               "type": "file",
               "path": "blogs/01.system-design/03.storage-and-retrival/03.1.Column-storage-summary.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Column-Oriented Storage Summary",
               "description": "A concise summary of column-oriented storage, its advantages, and how it works with examples.",
@@ -183,23 +190,25 @@
         {
           "label": "04.encoding-and-evolution",
           "type": "directory",
-          "Title": "Encoding and Evolution",
-          "Description": "This blog post explores the concepts of data encoding and schema evolution in software systems. It discusses how data formats can change over time and the implications for backward and forward compatibility in applications.",
-          "Author": "Avinash Gurugubelli",
-          "References": [
+          "title": "Encoding and Evolution",
+          "description": "This blog post explores the concepts of data encoding and schema evolution in software systems. It discusses how data formats can change over time and the implications for backward and forward compatibility in applications.",
+          "author": "Avinash Gurugubelli",
+          "references": [
             {
-              "Title": "Designing Data-Intensive Applications",
-              "Author": "Martin Kleppmann",
-              "Link": ""
+              "title": "Designing Data-Intensive Applications",
+              "author": "Martin Kleppmann",
+              "link": ""
             }
           ],
+          "id": "encoding-and-evolution",
           "children": [
             {
+              "id": "04-0-encoding-and-evolution-md",
               "label": "04.0.encoding-and-evolution.md",
               "type": "file",
               "path": "blogs/01.system-design/04.encoding-and-evolution/04.0.encoding-and-evolution.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Encoding and Evolution",
               "description": "A comprehensive guide to data encoding formats, their evolution, and practical examples in Node.js.",
@@ -213,11 +222,12 @@
               "references": []
             },
             {
+              "id": "04-1-message-packexamples-in-javascript-md",
               "label": "04.1.message-packExamples-in-javascript.md",
               "type": "file",
               "path": "blogs/01.system-design/04.encoding-and-evolution/04.1.message-packExamples-in-javascript.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "MessagePack Examples in JavaScript",
               "description": "A practical example of using MessagePack for encoding data in JavaScript, comparing it with JSON.",
@@ -240,11 +250,12 @@
               ]
             },
             {
+              "id": "04-2-serialization-comparison-md",
               "label": "04.2.serialization-comparison.md",
               "type": "file",
               "path": "blogs/01.system-design/04.encoding-and-evolution/04.2.serialization-comparison.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Serialization Format Comparison",
               "description": "A detailed comparison of various serialization formats including JSON, MessagePack, Thrift, and Protobuf.",
@@ -268,11 +279,12 @@
               ]
             },
             {
+              "id": "04-3-serialization-comparison-avro-md",
               "label": "04.3.serialization-comparison-avro.md",
               "type": "file",
               "path": "blogs/01.system-design/04.encoding-and-evolution/04.3.serialization-comparison-avro.md",
-              "date": "June 24, 2025",
-              "createdOn": "2025-06-24 12:32:42",
+              "date": "June 27, 2025",
+              "createdOn": "2025-06-27 17:22:34",
               "author": "Avinash Gurugubelli",
               "title": "Serialization Comparison: Avro",
               "description": "A detailed comparison of Avro serialization format with examples and explanations.",
