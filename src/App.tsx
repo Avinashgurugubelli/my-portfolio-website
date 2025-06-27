@@ -14,6 +14,7 @@ const BlogViewer = lazy(() => import("./pages/BlogViewer"));
 const BlogCategory = lazy(() => import("./pages/BlogCategory"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const NestedBlogs = lazy(() => import("./pages/NestedBlogs"));
+const BlogSearch = lazy(() => import("./pages/BlogSearch"));
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -35,6 +36,12 @@ const App = () => {
               </Suspense>
             } />
             
+            <Route path="/blogs/search" element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading search...</div>}>
+                <BlogSearch />
+              </Suspense>
+            } />
+            
             {/* New unified blog viewer route */}
             <Route path="/blogs/:categoryId" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading category...</div>}>
@@ -47,13 +54,6 @@ const App = () => {
                 <BlogViewer />
               </Suspense>
             } />
-            
-            {/* Legacy blog routes for backward compatibility */}
-            {/* <Route path="/blogs/:categoryId/:postId" element={
-              <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading article...</div>}>
-                <BlogPost />
-              </Suspense>
-            } /> */}
             
             {/* Nested blogs route */}
             <Route path="/nested-blogs" element={

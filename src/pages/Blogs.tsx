@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRightIcon, FolderIcon, FileTextIcon } from "lucide-react";
+import { ArrowRightIcon, FolderIcon, FileTextIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
@@ -75,6 +75,15 @@ const Blogs = () => {
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
                   Explore articles on various topics. Dive deep into comprehensive guides and tutorials.
                 </p>
+                
+                <Button
+                  onClick={() => navigate('/blogs/search')}
+                  className="gap-2"
+                  size="lg"
+                >
+                  <SearchIcon className="h-4 w-4" />
+                  Search Articles
+                </Button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

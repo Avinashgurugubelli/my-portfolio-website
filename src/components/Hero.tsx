@@ -74,7 +74,7 @@ const Hero = () => {
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         <div className="mb-6 inline-block">
           <div className="relative px-6 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 text-primary/90 animate-fade-in backdrop-blur-sm">
-            <span className="relative z-10">{personalInfo.title}</span>
+            <span className="relative z-10">Full Stack Developer & Software Engineer</span>
             <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-purple-500/10 animate-shimmer" style={{ backgroundSize: '200% 100%', backgroundPosition: '0 0' }}></span>
           </div>
         </div>
@@ -84,17 +84,22 @@ const Hero = () => {
           <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-pulse">{personalInfo.name}</span>
         </h1>
         
-        <div className="min-h-[4rem] flex items-center justify-center mb-10">
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <div className="min-h-[6rem] flex items-center justify-center mb-10">
+          <div className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
             {showTypewriter ? (
-              <>
-                {displayText}
-                <span className="animate-pulse">|</span>
-              </>
+              <div className="space-y-2">
+                <p className="leading-relaxed">
+                  {displayText}
+                  <span className="animate-pulse">|</span>
+                </p>
+                <p className="text-lg text-purple-300/80 font-medium">
+                  Building scalable applications from database to deployment
+                </p>
+              </div>
             ) : (
               <span className="opacity-0">Loading...</span>
             )}
-          </p>
+          </div>
         </div>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
