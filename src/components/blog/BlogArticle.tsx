@@ -1,7 +1,8 @@
 
-import { UserIcon, BookOpenIcon } from "lucide-react";
+import { UserIcon, BookOpenIcon, CalendarIcon, ExternalLinkIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import { BlogDirectory, BlogFile } from "@/models/blog";
 import { BlogContent } from "./BlogContent";
 
@@ -10,6 +11,17 @@ interface BlogArticleProps {
 }
 
 export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
+  const getGitHubUrl = () => {
+    if (selectedItem.type === "file" && selectedItem.path) {
+      // Convert the path to GitHub URL
+      const githubBaseUrl = "https://github.com/avinashgurugubelli/avinashgurugubelli.github.io/blob/main/public/";
+      return `${githubBaseUrl}${selectedItem.path}`;
+    }
+    return null;
+  };
+
+  const githubUrl = getGitHubUrl();
+
   return (
     <ScrollArea className="flex-1">
       <article className="p-6 lg:p-10 max-w-4xl mx-auto">
@@ -18,12 +30,40 @@ export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
             {selectedItem.title}
           </h1>
           
-          {selectedItem.type === "directory" && selectedItem.author && (
-            <div className="flex items-center text-muted-foreground mb-4">
-              <UserIcon className="h-4 w-4 mr-2" />
-              <span>{selectedItem.author}</span>
-            </div>
-          )}
+          <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-4">
+            {selectedItem.author && (
+              <div className="flex items-center">
+                <UserIcon className="h-4 w-4 mr-2" />
+                <span>{selectedItem.author}</span>
+              </div>
+            )}
+            
+            {(selectedItem.date || selectedItem.createdOn) && (
+              <div className="flex items-center">
+                <CalendarIcon className="h-4 w-4 mr-2" />
+                <span>{selectedItem.date || selectedItem.createdOn}</span>
+              </div>
+            )}
+            
+            {githubUrl && (
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="h-8"
+              >
+                <a 
+                  href={githubUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <ExternalLinkIcon className="h-3 w-3" />
+                  View Source
+                </a>
+              </Button>
+            )}
+          </div>
           
           {selectedItem.description && (
             <p className="text-xl text-muted-foreground mb-6">
