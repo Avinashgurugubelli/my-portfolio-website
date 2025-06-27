@@ -9,7 +9,7 @@ on:
       - 'scripts/sdk-versions.json'
 
 permissions:
-  contents: read  # to download release assets
+  contents: read  # for downloading release artifacts
   pages: write
   id-token: write
 
@@ -45,8 +45,7 @@ jobs:
           TAG="v${BLOG_VERSION}"
           ASSET_NAME="${ARTIFACT_PREFIX}${BLOG_VERSION}.zip"
 
-          echo "Fetching release from $REPO with tag $TAG and asset $ASSET_NAME..."
-
+          echo "Downloading $ASSET_NAME from release tag $TAG"
           gh release download "$TAG" \
             -R "$REPO" \
             -p "$ASSET_NAME" \
@@ -63,9 +62,12 @@ jobs:
       # 4. Copy blog files into public/blogs
       - name: Copy blog artifact into public/blogs
         run: |
-          echo "Copying from unzipped folder to public/blogs..."
+          echo "Creating public/blogs folder..."
           mkdir -p public/blogs
-          cp -r blog-temp/unzipped/blogs/* public/blogs/
+
+          echo "Copying from blog-temp/unzipped/out/blogs to public/blogs..."
+          cp -r blog-temp/unzipped/out/blogs/* public/blogs/
+
           echo "Files in public/blogs:"
           ls -R public/blogs
 
