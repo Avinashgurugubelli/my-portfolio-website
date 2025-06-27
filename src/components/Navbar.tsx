@@ -1,7 +1,9 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { MenuIcon, XIcon } from "lucide-react";
+import { MenuIcon, XIcon, SearchIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import personalJson from "@/config/personal.json";
 import ContactRibbon from "./ContactRibbon";
 import MobileMenu from "./MobileMenu";
@@ -9,6 +11,7 @@ import MobileMenu from "./MobileMenu";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -22,7 +25,6 @@ const Navbar = () => {
     { name: 'Skills', href: '/#skills', section: 'skills' },
     { name: 'Certifications', href: '/#certifications', section: 'certifications' },
     { name: 'Blogs', href: '/blogs', section: 'blogs' },
-    // { name: 'Nested Blogs', href: '/nested-blogs', section: 'nested-blogs' },
     { name: 'Contact', href: '/#contact', section: 'contact' },
   ];
 
@@ -61,6 +63,14 @@ const Navbar = () => {
     }
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/blogs/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
+
   const navLinks = navItems.map(item => ({
     name: item.name,
     path: item.href
@@ -93,17 +103,34 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={(e) => handleNavClick(e, item.href, item.section)}
-                  className="px-3 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-accent transition-colors"
-                >
-                  {item.name}
-                </Link>
-              ))}
+            <div className="hidden lg:flex items-center space-x-4">
+              {/* Navigation Links */}
+              <div className="flex items-center space-x-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    onClick={(e) => handleNavClick(e, item.href, item.section)}
+                    className="px-3 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-accent transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Search Bar */}
+              <form onSubmit={handleSearch} className="flex items-center">
+                <div className="relative">
+                  <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search blogs..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-8 h-8 w-48 text-sm"
+                  />
+                </div>
+              </form>
             </div>
 
             {/* Mobile menu button */}

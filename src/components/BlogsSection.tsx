@@ -6,6 +6,7 @@ import { ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { BlogsData, BlogCategory } from "@/models/blog";
+import { useLazyBlogs } from "@/hooks/useLazyBlogs";
 import blogsJson from "@/config/blogs.json";
 
 const BlogsSection = () => {
@@ -14,6 +15,11 @@ const BlogsSection = () => {
   useEffect(() => {
     setBlogsData(blogsJson as BlogsData);
   }, []);
+
+  const { visibleItems, isLoading, hasMore, loadingRef } = useLazyBlogs({
+    categories: blogsData?.categories || [],
+    itemsPerPage: 3
+  });
 
   if (!blogsData) return null;
 
@@ -28,12 +34,12 @@ const BlogsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogsData.categories.slice(0, 3).map((category) => (
+          {visibleItems.map((category, index) => (
             <motion.div
               key={category.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.1 * (index % 3) }}
               viewport={{ once: true }}
             >
               <Card className="h-full flex flex-col hover:shadow-lg transition-shadow bg-card border-border">
@@ -67,6 +73,18 @@ const BlogsSection = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Loading indicator */}
+        {hasMore && (
+          <div ref={loadingRef} className="flex justify-center mt-8">
+            {isLoading && (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                <span>Loading more blogs...</span>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="text-center mt-12">
           <Link to="/blogs">

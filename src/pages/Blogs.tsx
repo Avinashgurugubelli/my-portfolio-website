@@ -4,15 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRightIcon, FolderIcon, FileTextIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { BlogsData, BlogCategory } from "@/models/blog";
 import { BlogService } from "@/services/blogService";
+import { useLazyBlogs } from "@/hooks/useLazyBlogs";
 
 const Blogs = () => {
   const [blogsData, setBlogsData] = useState<BlogsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,13 +34,23 @@ const Blogs = () => {
     }
   };
 
+  const { visibleItems, isLoading, hasMore, loadingRef } = useLazyBlogs({
+    categories: blogsData?.categories || [],
+    itemsPerPage: 6
+  });
+
   const handleCategoryClick = (category: BlogCategory) => {
     if (category.indexUrl) {
-      // Navigate to nested blog structure
       navigate(`/blogs/${category.id}`);
     } else if (category.children && category.children.length > 0) {
-      // Navigate to simple article listing
       navigate(`/blogs/${category.id}`);
+    }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/blogs/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
@@ -76,23 +89,41 @@ const Blogs = () => {
                   Explore articles on various topics. Dive deep into comprehensive guides and tutorials.
                 </p>
                 
-                <Button
-                  onClick={() => navigate('/blogs/search')}
-                  className="gap-2"
-                  size="lg"
-                >
-                  <SearchIcon className="h-4 w-4" />
-                  Search Articles
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                  <form onSubmit={handleSearch} className="flex items-center gap-2">
+                    <div className="relative">
+                      <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="text"
+                        placeholder="Search articles..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 w-64"
+                      />
+                    </div>
+                    <Button type="submit" size="sm">
+                      Search
+                    </Button>
+                  </form>
+                  
+                  <Button
+                    onClick={() => navigate('/blogs/search')}
+                    variant="outline"
+                    className="gap-2"
+                  >
+                    <SearchIcon className="h-4 w-4" />
+                    Advanced Search
+                  </Button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {blogsData.categories.map((category) => (
+                {visibleItems.map((category, index) => (
                   <motion.div
                     key={category.id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 * blogsData.categories.indexOf(category) }}
+                    transition={{ duration: 0.5, delay: 0.1 * (index % 3) }}
                     viewport={{ once: true }}
                   >
                     <Card className="h-full flex flex-col overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
@@ -148,6 +179,18 @@ const Blogs = () => {
                   </motion.div>
                 ))}
               </div>
+
+              {/* Loading indicator */}
+              {hasMore && (
+                <div ref={loadingRef} className="flex justify-center mt-12">
+                  {isLoading && (
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                      <span>Loading more categories...</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </section>
         </main>
