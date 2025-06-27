@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MenuIcon, XIcon, SearchIcon } from "lucide-react";
@@ -7,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import personalJson from "@/config/personal.json";
 import ContactRibbon from "./ContactRibbon";
 import MobileMenu from "./MobileMenu";
+import BlogsJumboMenu from "./BlogsJumboMenu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showBlogsMenu, setShowBlogsMenu] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -36,13 +37,11 @@ const Navbar = () => {
     e.preventDefault();
     closeMenu();
     
-    // Handle blog routes directly
     if (href === '/blogs' || href === '/nested-blogs') {
       navigate(href);
       return;
     }
     
-    // Handle hash-based navigation
     if (href.startsWith('/#')) {
       if (location.pathname !== '/') {
         navigate('/');
@@ -87,10 +86,8 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      {/* Contact Ribbon */}
       <ContactRibbon />
       
-      {/* Main Navigation */}
       <nav className={`border-b transition-all duration-300 ${
         isScrolled ? 'border-border/50 shadow-sm' : 'border-border/20'
       }`}>
@@ -102,23 +99,38 @@ const Navbar = () => {
               </span>
             </Link>
 
-            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-4">
-              {/* Navigation Links */}
               <div className="flex items-center space-x-1">
                 {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    onClick={(e) => handleNavClick(e, item.href, item.section)}
-                    className="px-3 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-accent transition-colors"
-                  >
-                    {item.name}
-                  </Link>
+                  <div key={item.name} className="relative">
+                    {item.name === 'Blogs' ? (
+                      <div
+                        onMouseEnter={() => setShowBlogsMenu(true)}
+                        onMouseLeave={() => setShowBlogsMenu(false)}
+                        className="relative"
+                      >
+                        <Link
+                          to={item.href}
+                          onClick={(e) => handleNavClick(e, item.href, item.section)}
+                          className="px-3 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-accent transition-colors"
+                        >
+                          {item.name}
+                        </Link>
+                        <BlogsJumboMenu isVisible={showBlogsMenu} />
+                      </div>
+                    ) : (
+                      <Link
+                        to={item.href}
+                        onClick={(e) => handleNavClick(e, item.href, item.section)}
+                        className="px-3 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-accent transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
 
-              {/* Search Bar */}
               <form onSubmit={handleSearch} className="flex items-center">
                 <div className="relative">
                   <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -133,7 +145,6 @@ const Navbar = () => {
               </form>
             </div>
 
-            {/* Mobile menu button */}
             <div className="lg:hidden">
               <button
                 onClick={toggleMenu}
@@ -147,7 +158,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       <MobileMenu 
         isOpen={isOpen}
         navLinks={navLinks}

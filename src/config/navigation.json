@@ -1,0 +1,9 @@
+
+{
+  "jumboMenuEnabled": true,
+  "jumboMenuConfig": {
+    "maxCategories": 6,
+    "showDescriptions": true,
+    "showIcons": true
+  }
+}

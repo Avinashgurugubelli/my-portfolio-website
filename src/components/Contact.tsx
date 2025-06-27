@@ -1,22 +1,13 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import ContactForm from "./ContactForm";
 import { PersonalInfo, SocialData, SocialLinkData } from "@/models/blog";
 import personalJson from "@/config/personal.json";
 import socialJson from "@/config/social.json";
 import { GithubIcon, LinkedinIcon, TwitterIcon, MailIcon } from 'lucide-react';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
   const [socialLinks, setSocialLinks] = useState<SocialLinkData[]>([]);
 
@@ -25,24 +16,6 @@ const Contact = () => {
     setSocialLinks((socialJson as SocialData).socialLinks);
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      toast.success("Message sent successfully!");
-      setFormData({ name: "", email: "", message: "" });
-      setLoading(false);
-    }, 1500);
-  };
-
-  // Function to get the correct icon component
   const getIconComponent = (iconName: string) => {
     switch(iconName) {
       case 'LinkedinIcon': return LinkedinIcon;
@@ -114,65 +87,7 @@ const Contact = () => {
           </div>
           
           <div className="md:col-span-3">
-            <Card className="glass-card border-none h-full overflow-hidden">
-              <CardContent className="p-8">
-                <h3 className="text-xl font-semibold mb-6">Send Message</h3>
-                
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label htmlFor="name" className="text-sm font-medium">
-                        Your Name
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        placeholder="John Doe"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="email" className="text-sm font-medium">
-                        Your Email
-                      </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="john@example.com"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <label htmlFor="message" className="text-sm font-medium">
-                      Your Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      placeholder="Hello! I'm interested in working with you..."
-                      required
-                      rows={6}
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="resize-none bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-                    />
-                  </div>
-                  
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+            <ContactForm />
           </div>
         </div>
       </div>

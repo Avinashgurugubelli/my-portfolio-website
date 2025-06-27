@@ -89,7 +89,7 @@ const Blogs = () => {
                   Explore articles on various topics. Dive deep into comprehensive guides and tutorials.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <div className="flex justify-center">
                   <form onSubmit={handleSearch} className="flex items-center gap-2">
                     <div className="relative">
                       <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -105,15 +105,6 @@ const Blogs = () => {
                       Search
                     </Button>
                   </form>
-                  
-                  <Button
-                    onClick={() => navigate('/blogs/search')}
-                    variant="outline"
-                    className="gap-2"
-                  >
-                    <SearchIcon className="h-4 w-4" />
-                    Advanced Search
-                  </Button>
                 </div>
               </div>
 
@@ -180,7 +171,6 @@ const Blogs = () => {
                 ))}
               </div>
 
-              {/* Loading indicator */}
               {hasMore && (
                 <div ref={loadingRef} className="flex justify-center mt-12">
                   {isLoading && (
