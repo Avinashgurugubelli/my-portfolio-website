@@ -9,7 +9,7 @@ on:
       - 'scripts/sdk-versions.json'
 
 permissions:
-  contents: read  # for downloading release artifacts
+  contents: write  # for downloading release artifacts
   pages: write
   id-token: write
 
