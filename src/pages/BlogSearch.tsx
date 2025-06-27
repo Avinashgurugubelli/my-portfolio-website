@@ -132,8 +132,8 @@ const BlogSearch = () => {
         }
       });
       
-      // Tags matching
-      if (item.tags) {
+      // Tags matching (only for files)
+      if (item.type === "file" && item.tags) {
         item.tags.forEach(tag => {
           if (tag.toLowerCase().includes(query)) {
             score += 6;
@@ -286,16 +286,16 @@ const BlogSearch = () => {
                           </div>
                         )}
                         
-                        {(result.item.date || result.item.createdOn) && (
+                        {(result.item.date || (result.item.type === "file" && result.item.createdOn)) && (
                           <div className="flex items-center gap-1">
                             <CalendarIcon className="h-3 w-3" />
-                            <span>{result.item.date || result.item.createdOn}</span>
+                            <span>{result.item.date || (result.item.type === "file" ? result.item.createdOn : '')}</span>
                           </div>
                         )}
                       </div>
                     </CardHeader>
                     
-                    {result.item.tags && result.item.tags.length > 0 && (
+                    {result.item.type === "file" && result.item.tags && result.item.tags.length > 0 && (
                       <CardContent className="pt-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <TagIcon className="h-3 w-3 text-muted-foreground" />
