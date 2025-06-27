@@ -8,6 +8,11 @@ on:
       - 'package.json'
       - 'scripts/sdk-versions.json'
 
+permissions:
+  contents: read  # to download release assets
+  pages: write
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -34,37 +39,34 @@ jobs:
 
           echo "Fetched: Version=$BLOG_VERSION, Prefix=$ARTIFACT_PREFIX, Repo=$REPO"
 
-      # 3. Fetch latest blog artifact from avi-tech-blogs
-      - name: Fetch latest blog artifact
+      # 3. Download blog artifact from GitHub Release
+      - name: Download blog artifact from release
         run: |
-          echo "Fetching from repo: https://github.com/$REPO"
+          TAG="v${BLOG_VERSION}"
+          ASSET_NAME="${ARTIFACT_PREFIX}${BLOG_VERSION}.zip"
 
-          run_id=$(gh run list -R $REPO \
-            --workflow="Build and Publish Markdown" \
-            --branch=main \
-            --limit=1 \
-            --json databaseId \
-            --jq '.[0].databaseId')
+          echo "Fetching release from $REPO with tag $TAG and asset $ASSET_NAME..."
 
-          echo "Latest Run ID: $run_id"
-          echo "Expecting artifact: ${ARTIFACT_PREFIX}${BLOG_VERSION}"
-
-          gh run download $run_id \
-            -R $REPO \
-            -n ${ARTIFACT_PREFIX}${BLOG_VERSION} \
+          gh release download "$TAG" \
+            -R "$REPO" \
+            -p "$ASSET_NAME" \
             -D blog-temp
 
-          echo "Downloaded files in blog-temp:"
-          ls -R blog-temp
+          echo "Unzipping asset..."
+          unzip blog-temp/"$ASSET_NAME" -d blog-temp/unzipped
+
+          echo "Unzipped contents:"
+          ls -R blog-temp/unzipped
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 4. Sync blog content into public/blogs
+      # 4. Copy blog files into public/blogs
       - name: Copy blog artifact into public/blogs
         run: |
-          echo "Copying downloaded blog files (blogs/*) into public/blogs..."
-          cp -r blog-temp/blogs/* public/blogs/
-          echo "Files in public/blogs after copy:"
+          echo "Copying from unzipped folder to public/blogs..."
+          mkdir -p public/blogs
+          cp -r blog-temp/unzipped/blogs/* public/blogs/
+          echo "Files in public/blogs:"
           ls -R public/blogs
 
       # 5. Install dependencies

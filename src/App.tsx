@@ -49,11 +49,11 @@ const App = () => {
             } />
             
             {/* Legacy blog routes for backward compatibility */}
-            <Route path="/blogs/:categoryId/:postId" element={
+            {/* <Route path="/blogs/:categoryId/:postId" element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading article...</div>}>
                 <BlogPost />
               </Suspense>
-            } />
+            } /> */}
             
             {/* Nested blogs route */}
             <Route path="/nested-blogs" element={
