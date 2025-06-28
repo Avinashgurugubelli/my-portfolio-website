@@ -179,7 +179,7 @@ export const useSearchBlogs = () => {
               searchTerms.forEach(term => {
                 if (authorStr.includes(term)) {
                   score += 2;
-                });
+                }
               });
             });
             
