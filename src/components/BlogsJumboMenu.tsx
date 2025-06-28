@@ -12,7 +12,7 @@ interface BlogsJumboMenuProps {
 
 const BlogsJumboMenu = ({ isVisible }: BlogsJumboMenuProps) => {
   const [blogsData, setBlogsData] = useState<BlogsData | null>(null);
-  const [isEnabled, setIsEnabled] = useState(true); // Make this configurable
+  const [isEnabled, setIsEnabled] = useState(true);
 
   useEffect(() => {
     setBlogsData(blogsJson as BlogsData);
@@ -29,6 +29,8 @@ const BlogsJumboMenu = ({ isVisible }: BlogsJumboMenuProps) => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
           className="absolute top-full left-0 mt-2 w-96 bg-background/95 backdrop-blur-sm border border-border rounded-lg shadow-lg p-4 z-50"
+          onMouseEnter={(e) => e.stopPropagation()}
+          onMouseLeave={(e) => e.stopPropagation()}
         >
           <div className="grid grid-cols-1 gap-2">
             <h3 className="text-sm font-semibold text-muted-foreground mb-2">Blog Categories</h3>

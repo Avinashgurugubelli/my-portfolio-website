@@ -10,6 +10,7 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     subject: "",
     message: "",
   });
@@ -49,6 +50,7 @@ const ContactForm = () => {
         body: `
 Name: ${data.name}
 Email: ${data.email}
+Phone: ${data.phone}
 Subject: ${data.subject}
 
 Message:
@@ -67,6 +69,7 @@ ${data.message}
       //   body: JSON.stringify({
       //     name: data.name,
       //     email: data.email,
+      //     phone: data.phone,
       //     subject: data.subject,
       //     message: data.message
       //   })
@@ -92,7 +95,7 @@ ${data.message}
       
       if (emailSent || sheetsSent) {
         toast.success("Message sent successfully! I'll get back to you soon.");
-        setFormData({ name: "", email: "", subject: "", message: "" });
+        setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       } else {
         toast.error("Failed to send message. Please try again.");
       }
@@ -113,12 +116,12 @@ ${data.message}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
-                Your Name *
+                Name *
               </label>
               <Input
                 id="name"
                 name="name"
-                placeholder="John Doe"
+                placeholder="Enter your name"
                 required
                 value={formData.name}
                 onChange={handleChange}
@@ -127,13 +130,13 @@ ${data.message}
             </div>
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                Your Email *
+                Email *
               </label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                placeholder="john@example.com"
+                placeholder="Enter your email"
                 required
                 value={formData.email}
                 onChange={handleChange}
@@ -143,13 +146,28 @@ ${data.message}
           </div>
           
           <div className="space-y-2">
+            <label htmlFor="phone" className="text-sm font-medium">
+              Phone Number
+            </label>
+            <Input
+              id="phone"
+              name="phone"
+              type="tel"
+              placeholder="Enter your phone number"
+              value={formData.phone}
+              onChange={handleChange}
+              className="bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
+            />
+          </div>
+          
+          <div className="space-y-2">
             <label htmlFor="subject" className="text-sm font-medium">
               Subject *
             </label>
             <Input
               id="subject"
               name="subject"
-              placeholder="Project inquiry, collaboration, etc."
+              placeholder="Enter message subject"
               required
               value={formData.subject}
               onChange={handleChange}
@@ -159,12 +177,12 @@ ${data.message}
           
           <div className="space-y-2">
             <label htmlFor="message" className="text-sm font-medium">
-              Your Message *
+              Message *
             </label>
             <Textarea
               id="message"
               name="message"
-              placeholder="Hello! I'm interested in working with you..."
+              placeholder="Enter your message"
               required
               rows={6}
               value={formData.message}

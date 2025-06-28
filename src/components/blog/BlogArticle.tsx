@@ -13,9 +13,10 @@ interface BlogArticleProps {
 export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
   const getGitHubUrl = () => {
     if (selectedItem.type === "file" && selectedItem.path) {
-      // Convert the path to GitHub URL
+      // Convert the path to GitHub URL - remove leading slash and add proper base
+      const cleanPath = selectedItem.path.startsWith('/') ? selectedItem.path.slice(1) : selectedItem.path;
       const githubBaseUrl = "https://github.com/avinashgurugubelli/avinashgurugubelli.github.io/blob/main/public/";
-      return `${githubBaseUrl}${selectedItem.path}`;
+      return `${githubBaseUrl}${cleanPath}`;
     }
     return null;
   };

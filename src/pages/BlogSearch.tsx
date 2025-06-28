@@ -46,7 +46,7 @@ const BlogSearch = () => {
               const nestedIndex = await BlogService.fetchNestedBlogIndex(category.indexUrl);
               const flattenItems = (items: BlogItem[], path: string[] = []): void => {
                 items.forEach(item => {
-                  const currentPath = [...path, item.title];
+                  const currentPath = [...path, item.title || ''];
                   allItems.push({
                     item,
                     categoryId: category.id,
@@ -74,7 +74,7 @@ const BlogSearch = () => {
                 id: post.id,
                 type: "file",
                 path: post.path || post.contentPath || '',
-                title: post.title,
+                title: post.title || '',
                 description: post.description,
                 date: post.date,
               };
@@ -83,7 +83,7 @@ const BlogSearch = () => {
                 item: blogItem,
                 categoryId: category.id,
                 categoryTitle: category.title,
-                path: [post.title],
+                path: [post.title || ''],
                 relevanceScore: 0
               });
             });
@@ -99,7 +99,7 @@ const BlogSearch = () => {
     loadAllBlogs();
   }, []);
 
-  // Perform search
+  // Perform search with proper null checks
   const searchResults = useMemo(() => {
     if (!searchQuery.trim() || allBlogItems.length === 0) {
       return [];
@@ -112,47 +112,52 @@ const BlogSearch = () => {
       let score = 0;
       const item = result.item;
       
-      // Title matching (highest weight)
-      if (item?.title?.toLowerCase().includes(query)) {
+      // Title matching (highest weight) - with null checks
+      const title = item?.title || '';
+      if (title.toLowerCase().includes(query)) {
         score += 10;
       }
       searchTerms.forEach(term => {
-        if (item?.title?.toLowerCase().includes(term)) {
+        if (title.toLowerCase().includes(term)) {
           score += 5;
         }
       });
       
-      // Description matching
-      if (item?.description?.toLowerCase().includes(query)) {
+      // Description matching - with null checks
+      const description = item?.description || '';
+      if (description.toLowerCase().includes(query)) {
         score += 8;
       }
       searchTerms.forEach(term => {
-        if (item?.description?.toLowerCase().includes(term)) {
+        if (description.toLowerCase().includes(term)) {
           score += 3;
         }
       });
       
-      // Tags matching (only for files)
-      if (item.type === "file" && item.tags) {
+      // Tags matching (only for files) - with null checks
+      if (item.type === "file" && item.tags && Array.isArray(item.tags)) {
         item.tags.forEach(tag => {
-          if (tag.toLowerCase().includes(query)) {
+          const tagStr = tag || '';
+          if (tagStr.toLowerCase().includes(query)) {
             score += 6;
           }
           searchTerms.forEach(term => {
-            if (tag.toLowerCase().includes(term)) {
+            if (tagStr.toLowerCase().includes(term)) {
               score += 2;
             }
           });
         });
       }
       
-      // Author matching
-      if (item.author?.toLowerCase().includes(query)) {
+      // Author matching - with null checks
+      const author = item?.author || '';
+      if (author.toLowerCase().includes(query)) {
         score += 4;
       }
       
-      // Category matching
-      if (result.categoryTitle.toLowerCase().includes(query)) {
+      // Category matching - with null checks
+      const categoryTitle = result.categoryTitle || '';
+      if (categoryTitle.toLowerCase().includes(query)) {
         score += 3;
       }
       
@@ -173,9 +178,9 @@ const BlogSearch = () => {
     }
   }, [searchQuery, setSearchParams]);
 
-  // Highlight search terms in text
-  const highlightText = (text: string, searchQuery: string): React.ReactNode => {
-    if (!searchQuery.trim()) return text;
+  // Highlight search terms in text with null checks
+  const highlightText = (text: string | undefined, searchQuery: string): React.ReactNode => {
+    if (!text || !searchQuery.trim()) return text || '';
     
     const terms = searchQuery.toLowerCase().split(/\s+/).filter(term => term.length > 0);
     let highlightedText = text;
