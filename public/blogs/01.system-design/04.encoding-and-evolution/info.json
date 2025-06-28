@@ -1,0 +1,10 @@
+{
+    "title": "Encoding and Evolution",
+    "description": "This blog post explores the concepts of data encoding and schema evolution in software systems. It discusses how data formats can change over time and the implications for backward and forward compatibility in applications.",
+    "author": "Avinash Gurugubelli",
+    "references": [{
+        "title": "Designing Data-Intensive Applications",
+        "author": "Martin Kleppmann",
+        "link": ""
+    }]
+}
