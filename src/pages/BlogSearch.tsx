@@ -113,21 +113,21 @@ const BlogSearch = () => {
       const item = result.item;
       
       // Title matching (highest weight)
-      if (item.title.toLowerCase().includes(query)) {
+      if (item?.title?.toLowerCase().includes(query)) {
         score += 10;
       }
       searchTerms.forEach(term => {
-        if (item.title.toLowerCase().includes(term)) {
+        if (item?.title?.toLowerCase().includes(term)) {
           score += 5;
         }
       });
       
       // Description matching
-      if (item.description?.toLowerCase().includes(query)) {
+      if (item?.description?.toLowerCase().includes(query)) {
         score += 8;
       }
       searchTerms.forEach(term => {
-        if (item.description?.toLowerCase().includes(term)) {
+        if (item?.description?.toLowerCase().includes(term)) {
           score += 3;
         }
       });
