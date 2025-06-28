@@ -5,7 +5,7 @@
         "title": "System Design",
         "description": "Explore comprehensive guides and in-depth articles on System Design principles, patterns, and best practices. This section covers critical topics such as scalability, reliability, fault tolerance, and maintainability essential for building robust and high-performance distributed systems. From beginner-friendly introductions to advanced architecture discussions, each article aims to simplify complex concepts with real-world examples, case studies, and practical insights.",
         "image": "/placeholder.svg",
-        "indexUrl": "/blogs/01.system-design/index.json"
+        "indexUrl": "/blogs/system-design/index.json"
       },
       {
         "id": "design-patterns",

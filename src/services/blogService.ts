@@ -87,7 +87,7 @@ export class BlogService {
    * Generate URL path for blog item
    */
   static generateBlogPath(item: BlogItem): string {
-    return item.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-');
+    return item?.title?.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-') || '';
   }
 
   /**

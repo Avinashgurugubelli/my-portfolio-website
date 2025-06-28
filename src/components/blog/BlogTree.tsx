@@ -75,8 +75,8 @@ export const BlogTree = ({
   return (
     <TooltipProvider>
       <div className={`space-y-1 ${level > 0 ? 'ml-4 border-l border-border pl-2' : ''}`}>
-        {items.map((item) => (
-          <div key={item.id}>
+        {items.map((item, index) => (
+          <div key={item.id + '' + index}>
             {item.type === "directory" ? (
               <Collapsible 
                 open={openDirectories.has(item.id)}
