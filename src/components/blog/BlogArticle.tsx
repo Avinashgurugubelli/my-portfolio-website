@@ -13,8 +13,8 @@ interface BlogArticleProps {
 
 export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
   const getSourceUrl = () => {
-    // Check for sourceLink first
-    if ('sourceLink' in selectedItem && selectedItem.sourceLink) {
+    // Check for sourceLink first - ensure it's a string
+    if ('sourceLink' in selectedItem && selectedItem.sourceLink && typeof selectedItem.sourceLink === 'string') {
       return selectedItem.sourceLink;
     }
     
