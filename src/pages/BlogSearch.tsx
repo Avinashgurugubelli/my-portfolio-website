@@ -1,173 +1,19 @@
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { SearchIcon, ArrowLeftIcon, TagIcon, CalendarIcon, UserIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SearchHeader from "@/components/search/SearchHeader";
+import SearchResults from "@/components/search/SearchResults";
+import { useSearchBlogs } from "@/hooks/useSearchBlogs";
 import { BlogService } from "@/services/blogService";
-import { BlogItem, BlogsData } from "@/models/blog";
-
-interface SearchResult {
-  item: BlogItem;
-  categoryId: string;
-  categoryTitle: string;
-  path: string[];
-  relevanceScore: number;
-}
 
 const BlogSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [blogsData, setBlogsData] = useState<BlogsData | null>(null);
-  const [allBlogItems, setAllBlogItems] = useState<SearchResult[]>([]);
-
-  // Load all blog data on mount
-  useEffect(() => {
-    const loadAllBlogs = async () => {
-      try {
-        const data = await BlogService.fetchBlogsData();
-        setBlogsData(data);
-        
-        // Flatten all blog items for searching
-        const allItems: SearchResult[] = [];
-        
-        for (const category of data.categories) {
-          if (category.indexUrl) {
-            // Fetch nested structure
-            try {
-              const nestedIndex = await BlogService.fetchNestedBlogIndex(category.indexUrl);
-              const flattenItems = (items: BlogItem[], path: string[] = []): void => {
-                items.forEach(item => {
-                  const currentPath = [...path, item.title || ''];
-                  allItems.push({
-                    item,
-                    categoryId: category.id,
-                    categoryTitle: category.title,
-                    path: currentPath,
-                    relevanceScore: 0
-                  });
-                  
-                  if (item.type === "directory" && item.children) {
-                    flattenItems(item.children, currentPath);
-                  }
-                });
-              };
-              
-              if (nestedIndex.children) {
-                flattenItems(nestedIndex.children);
-              }
-            } catch (error) {
-              console.error(`Failed to load nested index for ${category.id}:`, error);
-            }
-          } else if (category.children) {
-            // Simple articles
-            category.children.forEach(post => {
-              const blogItem: BlogItem = {
-                id: post.id,
-                type: "file",
-                path: post.path || post.contentPath || '',
-                title: post.title || '',
-                description: post.description,
-                date: post.date,
-              };
-              
-              allItems.push({
-                item: blogItem,
-                categoryId: category.id,
-                categoryTitle: category.title,
-                path: [post.title || ''],
-                relevanceScore: 0
-              });
-            });
-          }
-        }
-        
-        setAllBlogItems(allItems);
-      } catch (error) {
-        console.error('Failed to load blogs data:', error);
-      }
-    };
-    
-    loadAllBlogs();
-  }, []);
-
-  // Perform search with proper null checks
-  const searchResults = useMemo(() => {
-    if (!searchQuery.trim() || allBlogItems.length === 0) {
-      return [];
-    }
-
-    const query = searchQuery.toLowerCase();
-    const searchTerms = query.split(/\s+/).filter(term => term.length > 0);
-    
-    const scoredResults = allBlogItems.map(result => {
-      let score = 0;
-      const item = result.item;
-      
-      // Title matching (highest weight) - with null checks
-      const title = item?.title || '';
-      if (title.toLowerCase().includes(query)) {
-        score += 10;
-      }
-      searchTerms.forEach(term => {
-        if (title.toLowerCase().includes(term)) {
-          score += 5;
-        }
-      });
-      
-      // Description matching - with null checks
-      const description = item?.description || '';
-      if (description.toLowerCase().includes(query)) {
-        score += 8;
-      }
-      searchTerms.forEach(term => {
-        if (description.toLowerCase().includes(term)) {
-          score += 3;
-        }
-      });
-      
-      // Tags matching (only for files) - with null checks
-      if (item.type === "file" && item.tags && Array.isArray(item.tags)) {
-        item.tags.forEach(tag => {
-          const tagStr = tag || '';
-          if (tagStr.toLowerCase().includes(query)) {
-            score += 6;
-          }
-          searchTerms.forEach(term => {
-            if (tagStr.toLowerCase().includes(term)) {
-              score += 2;
-            }
-          });
-        });
-      }
-      
-      // Author matching - with null checks
-      const author = item?.author || '';
-      if (author.toLowerCase().includes(query)) {
-        score += 4;
-      }
-      
-      // Category matching - with null checks
-      const categoryTitle = result.categoryTitle || '';
-      if (categoryTitle.toLowerCase().includes(query)) {
-        score += 3;
-      }
-      
-      return { ...result, relevanceScore: score };
-    });
-    
-    return scoredResults
-      .filter(result => result.relevanceScore > 0)
-      .sort((a, b) => b.relevanceScore - a.relevanceScore);
-  }, [searchQuery, allBlogItems]);
+  const { searchResults, allBlogItems } = useSearchBlogs();
 
   // Update URL when search changes
   useEffect(() => {
@@ -178,29 +24,7 @@ const BlogSearch = () => {
     }
   }, [searchQuery, setSearchParams]);
 
-  // Highlight search terms in text with null checks
-  const highlightText = (text: string | undefined, searchQuery: string): React.ReactNode => {
-    if (!text || !searchQuery.trim()) return text || '';
-    
-    const terms = searchQuery.toLowerCase().split(/\s+/).filter(term => term.length > 0);
-    let highlightedText = text;
-    
-    terms.forEach(term => {
-      const regex = new RegExp(`(${term})`, 'gi');
-      highlightedText = highlightedText.replace(regex, '|||HIGHLIGHT_START|||$1|||HIGHLIGHT_END|||');
-    });
-    
-    const parts = highlightedText.split(/\|\|\|HIGHLIGHT_START\|\|\||HIGHLIGHT_END\|\|\|/);
-    
-    return parts.map((part, index) => {
-      if (index % 2 === 1) {
-        return <mark key={index} className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">{part}</mark>;
-      }
-      return part;
-    });
-  };
-
-  const handleResultClick = (result: SearchResult) => {
+  const handleResultClick = (result: any) => {
     const fullPath = BlogService.findItemPath(allBlogItems.filter(r => r.categoryId === result.categoryId).map(r => r.item), result.item);
     if (fullPath) {
       const urlPath = fullPath.join('/');
@@ -209,6 +33,8 @@ const BlogSearch = () => {
       navigate(`/blogs/${result.categoryId}`);
     }
   };
+
+  const results = searchResults(searchQuery);
 
   return (
     <AnimatePresence>
@@ -222,107 +48,16 @@ const BlogSearch = () => {
         <Navbar />
         <main className="pt-[120px] pb-20">
           <div className="max-w-4xl mx-auto px-4">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-4 mb-6">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/blogs')}
-                  className="gap-2"
-                >
-                  <ArrowLeftIcon className="h-4 w-4" />
-                  Back to Blogs
-                </Button>
-                <div>
-                  <h1 className="text-3xl font-bold">Search Blogs</h1>
-                  <p className="text-muted-foreground">Find articles by title, content, tags, or author</p>
-                </div>
-              </div>
-
-              {/* Search Input */}
-              <div className="relative">
-                <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search articles..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-12 text-lg"
-                  autoFocus
-                />
-              </div>
-            </div>
-
-            {/* Results */}
-            <div className="space-y-6">
-              {searchQuery.trim() && (
-                <div className="text-sm text-muted-foreground">
-                  {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} for "{searchQuery}"
-                </div>
-              )}
-              
-              {searchResults.map((result, index) => (
-                <motion.div
-                  key={`${result.categoryId}-${result.item.id}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleResultClick(result)}>
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <CardTitle className="text-xl mb-2">
-                            {highlightText(result.item.title, searchQuery)}
-                          </CardTitle>
-                          <CardDescription className="text-base mb-3">
-                            {result.item.description && highlightText(result.item.description, searchQuery)}
-                          </CardDescription>
-                        </div>
-                        <Badge variant="secondary">{result.categoryTitle}</Badge>
-                      </div>
-                      
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                        {result.item.author && (
-                          <div className="flex items-center gap-1">
-                            <UserIcon className="h-3 w-3" />
-                            <span>{result.item.author}</span>
-                          </div>
-                        )}
-                        
-                        {(result.item.date || (result.item.type === "file" && result.item.createdOn)) && (
-                          <div className="flex items-center gap-1">
-                            <CalendarIcon className="h-3 w-3" />
-                            <span>{result.item.date || (result.item.type === "file" ? result.item.createdOn : '')}</span>
-                          </div>
-                        )}
-                      </div>
-                    </CardHeader>
-                    
-                    {result.item.type === "file" && result.item.tags && result.item.tags.length > 0 && (
-                      <CardContent className="pt-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <TagIcon className="h-3 w-3 text-muted-foreground" />
-                          {result.item.tags.map((tag, tagIndex) => (
-                            <Badge key={tagIndex} variant="outline" className="text-xs">
-                              {highlightText(tag, searchQuery)}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    )}
-                  </Card>
-                </motion.div>
-              ))}
-              
-              {searchQuery.trim() && searchResults.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground text-lg">No articles found for "{searchQuery}"</p>
-                  <p className="text-muted-foreground text-sm mt-2">Try different keywords or browse categories</p>
-                </div>
-              )}
-            </div>
+            <SearchHeader 
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+            />
+            
+            <SearchResults
+              searchQuery={searchQuery}
+              results={results}
+              onResultClick={handleResultClick}
+            />
           </div>
         </main>
         <Footer />
