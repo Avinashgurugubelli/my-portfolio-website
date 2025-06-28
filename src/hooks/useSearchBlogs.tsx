@@ -55,7 +55,7 @@ export const useSearchBlogs = () => {
               console.error(`Failed to load nested index for ${category.id}:`, error);
             }
           } else if (category.children) {
-            // Simple articles
+            // Simple articles - BlogPost doesn't have tags, so we don't include them
             category.children.forEach(post => {
               const blogItem: BlogItem = {
                 id: post.id,
@@ -64,7 +64,7 @@ export const useSearchBlogs = () => {
                 title: post.title || '',
                 description: post.description,
                 date: post.date,
-                tags: post.tags || [], // Include tags
+                // Don't add tags here as BlogPost type doesn't have tags property
               };
               
               allItems.push({
