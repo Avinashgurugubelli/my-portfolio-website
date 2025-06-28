@@ -105,35 +105,40 @@ export const useSearchBlogs = () => {
         // Title matching (highest weight) - with null checks
         const title = item?.title || '';
         if (title.toLowerCase().includes(query)) {
-          score += 10;
+          score += 15;
         }
         searchTerms.forEach(term => {
           if (title.toLowerCase().includes(term)) {
-            score += 5;
+            score += 8;
           }
         });
         
         // Description matching - with null checks
         const description = item?.description || '';
         if (description.toLowerCase().includes(query)) {
-          score += 8;
+          score += 12;
         }
         searchTerms.forEach(term => {
           if (description.toLowerCase().includes(term)) {
-            score += 3;
+            score += 6;
           }
         });
         
-        // Tags matching (only for files) - with null checks
+        // Tags matching (highest priority for exact matches) - with null checks
         if (item.type === "file" && item.tags && Array.isArray(item.tags)) {
           item.tags.forEach(tag => {
-            const tagStr = tag || '';
-            if (tagStr.toLowerCase().includes(query)) {
-              score += 6;
+            const tagStr = (tag || '').toLowerCase();
+            // Exact tag match gets very high score
+            if (tagStr === query) {
+              score += 20;
+            } else if (tagStr.includes(query)) {
+              score += 10;
             }
             searchTerms.forEach(term => {
-              if (tagStr.toLowerCase().includes(term)) {
-                score += 2;
+              if (tagStr === term) {
+                score += 15;
+              } else if (tagStr.includes(term)) {
+                score += 5;
               }
             });
           });
@@ -142,14 +147,65 @@ export const useSearchBlogs = () => {
         // Author matching - with null checks
         const author = item?.author || '';
         if (author.toLowerCase().includes(query)) {
-          score += 4;
+          score += 8;
+        }
+        searchTerms.forEach(term => {
+          if (author.toLowerCase().includes(term)) {
+            score += 4;
+          }
+        });
+        
+        // References matching - check title, authors, publisher
+        if (item.type === "file" && item.references && Array.isArray(item.references)) {
+          item.references.forEach(ref => {
+            // Reference title
+            const refTitle = (ref.title || '').toLowerCase();
+            if (refTitle.includes(query)) {
+              score += 6;
+            }
+            searchTerms.forEach(term => {
+              if (refTitle.includes(term)) {
+                score += 3;
+              }
+            });
+            
+            // Reference authors (both single author and authors array)
+            const authors = ref.authors || (ref.author ? [ref.author] : []);
+            authors.forEach(author => {
+              const authorStr = (author || '').toLowerCase();
+              if (authorStr.includes(query)) {
+                score += 5;
+              }
+              searchTerms.forEach(term => {
+                if (authorStr.includes(term)) {
+                  score += 2;
+                });
+              });
+            });
+            
+            // Reference publisher
+            const publisher = (ref.publisher || '').toLowerCase();
+            if (publisher.includes(query)) {
+              score += 4;
+            }
+            searchTerms.forEach(term => {
+              if (publisher.includes(term)) {
+                score += 2;
+              }
+            });
+          });
         }
         
         // Category matching - with null checks
         const categoryTitle = result.categoryTitle || '';
         if (categoryTitle.toLowerCase().includes(query)) {
-          score += 3;
+          score += 5;
         }
+        searchTerms.forEach(term => {
+          if (categoryTitle.toLowerCase().includes(term)) {
+            score += 2;
+          }
+        });
         
         return { ...result, relevanceScore: score };
       });
