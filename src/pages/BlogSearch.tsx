@@ -28,9 +28,12 @@ const BlogSearch = () => {
     const fullPath = BlogService.findItemPath(allBlogItems.filter(r => r.categoryId === result.categoryId).map(r => r.item), result.item);
     if (fullPath) {
       const urlPath = fullPath.join('/');
-      navigate(`/blogs/${result.categoryId}/${urlPath}`);
+      // Open in new tab
+      const url = `/blogs/${result.categoryId}/${urlPath}`;
+      window.open(url, '_blank');
     } else {
-      navigate(`/blogs/${result.categoryId}`);
+      // Open in new tab
+      window.open(`/blogs/${result.categoryId}`, '_blank');
     }
   };
 

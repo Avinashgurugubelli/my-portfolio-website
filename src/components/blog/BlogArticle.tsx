@@ -5,15 +5,21 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { BlogDirectory, BlogFile } from "@/models/blog";
 import { BlogContent } from "./BlogContent";
+import { TagsDisplay } from "@/components/ui/TagsDisplay";
 
 interface BlogArticleProps {
   selectedItem: BlogDirectory | BlogFile;
 }
 
 export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
-  const getGitHubUrl = () => {
+  const getSourceUrl = () => {
+    // Check for sourceLink first
+    if ('sourceLink' in selectedItem && selectedItem.sourceLink) {
+      return selectedItem.sourceLink;
+    }
+    
+    // Fallback to GitHub URL
     if (selectedItem.type === "file" && selectedItem.path) {
-      // Convert the path to GitHub URL - remove leading slash and add proper base
       const cleanPath = selectedItem.path.startsWith('/') ? selectedItem.path.slice(1) : selectedItem.path;
       const githubBaseUrl = "https://github.com/avinashgurugubelli/avinashgurugubelli.github.io/blob/main/public/";
       return `${githubBaseUrl}${cleanPath}`;
@@ -21,7 +27,7 @@ export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
     return null;
   };
 
-  const githubUrl = getGitHubUrl();
+  const sourceUrl = getSourceUrl();
 
   return (
     <ScrollArea className="flex-1">
@@ -46,7 +52,7 @@ export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
               </div>
             )}
             
-            {githubUrl && (
+            {sourceUrl && (
               <Button
                 variant="outline"
                 size="sm"
@@ -54,7 +60,7 @@ export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
                 className="h-8"
               >
                 <a 
-                  href={githubUrl} 
+                  href={sourceUrl} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
@@ -70,6 +76,12 @@ export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
             <p className="text-xl text-muted-foreground mb-6">
               {selectedItem.description}
             </p>
+          )}
+
+          {selectedItem.type === "file" && selectedItem.tags && (
+            <div className="mb-6">
+              <TagsDisplay tags={selectedItem.tags} maxTags={6} />
+            </div>
           )}
           
           {selectedItem.type === "directory" && selectedItem.references && (

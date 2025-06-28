@@ -62,10 +62,10 @@ const About = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {[
-                { label: "Problem Solving", value: "Finding elegant solutions to complex challenges" },
-                { label: "User Experience", value: "Creating intuitive interfaces that users love" },
-                { label: "Performance", value: "Building fast, efficient, and scalable applications" },
-                { label: "Collaboration", value: "Working effectively in team environments" }
+                { label: "System Architecture", value: "Designing scalable distributed systems and microservices" },
+                { label: "Full-Stack Development", value: "Building end-to-end applications with modern technologies" },
+                { label: "Database Design", value: "Optimizing data models and query performance" },
+                { label: "DevOps & Cloud", value: "Implementing CI/CD pipelines and cloud infrastructure" }
               ].map((item, index) => (
                 <div key={index} className="glass p-6 hover-lift">
                   <h3 className="text-lg font-medium mb-2">{item.label}</h3>

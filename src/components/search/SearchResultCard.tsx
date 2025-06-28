@@ -1,8 +1,8 @@
 
-import { motion } from "framer-motion";
-import { TagIcon, CalendarIcon, UserIcon } from "lucide-react";
+import { CalendarIcon, UserIcon, FolderIcon, FileTextIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { TagsDisplay } from "@/components/ui/TagsDisplay";
 
 interface SearchResult {
   item: {
@@ -29,78 +29,78 @@ interface SearchResultCardProps {
 }
 
 const SearchResultCard = ({ result, searchQuery, index, onClick }: SearchResultCardProps) => {
-  const highlightText = (text: string | undefined, searchQuery: string): React.ReactNode => {
-    if (!text || !searchQuery.trim()) return text || '';
+  const highlightText = (text: string, query: string) => {
+    if (!query.trim()) return text;
     
-    const terms = searchQuery.toLowerCase().split(/\s+/).filter(term => term.length > 0);
-    let highlightedText = text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    const parts = text.split(regex);
     
-    terms.forEach(term => {
-      const regex = new RegExp(`(${term})`, 'gi');
-      highlightedText = highlightedText.replace(regex, '|||HIGHLIGHT_START|||$1|||HIGHLIGHT_END|||');
-    });
-    
-    const parts = highlightedText.split(/\|\|\|HIGHLIGHT_START\|\|\||HIGHLIGHT_END\|\|\|/);
-    
-    return parts.map((part, index) => {
-      if (index % 2 === 1) {
-        return <mark key={index} className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">{part}</mark>;
-      }
-      return part;
-    });
+    return parts.map((part, i) => 
+      regex.test(part) ? 
+        <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">{part}</mark> : 
+        part
+    );
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
+    <Card 
+      className="cursor-pointer hover:shadow-md transition-shadow duration-200"
+      onClick={() => onClick(result)}
     >
-      <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => onClick(result)}>
-        <CardHeader>
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
-              <CardTitle className="text-xl mb-2">
-                {highlightText(result.item.title, searchQuery)}
-              </CardTitle>
-              <CardDescription className="text-base mb-3">
-                {result.item.description && highlightText(result.item.description, searchQuery)}
-              </CardDescription>
-            </div>
-            <Badge variant="secondary">{result.categoryTitle}</Badge>
-          </div>
-          
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            {result.item.author && (
-              <div className="flex items-center gap-1">
-                <UserIcon className="h-3 w-3" />
-                <span>{result.item.author}</span>
-              </div>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2 mb-2">
+            {result.item.type === "directory" ? (
+              <FolderIcon className="h-4 w-4 text-blue-500" />
+            ) : (
+              <FileTextIcon className="h-4 w-4 text-green-500" />
             )}
-            
-            {(result.item.date || (result.item.type === "file" && result.item.createdOn)) && (
-              <div className="flex items-center gap-1">
-                <CalendarIcon className="h-3 w-3" />
-                <span>{result.item.date || (result.item.type === "file" ? result.item.createdOn : '')}</span>
-              </div>
-            )}
+            <Badge variant="outline" className="text-xs">
+              {result.categoryTitle}
+            </Badge>
+            <span className="text-xs text-muted-foreground">
+              Score: {result.relevanceScore}
+            </span>
           </div>
-        </CardHeader>
+        </div>
         
-        {result.item.type === "file" && result.item.tags && result.item.tags.length > 0 && (
-          <CardContent className="pt-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <TagIcon className="h-3 w-3 text-muted-foreground" />
-              {result.item.tags.map((tag, tagIndex) => (
-                <Badge key={tagIndex} variant="outline" className="text-xs">
-                  {highlightText(tag, searchQuery)}
-                </Badge>
-              ))}
+        <CardTitle className="text-xl mb-2">
+          {result.item.title ? highlightText(result.item.title, searchQuery) : 'Untitled'}
+        </CardTitle>
+        
+        <CardDescription>
+          {result.item.description && highlightText(result.item.description, searchQuery)}
+        </CardDescription>
+      </CardHeader>
+      
+      <CardContent className="pt-0">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
+          {result.item.author && (
+            <div className="flex items-center gap-1">
+              <UserIcon className="h-3 w-3" />
+              <span>{highlightText(result.item.author, searchQuery)}</span>
             </div>
-          </CardContent>
+          )}
+          
+          {(result.item.date || result.item.createdOn) && (
+            <div className="flex items-center gap-1">
+              <CalendarIcon className="h-3 w-3" />
+              <span>{result.item.date || result.item.createdOn}</span>
+            </div>
+          )}
+        </div>
+        
+        {result.item.tags && result.item.tags.length > 0 && (
+          <TagsDisplay tags={result.item.tags} maxTags={4} />
         )}
-      </Card>
-    </motion.div>
+        
+        {result.path.length > 1 && (
+          <div className="mt-3 text-xs text-muted-foreground">
+            Path: {result.path.join(' > ')}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
