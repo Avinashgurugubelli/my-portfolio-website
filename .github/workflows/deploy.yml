@@ -82,8 +82,12 @@ jobs:
       # 7. List dist before deploy
       - name: List dist folder
         run: ls -R dist
+      
+      # 8. NEW STEP: Add CNAME file
+      - name: Add custom domain CNAME file
+        run: echo 'avinashgu.xyz' > dist/CNAME
 
-      # 8. Deploy to GitHub Pages
+      # 9. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
