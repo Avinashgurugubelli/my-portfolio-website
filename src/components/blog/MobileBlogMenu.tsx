@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { MenuIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { BlogTree } from "./BlogTree";
 import { BlogItem } from "@/models/blog";
 
@@ -33,17 +34,12 @@ export const MobileBlogMenu = ({ blogItems, onItemClick, selectedPath }: MobileB
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-80 p-0">
+        <SheetHeader className="sr-only">
+          <SheetTitle>Browse Articles</SheetTitle>
+        </SheetHeader>
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-border flex items-center justify-between">
             <h2 className="text-lg font-semibold">Articles</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsOpen(false)}
-              className="h-8 w-8 p-0"
-            >
-              <XIcon className="h-4 w-4" />
-            </Button>
           </div>
           <div className="flex-1 overflow-y-auto p-4">
             <BlogTree 

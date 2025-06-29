@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -5,9 +6,9 @@ import { ArrowLeftIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { NestedBlogsData, BlogDirectory, BlogFile, BlogItem } from "@/models/blog";
 import nestedBlogsJson from "@/config/nested-blogs.json";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { BlogSidebar } from "@/components/blog/BlogSidebar";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { EmptyBlogState } from "@/components/blog/EmptyBlogState";
@@ -179,66 +180,82 @@ const NestedBlogs = () => {
   console.log("Rendering with blogs data:", blogsData);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className="min-h-screen bg-background text-foreground relative"
-      >
-        <Navbar />
-        <main className="pt-[120px]">
-          <div className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
-            <div className="p-4 border-b border-border">
-              <div className="flex items-center gap-4 mb-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/blogs')}
-                  className="gap-2"
-                >
-                  <ArrowLeftIcon className="h-4 w-4" />
-                  Back to Blogs
-                </Button>
-                <div className="flex-1">
-                  <h1 className="text-2xl font-bold">Nested Blogs</h1>
-                  <p className="text-muted-foreground">Explore the nested blog structure</p>
+    <TooltipProvider>
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="min-h-screen bg-background text-foreground relative"
+        >
+          <Navbar />
+          <main className="pt-[120px]">
+            <div className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
+              <div className="p-4 border-b border-border">
+                <div className="flex flex-col gap-4 mb-4">
+                  {/* Header row with back button and mobile menu */}
+                  <div className="flex items-center justify-between">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate('/blogs')}
+                      className="gap-2"
+                    >
+                      <ArrowLeftIcon className="h-4 w-4" />
+                      Back to Articles
+                    </Button>
+                    {blogsData && (
+                      <MobileBlogMenu 
+                        blogItems={blogsData.blogs as BlogItem[]}
+                        onItemClick={handleItemClick}
+                        selectedPath={selectedPath}
+                      />
+                    )}
+                  </div>
+                  
+                  {/* Title and description */}
+                  <div className="flex-1">
+                    <h1 className="text-2xl font-bold mb-2">Nested Blogs</h1>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-muted-foreground line-clamp-3 cursor-help">
+                          Explore the nested blog structure with organized content and categories
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-md">
+                        <p>Explore the nested blog structure with organized content and categories</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                 </div>
-                {blogsData && (
-                  <MobileBlogMenu 
-                    blogItems={blogsData.blogs as BlogItem[]}
+              </div>
+
+              <div className="flex">
+                {/* Desktop Sidebar - Hidden on mobile */}
+                <div className="hidden lg:block w-80 border-r border-border">
+                  <BlogSidebar 
+                    blogItems={blogsData?.blogs as BlogItem[] || []}
                     onItemClick={handleItemClick}
                     selectedPath={selectedPath}
                   />
-                )}
+                </div>
+                
+                {/* Content Area - Full width on mobile, remaining space on desktop */}
+                <div className="flex-1 min-h-[calc(100vh-200px)]">
+                  {selectedItem ? (
+                    <BlogArticle selectedItem={selectedItem} />
+                  ) : (
+                    <EmptyBlogState />
+                  )}
+                </div>
               </div>
             </div>
-
-            <div className="flex">
-              {/* Desktop Sidebar - Hidden on mobile */}
-              <div className="hidden lg:block w-80 border-r border-border">
-                <BlogSidebar 
-                  blogItems={blogsData?.blogs as BlogItem[] || []}
-                  onItemClick={handleItemClick}
-                  selectedPath={selectedPath}
-                />
-              </div>
-              
-              {/* Content Area - Full width on mobile, remaining space on desktop */}
-              <div className="flex-1 min-h-[calc(100vh-200px)]">
-                {selectedItem ? (
-                  <BlogArticle selectedItem={selectedItem} />
-                ) : (
-                  <EmptyBlogState />
-                )}
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </motion.div>
-    </AnimatePresence>
+          </main>
+          <Footer />
+        </motion.div>
+      </AnimatePresence>
+    </TooltipProvider>
   );
 };
 

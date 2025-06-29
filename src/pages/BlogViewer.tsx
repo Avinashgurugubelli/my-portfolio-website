@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { BlogCategory, NestedBlogIndex, BlogItem } from "@/models/blog";
 import { BlogService } from "@/services/blogService";
 import { BlogSidebar } from "@/components/blog/BlogSidebar";
@@ -138,72 +138,88 @@ const BlogViewer = () => {
   }
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className="min-h-screen bg-background text-foreground relative"
-      >
-        <Navbar />
-        <main className="pt-[120px]">
-          <div className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
-            <div className="p-4 border-b border-border">
-              <div className="flex items-center gap-4 mb-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate('/blogs')}
-                  className="gap-2"
-                >
-                  <ArrowLeftIcon className="h-4 w-4" />
-                  Back to Blogs
-                </Button>
-                <div className="flex-1">
-                  <h1 className="text-2xl font-bold">{category.title}</h1>
-                  <p className="text-muted-foreground">{category.description}</p>
+    <TooltipProvider>
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="min-h-screen bg-background text-foreground relative"
+        >
+          <Navbar />
+          <main className="pt-[120px]">
+            <div className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
+              <div className="p-4 border-b border-border">
+                <div className="flex flex-col gap-4 mb-4">
+                  {/* Header row with back button and mobile menu */}
+                  <div className="flex items-center justify-between">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate('/blogs')}
+                      className="gap-2"
+                    >
+                      <ArrowLeftIcon className="h-4 w-4" />
+                      Back to Articles
+                    </Button>
+                    {blogItems.length > 0 && (
+                      <MobileBlogMenu 
+                        blogItems={blogItems}
+                        onItemClick={handleItemClick}
+                        selectedPath={selectedPath}
+                      />
+                    )}
+                  </div>
+                  
+                  {/* Title and description */}
+                  <div className="flex-1">
+                    <h1 className="text-2xl font-bold mb-2">{category.title}</h1>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-muted-foreground line-clamp-3 cursor-help">
+                          {category.description}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-md">
+                        <p>{category.description}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                 </div>
-                {blogItems.length > 0 && (
-                  <MobileBlogMenu 
-                    blogItems={blogItems}
-                    onItemClick={handleItemClick}
-                    selectedPath={selectedPath}
-                  />
-                )}
               </div>
-            </div>
 
-            {blogItems.length > 0 ? (
-              <div className="flex">
-                {/* Desktop Sidebar - Hidden on mobile */}
-                <div className="hidden lg:block w-80 border-r border-border">
-                  <BlogSidebar 
-                    blogItems={blogItems}
-                    onItemClick={handleItemClick}
-                    selectedPath={selectedPath}
-                  />
+              {blogItems.length > 0 ? (
+                <div className="flex">
+                  {/* Desktop Sidebar - Hidden on mobile */}
+                  <div className="hidden lg:block w-80 border-r border-border">
+                    <BlogSidebar 
+                      blogItems={blogItems}
+                      onItemClick={handleItemClick}
+                      selectedPath={selectedPath}
+                    />
+                  </div>
+                  
+                  {/* Content Area - Full width on mobile, remaining space on desktop */}
+                  <div className="flex-1 min-h-[calc(100vh-200px)]">
+                    {selectedItem ? (
+                      <BlogArticle selectedItem={selectedItem} />
+                    ) : (
+                      <EmptyBlogState />
+                    )}
+                  </div>
                 </div>
-                
-                {/* Content Area - Full width on mobile, remaining space on desktop */}
-                <div className="flex-1 min-h-[calc(100vh-200px)]">
-                  {selectedItem ? (
-                    <BlogArticle selectedItem={selectedItem} />
-                  ) : (
-                    <EmptyBlogState />
-                  )}
+              ) : (
+                <div className="flex items-center justify-center h-[400px]">
+                  <p className="text-muted-foreground">No content available</p>
                 </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-[400px]">
-                <p className="text-muted-foreground">No content available</p>
-              </div>
-            )}
-          </div>
-        </main>
-        <Footer />
-      </motion.div>
-    </AnimatePresence>
+              )}
+            </div>
+          </main>
+          <Footer />
+        </motion.div>
+      </AnimatePresence>
+    </TooltipProvider>
   );
 };
 
