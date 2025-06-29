@@ -38,7 +38,7 @@ export const BlogContent = ({ item }: BlogContentProps) => {
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100); // Small delay to ensure content is rendered
+      }, 100);
     }
   }, [content]);
 
@@ -59,11 +59,21 @@ export const BlogContent = ({ item }: BlogContentProps) => {
   }, []);
 
   const handleMarkdownLinkClick = (href: string) => {
+    console.log("Handling markdown link click:", href);
+    
     // Handle internal markdown links (relative paths ending with .md)
     if (href.endsWith('.md') && !href.startsWith('http')) {
-      const cleanHref = href.replace('./', '').replace('.md', '');
-      const slugifiedHref = BlogService.generateUrlSlug(cleanHref);
+      // Extract filename from href
+      let filename = href.replace('./', '').replace('../', '');
+      console.log("Processing filename:", filename);
+      
+      // Generate slug from filename
+      const slugifiedHref = BlogService.generateFileSlug(filename);
+      console.log("Generated slug:", slugifiedHref);
+      
       const newUrl = `/blogs/${categoryId}/${slugifiedHref}`;
+      console.log("Navigating to:", newUrl);
+      
       navigate(newUrl);
       return false;
     }
@@ -124,7 +134,7 @@ export const BlogContent = ({ item }: BlogContentProps) => {
           },
           h5: ({ children, ...props }) => {
             const id = typeof children === 'string' 
-              ? children.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
+              ? children.toLowerCase().replace(/[^\w\s-]/g, '').replace /\s+/g, '-')
               : undefined;
             return <h5 id={id} {...props}>{children}</h5>;
           },

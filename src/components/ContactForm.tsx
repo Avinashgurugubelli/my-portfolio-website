@@ -149,7 +149,7 @@ const ContactForm = () => {
           type="tel"
           value={formData.phone}
           onChange={handleInputChange}
-          placeholder="+1 (555) 123-4567"
+          placeholder="Enter your phone number"
           className={errors.phone ? 'border-destructive' : ''}
         />
         {errors.phone && (

@@ -47,7 +47,19 @@ export class BlogService {
       .replace(/[^\w\s-]/g, '') // Remove special characters except spaces and dashes
       .replace(/\s+/g, '-')     // Replace spaces with dashes
       .replace(/-+/g, '-')      // Replace multiple dashes with single dash
+      .replace(/^-|-$/g, '')    // Remove leading/trailing dashes
       .trim();
+  }
+
+  /**
+   * Convert filename to dash-separated format
+   */
+  static generateFileSlug(filename: string): string {
+    if (!filename) return '';
+    
+    // Remove file extension and convert to slug
+    const nameWithoutExt = filename.replace(/\.(md|txt)$/i, '');
+    return this.generateUrlSlug(nameWithoutExt);
   }
 
   /**
@@ -61,7 +73,7 @@ export class BlogService {
     console.log("Current segment:", currentSegment);
     
     const item = items.find(item => {
-      // Multiple matching strategies including dash-separated format
+      // Multiple matching strategies
       const idMatch = item.id === currentSegment;
       const urlSlugMatch = this.generateUrlSlug(item.title) === currentSegment.toLowerCase();
       const titleMatch = item.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-') === currentSegment.toLowerCase();
@@ -69,10 +81,12 @@ export class BlogService {
       
       // For files, also check filename-based matching
       if (item.type === "file") {
+        const filename = item.path.split('/').pop() || '';
+        const fileSlugMatch = this.generateFileSlug(filename) === currentSegment.toLowerCase();
         const pathMatch = item.path.toLowerCase().includes(currentSegment.toLowerCase());
-        const filenameMatch = item.path.split('/').pop()?.replace('.md', '').toLowerCase() === currentSegment.toLowerCase();
-        console.log(`File ${item.id}: idMatch=${idMatch}, urlSlugMatch=${urlSlugMatch}, titleMatch=${titleMatch}, pathMatch=${pathMatch}, filenameMatch=${filenameMatch}`);
-        return idMatch || urlSlugMatch || titleMatch || directTitleMatch || pathMatch || filenameMatch;
+        
+        console.log(`File ${item.id}: idMatch=${idMatch}, urlSlugMatch=${urlSlugMatch}, titleMatch=${titleMatch}, fileSlugMatch=${fileSlugMatch}, pathMatch=${pathMatch}`);
+        return idMatch || urlSlugMatch || titleMatch || directTitleMatch || fileSlugMatch || pathMatch;
       }
       
       console.log(`Directory ${item.id}: idMatch=${idMatch}, urlSlugMatch=${urlSlugMatch}, titleMatch=${titleMatch}, directTitleMatch=${directTitleMatch}`);
@@ -82,7 +96,7 @@ export class BlogService {
     console.log("Found item:", item);
     
     if (!item) {
-      console.log("Item not found, available items:", items.map(i => ({ id: i.id, title: i.title, type: i.type })));
+      console.log("Item not found, available items:", items.map(i => ({ id: i.id, title: i.title, type: i.type, path: i.type === 'file' ? i.path : 'N/A' })));
       return null;
     }
     
@@ -101,6 +115,10 @@ export class BlogService {
    * Generate URL path for blog item using dash-separated format
    */
   static generateBlogPath(item: BlogItem): string {
+    if (item.type === "file" && item.path) {
+      const filename = item.path.split('/').pop() || '';
+      return this.generateFileSlug(filename);
+    }
     return this.generateUrlSlug(item.title);
   }
 

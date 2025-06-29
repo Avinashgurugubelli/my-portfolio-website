@@ -5,3 +5,6 @@
 # Handle specific blog routes
 /blogs/index.json    /blogs/index.json   200
 /blogs/*             /index.html         200
+
+# Ensure blogs root loads correctly
+/blogs               /index.html         200
