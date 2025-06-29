@@ -145,10 +145,25 @@ const Navbar = () => {
               </form>
             </div>
 
-            <div className="lg:hidden">
+            <div className="lg:hidden flex items-center gap-2">
+              {/* Mobile Search */}
+              <form onSubmit={handleSearch} className="flex items-center">
+                <div className="relative">
+                  <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-7 h-8 w-24 text-xs"
+                  />
+                </div>
+              </form>
+              
+              {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
-                className="p-2 rounded-md text-foreground hover:bg-accent"
+                className="p-2 rounded-md text-foreground hover:bg-accent touch-manipulation"
                 aria-label="Toggle menu"
               >
                 {isOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}

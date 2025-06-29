@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +11,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/componen
 import { BlogSidebar } from "@/components/blog/BlogSidebar";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { EmptyBlogState } from "@/components/blog/EmptyBlogState";
+import { MobileBlogMenu } from "@/components/blog/MobileBlogMenu";
 
 const NestedBlogs = () => {
   const { "*": wildcardPath } = useParams();
@@ -201,34 +201,39 @@ const NestedBlogs = () => {
                   <ArrowLeftIcon className="h-4 w-4" />
                   Back to Blogs
                 </Button>
-                <div>
+                <div className="flex-1">
                   <h1 className="text-2xl font-bold">Nested Blogs</h1>
                   <p className="text-muted-foreground">Explore the nested blog structure</p>
                 </div>
+                {blogsData && (
+                  <MobileBlogMenu 
+                    blogItems={blogsData.blogs as BlogItem[]}
+                    onItemClick={handleItemClick}
+                    selectedPath={selectedPath}
+                  />
+                )}
               </div>
             </div>
 
-            <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)]">
-              <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+            <div className="flex">
+              {/* Desktop Sidebar - Hidden on mobile */}
+              <div className="hidden lg:block w-80 border-r border-border">
                 <BlogSidebar 
-                  blogItems={blogsData.blogs as BlogItem[]}
+                  blogItems={blogsData?.blogs as BlogItem[] || []}
                   onItemClick={handleItemClick}
                   selectedPath={selectedPath}
                 />
-              </ResizablePanel>
+              </div>
               
-              <ResizableHandle withHandle />
-              
-              <ResizablePanel defaultSize={75}>
-                <div className="flex flex-col h-full">
-                  {selectedItem ? (
-                    <BlogArticle selectedItem={selectedItem} />
-                  ) : (
-                    <EmptyBlogState />
-                  )}
-                </div>
-              </ResizablePanel>
-            </ResizablePanelGroup>
+              {/* Content Area - Full width on mobile, remaining space on desktop */}
+              <div className="flex-1 min-h-[calc(100vh-200px)]">
+                {selectedItem ? (
+                  <BlogArticle selectedItem={selectedItem} />
+                ) : (
+                  <EmptyBlogState />
+                )}
+              </div>
+            </div>
           </div>
         </main>
         <Footer />

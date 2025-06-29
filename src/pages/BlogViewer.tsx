@@ -13,6 +13,7 @@ import { BlogSidebar } from "@/components/blog/BlogSidebar";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { EmptyBlogState } from "@/components/blog/EmptyBlogState";
 import blogsJson from "@/config/blogs.json";
+import { MobileBlogMenu } from "@/components/blog/MobileBlogMenu";
 
 const BlogViewer = () => {
   const { categoryId, "*": wildcardPath } = useParams();
@@ -159,35 +160,40 @@ const BlogViewer = () => {
                   <ArrowLeftIcon className="h-4 w-4" />
                   Back to Blogs
                 </Button>
-                <div>
+                <div className="flex-1">
                   <h1 className="text-2xl font-bold">{category.title}</h1>
                   <p className="text-muted-foreground">{category.description}</p>
                 </div>
+                {blogItems.length > 0 && (
+                  <MobileBlogMenu 
+                    blogItems={blogItems}
+                    onItemClick={handleItemClick}
+                    selectedPath={selectedPath}
+                  />
+                )}
               </div>
             </div>
 
             {blogItems.length > 0 ? (
-              <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)]">
-                <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
+              <div className="flex">
+                {/* Desktop Sidebar - Hidden on mobile */}
+                <div className="hidden lg:block w-80 border-r border-border">
                   <BlogSidebar 
                     blogItems={blogItems}
                     onItemClick={handleItemClick}
                     selectedPath={selectedPath}
                   />
-                </ResizablePanel>
+                </div>
                 
-                <ResizableHandle withHandle />
-                
-                <ResizablePanel defaultSize={75}>
-                  <div className="flex flex-col h-full">
-                    {selectedItem ? (
-                      <BlogArticle selectedItem={selectedItem} />
-                    ) : (
-                      <EmptyBlogState />
-                    )}
-                  </div>
-                </ResizablePanel>
-              </ResizablePanelGroup>
+                {/* Content Area - Full width on mobile, remaining space on desktop */}
+                <div className="flex-1 min-h-[calc(100vh-200px)]">
+                  {selectedItem ? (
+                    <BlogArticle selectedItem={selectedItem} />
+                  ) : (
+                    <EmptyBlogState />
+                  )}
+                </div>
+              </div>
             ) : (
               <div className="flex items-center justify-center h-[400px]">
                 <p className="text-muted-foreground">No content available</p>
