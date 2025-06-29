@@ -134,7 +134,7 @@ export const BlogContent = ({ item }: BlogContentProps) => {
           },
           h5: ({ children, ...props }) => {
             const id = typeof children === 'string' 
-              ? children.toLowerCase().replace(/[^\w\s-]/g, '').replace /\s+/g, '-')
+              ? children.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
               : undefined;
             return <h5 id={id} {...props}>{children}</h5>;
           },
