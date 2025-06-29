@@ -25,15 +25,18 @@ const BlogSearch = () => {
   }, [searchQuery, setSearchParams]);
 
   const handleResultClick = (result: any) => {
-    const fullPath = BlogService.findItemPath(allBlogItems.filter(r => r.categoryId === result.categoryId).map(r => r.item), result.item);
-    if (fullPath) {
+    const categoryItems = allBlogItems.filter(r => r.categoryId === result.categoryId);
+    const fullPath = BlogService.findItemPath(categoryItems.map(r => r.item), result.item);
+    
+    if (fullPath && fullPath.length > 0) {
       const urlPath = fullPath.join('/');
-      // Open in new tab
       const url = `/blogs/${result.categoryId}/${urlPath}`;
-      window.open(url, '_blank');
+      console.log('Opening URL:', url);
+      // Navigate to the same tab instead of opening new tab to fix blank page issue
+      navigate(url);
     } else {
-      // Open in new tab
-      window.open(`/blogs/${result.categoryId}`, '_blank');
+      // Fallback: navigate to category
+      navigate(`/blogs/${result.categoryId}`);
     }
   };
 

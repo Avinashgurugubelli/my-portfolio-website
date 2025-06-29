@@ -1,3 +1,7 @@
 
 # Redirect all routes to index.html for client-side routing
 /*    /index.html   200
+
+# Handle specific blog routes
+/blogs/index.json    /blogs/index.json   200
+/blogs/*             /index.html         200

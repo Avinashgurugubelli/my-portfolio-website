@@ -1,6 +1,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BlogDirectory, BlogFile } from "@/models/blog";
 import { BlogService } from "@/services/blogService";
@@ -13,6 +14,9 @@ interface BlogContentProps {
 }
 
 export const BlogContent = ({ item }: BlogContentProps) => {
+  const navigate = useNavigate();
+  const { categoryId } = useParams();
+
   const { data: content, isLoading, error } = useQuery({
     queryKey: ['blogContent', item.type === "file" ? item.path : item.id],
     queryFn: async () => {
@@ -53,6 +57,18 @@ export const BlogContent = ({ item }: BlogContentProps) => {
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  const handleMarkdownLinkClick = (href: string) => {
+    // Handle internal markdown links (relative paths ending with .md)
+    if (href.endsWith('.md') && !href.startsWith('http')) {
+      const cleanHref = href.replace('./', '').replace('.md', '');
+      const slugifiedHref = BlogService.generateUrlSlug(cleanHref);
+      const newUrl = `/blogs/${categoryId}/${slugifiedHref}`;
+      navigate(newUrl);
+      return false;
+    }
+    return true;
+  };
 
   if (isLoading) {
     return (
@@ -117,6 +133,25 @@ export const BlogContent = ({ item }: BlogContentProps) => {
               ? children.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
               : undefined;
             return <h6 id={id} {...props}>{children}</h6>;
+          },
+          // Custom link handler for internal markdown links
+          a: ({ href, children, ...props }) => {
+            if (href && href.endsWith('.md') && !href.startsWith('http')) {
+              return (
+                <a
+                  {...props}
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMarkdownLinkClick(href);
+                  }}
+                  className="text-primary hover:underline cursor-pointer"
+                >
+                  {children}
+                </a>
+              );
+            }
+            return <a href={href} {...props}>{children}</a>;
           },
         }}
       >

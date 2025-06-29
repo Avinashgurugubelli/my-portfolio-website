@@ -38,6 +38,19 @@ export class BlogService {
   }
 
   /**
+   * Convert title to dash-separated URL format
+   */
+  static generateUrlSlug(title: string): string {
+    if (!title) return '';
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '') // Remove special characters except spaces and dashes
+      .replace(/\s+/g, '-')     // Replace spaces with dashes
+      .replace(/-+/g, '-')      // Replace multiple dashes with single dash
+      .trim();
+  }
+
+  /**
    * Find a blog item by path in nested structure with improved matching
    */
   static findBlogItemByPath(items: BlogItem[], pathSegments: string[]): BlogItem | null {
@@ -48,8 +61,9 @@ export class BlogService {
     console.log("Current segment:", currentSegment);
     
     const item = items.find(item => {
-      // Multiple matching strategies
+      // Multiple matching strategies including dash-separated format
       const idMatch = item.id === currentSegment;
+      const urlSlugMatch = this.generateUrlSlug(item.title) === currentSegment.toLowerCase();
       const titleMatch = item.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-') === currentSegment.toLowerCase();
       const directTitleMatch = item.title.toLowerCase() === currentSegment.toLowerCase();
       
@@ -57,12 +71,12 @@ export class BlogService {
       if (item.type === "file") {
         const pathMatch = item.path.toLowerCase().includes(currentSegment.toLowerCase());
         const filenameMatch = item.path.split('/').pop()?.replace('.md', '').toLowerCase() === currentSegment.toLowerCase();
-        console.log(`File ${item.id}: idMatch=${idMatch}, titleMatch=${titleMatch}, pathMatch=${pathMatch}, filenameMatch=${filenameMatch}`);
-        return idMatch || titleMatch || directTitleMatch || pathMatch || filenameMatch;
+        console.log(`File ${item.id}: idMatch=${idMatch}, urlSlugMatch=${urlSlugMatch}, titleMatch=${titleMatch}, pathMatch=${pathMatch}, filenameMatch=${filenameMatch}`);
+        return idMatch || urlSlugMatch || titleMatch || directTitleMatch || pathMatch || filenameMatch;
       }
       
-      console.log(`Directory ${item.id}: idMatch=${idMatch}, titleMatch=${titleMatch}, directTitleMatch=${directTitleMatch}`);
-      return idMatch || titleMatch || directTitleMatch;
+      console.log(`Directory ${item.id}: idMatch=${idMatch}, urlSlugMatch=${urlSlugMatch}, titleMatch=${titleMatch}, directTitleMatch=${directTitleMatch}`);
+      return idMatch || urlSlugMatch || titleMatch || directTitleMatch;
     });
     
     console.log("Found item:", item);
@@ -84,10 +98,10 @@ export class BlogService {
   }
 
   /**
-   * Generate URL path for blog item
+   * Generate URL path for blog item using dash-separated format
    */
   static generateBlogPath(item: BlogItem): string {
-    return item?.title?.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-') || '';
+    return this.generateUrlSlug(item.title);
   }
 
   /**

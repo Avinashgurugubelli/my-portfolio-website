@@ -1,206 +1,186 @@
 
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 const ContactForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
   });
-  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const validateForm = () => {
+    const newErrors = {
+      name: '',
+      email: '',
+      phone: '',
+      message: ''
+    };
 
-  const sendToGoogleSheets = async (data: typeof formData) => {
-    try {
-      // This would typically use Google Apps Script Web App URL
-      // For now, we'll just log it and show success
-      console.log('Sending to Google Sheets:', data);
-      
-      // In production, you would use a Google Apps Script Web App URL like:
-      // const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data)
-      // });
-      
-      return true;
-    } catch (error) {
-      console.error('Error sending to Google Sheets:', error);
-      return false;
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
     }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(formData.phone)) {
+      newErrors.phone = 'Phone number is invalid';
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error !== '');
   };
 
-  const sendEmail = async (data: typeof formData) => {
-    try {
-      // Using a simple email service (you can replace with EmailJS)
-      const emailData = {
-        to: 'avinashgurugubelli@gmail.com',
-        subject: `Contact Form: ${data.subject}`,
-        body: `
-Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Subject: ${data.subject}
-
-Message:
-${data.message}
-        `
-      };
-
-      // For GitHub Pages, we'll use a third-party service like Formspree or EmailJS
-      // This is a placeholder - you'll need to set up EmailJS or similar service
-      console.log('Email data:', emailData);
-      
-      // Example with fetch to a service like Formspree:
-      // const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     name: data.name,
-      //     email: data.email,
-      //     phone: data.phone,
-      //     subject: data.subject,
-      //     message: data.message
-      //   })
-      // });
-      
-      return true;
-    } catch (error) {
-      console.error('Error sending email:', error);
-      return false;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name as keyof typeof errors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
     
     try {
-      // Send email
-      const emailSent = await sendEmail(formData);
+      // Simulate form submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Send to Google Sheets
-      const sheetsSent = await sendToGoogleSheets(formData);
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for your message. I'll get back to you soon!",
+      });
       
-      if (emailSent || sheetsSent) {
-        toast.success("Message sent successfully! I'll get back to you soon.");
-        setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-      } else {
-        toast.error("Failed to send message. Please try again.");
-      }
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
     } catch (error) {
-      console.error('Error submitting form:', error);
-      toast.error("Failed to send message. Please try again.");
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <Card className="glass-card border-none h-full overflow-hidden">
-      <CardContent className="p-8">
-        <h3 className="text-xl font-semibold mb-6">Send Message</h3>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <Label htmlFor="name">Name *</Label>
+          <Input
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="Your full name"
+            className={errors.name ? 'border-destructive' : ''}
+          />
+          {errors.name && (
+            <p className="text-sm text-destructive">{errors.name}</p>
+          )}
+        </div>
         
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                Name *
-              </label>
-              <Input
-                id="name"
-                name="name"
-                placeholder="Enter your name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email *
-              </label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-              />
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <label htmlFor="phone" className="text-sm font-medium">
-              Phone Number
-            </label>
-            <Input
-              id="phone"
-              name="phone"
-              type="tel"
-              placeholder="Enter your phone number"
-              value={formData.phone}
-              onChange={handleChange}
-              className="bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label htmlFor="subject" className="text-sm font-medium">
-              Subject *
-            </label>
-            <Input
-              id="subject"
-              name="subject"
-              placeholder="Enter message subject"
-              required
-              value={formData.subject}
-              onChange={handleChange}
-              className="bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <label htmlFor="message" className="text-sm font-medium">
-              Message *
-            </label>
-            <Textarea
-              id="message"
-              name="message"
-              placeholder="Enter your message"
-              required
-              rows={6}
-              value={formData.message}
-              onChange={handleChange}
-              className="resize-none bg-secondary/50 border-none focus-visible:ring-1 focus-visible:ring-primary/50"
-            />
-          </div>
-          
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Sending..." : "Send Message"}
-          </Button>
-          
-          <p className="text-xs text-muted-foreground text-center">
-            * Required fields. Your message will be sent directly to my email.
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email *</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="your.email@example.com"
+            className={errors.email ? 'border-destructive' : ''}
+          />
+          {errors.email && (
+            <p className="text-sm text-destructive">{errors.email}</p>
+          )}
+        </div>
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="phone">Phone Number *</Label>
+        <Input
+          id="phone"
+          name="phone"
+          type="tel"
+          value={formData.phone}
+          onChange={handleInputChange}
+          placeholder="+1 (555) 123-4567"
+          className={errors.phone ? 'border-destructive' : ''}
+        />
+        {errors.phone && (
+          <p className="text-sm text-destructive">{errors.phone}</p>
+        )}
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="message">Message *</Label>
+        <Textarea
+          id="message"
+          name="message"
+          value={formData.message}
+          onChange={handleInputChange}
+          placeholder="Tell me about your project or inquiry..."
+          rows={5}
+          className={errors.message ? 'border-destructive' : ''}
+        />
+        {errors.message && (
+          <p className="text-sm text-destructive">{errors.message}</p>
+        )}
+      </div>
+      
+      <Button 
+        type="submit" 
+        className="w-full"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? "Sending..." : "Send Message"}
+      </Button>
+    </form>
   );
 };
 
