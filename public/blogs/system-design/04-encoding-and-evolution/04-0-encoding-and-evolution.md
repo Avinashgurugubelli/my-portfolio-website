@@ -274,7 +274,7 @@ Format	Size (bytes)
 
 ### Encode a JSON object using MessagePack in Node JS
 
-Refer for example: [link](./04.1.MessagePackExampleInJavascript.md)
+Refer for example: [link](./04-1-message-packExamples-in-javascript.md)
 
 #### 2. Thrift and Protocol Buffers
 
@@ -407,7 +407,7 @@ That’s why Protobuf’s per-field header is smaller — and total size is less
 
 # Refer for MessagePack, Thrift Binary & Compact, and Protobuf examples with JavaScript code and explanations:
 
-Refer [Serialization and compression](./04.2.serialization-comparison.md)
+Refer [Serialization and compression](./04-2- serialization-comparison.md)
 
 
 # Avro: Encoding and Schema Evolution
@@ -422,4 +422,4 @@ Avro is a binary encoding format that excels in compactness and schema evolution
 - Encodes data very efficiently (example record: just 32 bytes)
 - Most compact format among comparable options (Thrift, Protocol Buffers)
 
-Refer for MORE INFO: [Avro Encoding Detailed Explanation](./04.3.Serialization-comparison-avro.md)
+Refer for MORE INFO: [Avro Encoding Detailed Explanation](./04-3-serialization-comparison-avro.md)
