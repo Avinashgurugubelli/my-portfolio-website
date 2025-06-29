@@ -67,11 +67,41 @@ export const BlogContent = ({ item }: BlogContentProps) => {
       let filename = href.replace('./', '').replace('../', '');
       console.log("Processing filename:", filename);
       
-      // Generate slug from filename
-      const slugifiedHref = BlogService.generateFileSlug(filename);
-      console.log("Generated slug:", slugifiedHref);
+      // For files like "04-3-serialization-comparison-avro.md", we need to find the correct nested path
+      // First, generate the basic slug
+      const fileSlug = BlogService.generateFileSlug(filename);
+      console.log("Generated file slug:", fileSlug);
       
-      const newUrl = `/blogs/${categoryId}/${slugifiedHref}`;
+      // Build the full nested path based on the current item's path structure
+      let fullPath = '';
+      
+      if (item.type === "file" && item.path) {
+        // Get the directory structure from the current file's path
+        const pathParts = item.path.split('/');
+        // Remove the filename and the leading "/blogs" and category parts
+        const categoryIndex = pathParts.findIndex(part => part === categoryId);
+        if (categoryIndex !== -1) {
+          // Take everything after the category but before the filename
+          const directoryParts = pathParts.slice(categoryIndex + 1, -1);
+          console.log("Directory parts:", directoryParts);
+          
+          if (directoryParts.length > 0) {
+            // Convert directory names to URL format
+            const urlDirectoryParts = directoryParts.map(part => 
+              BlogService.generateUrlSlug(part.replace(/^\d+[-.]/, ''))
+            );
+            fullPath = `${urlDirectoryParts.join('/')}/${fileSlug}`;
+          } else {
+            fullPath = fileSlug;
+          }
+        } else {
+          fullPath = fileSlug;
+        }
+      } else {
+        fullPath = fileSlug;
+      }
+      
+      const newUrl = `/blogs/${categoryId}/${fullPath}`;
       console.log("Navigating to:", newUrl);
       
       navigate(newUrl);
