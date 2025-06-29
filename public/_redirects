@@ -1,10 +1,6 @@
-
-# Redirect all routes to index.html for client-side routing
+# Redirect all SPA routes to index.html
 /*    /index.html   200
 
-# Handle specific blog routes
+# Serve blog index.json directly (not via index.html)
+# Important for fetch("/blogs/index.json")
 /blogs/index.json    /blogs/index.json   200
-/blogs/*             /index.html         200
-
-# Ensure blogs root loads correctly
-/blogs               /index.html         200

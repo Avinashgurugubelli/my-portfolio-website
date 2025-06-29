@@ -1,0 +1,96 @@
+# This GitHub Actions workflow syncs the blog content from a GitHub release artifact
+# and prepares the build for deployment to Netlify.
+# It is triggered on pushes to the main branch, specifically when package.json or
+# scripts/sdk-versions.json are modified.
+# The workflow performs the following steps:
+# 1. Checks out the portfolio repository.
+# 2. Reads the SDK versions from scripts/sdk-versions.json.
+# 3. Downloads the blog artifact from a GitHub release based on the version specified.
+# 4. Unzips the artifact and copies the blog files into public/blogs.
+# 5. Installs project dependencies.
+# 6. Builds the project using npm.
+# 7. Lists the contents of the dist folder before pushing to Netlify.
+
+
+name: Sync Blog and Prepare Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+      - 'scripts/sdk-versions.json'
+
+permissions:
+  contents: read  # Only need read permissions now
+
+jobs:
+  sync-blog-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout portfolio repo
+      - name: Checkout portfolio repo
+        uses: actions/checkout@v3
+
+      - name: List files after checkout
+        run: ls -R .
+
+      # 2. Read SDK Versions
+      - name: Read SDK Versions
+        id: sdk_versions
+        run: |
+          BLOG_VERSION=$(jq -r '.blogs.version' scripts/sdk-versions.json)
+          ARTIFACT_PREFIX=$(jq -r '.blogs.artifactPrefix' scripts/sdk-versions.json)
+          REPO=$(jq -r '.blogs.repo' scripts/sdk-versions.json)
+          
+          echo "BLOG_VERSION=$BLOG_VERSION" >> $GITHUB_ENV
+          echo "ARTIFACT_PREFIX=$ARTIFACT_PREFIX" >> $GITHUB_ENV
+          echo "REPO=$REPO" >> $GITHUB_ENV
+
+          echo "Fetched: Version=$BLOG_VERSION, Prefix=$ARTIFACT_PREFIX, Repo=$REPO"
+
+      # 3. Download blog artifact from GitHub Release
+      - name: Download blog artifact from release
+        run: |
+          TAG="v${BLOG_VERSION}"
+          ASSET_NAME="${ARTIFACT_PREFIX}${BLOG_VERSION}.zip"
+
+          echo "Downloading $ASSET_NAME from release tag $TAG"
+          gh release download "$TAG" \
+            -R "$REPO" \
+            -p "$ASSET_NAME" \
+            -D blog-temp
+
+          echo "Unzipping asset..."
+          unzip blog-temp/"$ASSET_NAME" -d blog-temp/unzipped
+
+          echo "Unzipped contents:"
+          ls -R blog-temp/unzipped
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 4. Copy blog files into public/blogs
+      - name: Copy blog artifact into public/blogs
+        run: |
+          echo "Creating public/blogs folder..."
+          mkdir -p public/blogs
+
+          echo "Copying from blog-temp/unzipped/out/blogs to public/blogs..."
+          cp -r blog-temp/unzipped/out/blogs/* public/blogs/
+
+          echo "Files in public/blogs:"
+          ls -R public/blogs
+
+      # 5. Install dependencies
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      # 6. Build the project
+      - name: Build
+        run: npm run build
+
+      # 7. List dist before pushing to Netlify
+      - name: List dist folder
+        run: ls -R dist
