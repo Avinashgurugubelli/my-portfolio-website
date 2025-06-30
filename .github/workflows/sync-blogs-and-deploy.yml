@@ -36,13 +36,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5. Upload dist as release asset (optional)
-      - name: Upload dist to Release
+      # 5. Zip the dist folder
+      - name: Zip dist folder
+        run: |
+          cd dist
+          zip -r ../dist.zip .  # creates dist.zip in root of repo
+
+      # 6. Upload zipped dist to GitHub Release
+      - name: Upload dist.zip to Release
         if: success()
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.BLOG_VERSION }}
           name: "Site Build v${{ env.BLOG_VERSION }}"
-          files: dist/**
+          files: dist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

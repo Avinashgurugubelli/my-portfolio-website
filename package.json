@@ -2,7 +2,7 @@
   "name": "avinash_gurugubelli_portfolio",
   "homepage": "https://github.com/Avinashgurugubelli/my-portfolio-website",
   "private": false,
-  "version": "1.4.2",
+  "version": "1.4.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
