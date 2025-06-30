@@ -1,4 +1,5 @@
 
+import { XIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface NavLink {
@@ -20,7 +21,16 @@ const MobileMenu = ({ isOpen, navLinks, closeMenu, handleNavigation }: MobileMen
         isOpen ? "translate-x-0" : "translate-x-full"
       } lg:hidden`}
     >
-      <div className="flex flex-col items-center justify-center h-full space-y-6 px-8">
+      {/* Close button */}
+      <button
+        onClick={closeMenu}
+        className="absolute top-4 right-4 p-2 rounded-full bg-accent/70 hover:bg-accent transition-colors"
+        aria-label="Close menu"
+      >
+        <XIcon className="h-6 w-6 text-foreground" />
+      </button>
+      
+      <div className="flex flex-col items-center justify-center min-h-screen space-y-6 px-8 bg-background">
         {navLinks.map((link) => (
           <button
             key={link.name}

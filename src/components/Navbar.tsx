@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MenuIcon, XIcon, SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import personalJson from "@/config/personal.json";
 import ContactRibbon from "./ContactRibbon";
 import MobileMenu from "./MobileMenu";
 import BlogsJumboMenu from "./BlogsJumboMenu";
