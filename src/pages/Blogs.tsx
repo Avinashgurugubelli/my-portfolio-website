@@ -83,10 +83,10 @@ const Blogs = () => {
         <main>
           <section className="py-20 px-4 mt-30">
             <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-16">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4">Blogs</h1>
+              <div className="text-center mb-16 mt-16">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">Bits of Code, Bytes of Thought (Tech Blogs)</h1>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-                  Explore articles on various topics. Dive deep into comprehensive guides and tutorials.
+                    I write about the things I build and learn — from tech experiments and programming tips to system design and clean coding practices. Dive into articles exploring modern technologies and real-world software engineering insights.
                 </p>
                 
                 <div className="flex justify-center">

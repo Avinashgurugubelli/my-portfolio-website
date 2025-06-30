@@ -27,9 +27,9 @@ const BlogsSection = () => {
     <section id="blogs" className="py-20 px-4 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Blog</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Bits of Code, Bytes of Thought (Tech Blogs)</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore my blog where I share insights about technology, coding practices, and industry trends.
+            I write about the things I build and learn — from tech experiments and programming tips to system design and clean coding practices. Dive into articles exploring modern technologies and real-world software engineering insights.
           </p>
         </div>
 
