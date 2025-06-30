@@ -23,4 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+blog-temp
+
 # public/blogs/system-design
+public/blogs/info.json
