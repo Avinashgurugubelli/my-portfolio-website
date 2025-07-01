@@ -122,12 +122,13 @@ const Blogs = () => {
                       <CardHeader>
                         <div className="flex items-center gap-2 mb-2">
                           {category.indexUrl ? (
-                            <FolderIcon className="h-5 w-5 text-blue-500" />
+                            // <FolderIcon className="h-5 w-5 text-blue-500" />
+                            <FileTextIcon className="h-5 w-5 text-green-500" />
                           ) : (
                             <FileTextIcon className="h-5 w-5 text-green-500" />
                           )}
                           <span className="text-xs text-muted-foreground">
-                            {category.indexUrl ? 'Nested Structure' : 'Articles'}
+                            {category.indexUrl ? category.title : category.title}
                           </span>
                         </div>
                         <CardTitle className="text-2xl">{category.title}</CardTitle>
@@ -162,7 +163,7 @@ const Blogs = () => {
                       </CardContent>
                       <CardFooter>
                         <Button variant="outline" className="gap-2 w-full">
-                          {category.indexUrl ? 'Explore Structure' : 'View Articles'} 
+                          {category.indexUrl ? 'View Articles' : 'View Articles'} 
                           <ArrowRightIcon className="h-4 w-4" />
                         </Button>
                       </CardFooter>

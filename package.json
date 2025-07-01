@@ -2,7 +2,7 @@
   "name": "avinash_gurugubelli_portfolio",
   "homepage": "https://github.com/Avinashgurugubelli/my-portfolio-website",
   "private": false,
-  "version": "1.4.6",
+  "version": "1.4.7",
   "type": "module",
   "scripts": {
     "sync-blog": "node scripts/syncBlogAndBuild.js",
