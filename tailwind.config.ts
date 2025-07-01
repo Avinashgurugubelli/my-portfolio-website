@@ -124,6 +124,28 @@ export default {
 						},
 						'td code::before': { content: 'none' },
 						'td code::after': { content: 'none' },
+						'li code': {
+							backgroundColor: 'transparent',
+							padding: '0',
+							borderRadius: '0',
+							fontWeight: 'normal',
+							fontSize: '1em',
+							color: theme('colors.foreground'),
+						},
+						'li code::before': { content: 'none' },
+						'li code::after': { content: 'none' },
+						// ...existing code...
+						'p code': {
+							backgroundColor: theme('colors.muted.DEFAULT'), // Add a subtle background
+							padding: '0.2em 0.4em', // Add some padding for readability
+							borderRadius: '0.25em',
+							fontWeight: 'normal',
+							fontSize: '1em',
+							color: theme('colors.primary.DEFAULT'), // Use a primary color for code text
+						},
+						// ...existing code...
+						'p code::before': { content: 'none' },
+						'p code::after': { content: 'none' }
 					},
 				},
 				dark: {
@@ -200,6 +222,26 @@ export default {
 						},
 						'td code::before': { content: 'none' },
 						'td code::after': { content: 'none' },
+						'li code': {
+							backgroundColor: 'transparent',
+							padding: '0',
+							borderRadius: '0',
+							fontWeight: 'normal',
+							fontSize: '1em',
+							color: theme('colors.foreground'),
+						},
+						'li code::before': { content: 'none' },
+						'li code::after': { content: 'none' },
+						'p code': {
+							backgroundColor: theme('colors.muted.DEFAULT'), // Add a subtle background
+							padding: '0.2em 0.4em', // Add some padding for readability
+							borderRadius: '0.25em',
+							fontWeight: 'normal',
+							fontSize: '1em',
+							color: theme('colors.primary.DEFAULT'), // Use a primary color for code text
+						},
+						'p code::before': { content: 'none' },
+						'p code::after': { content: 'none' }
 					},
 				},
 			}),

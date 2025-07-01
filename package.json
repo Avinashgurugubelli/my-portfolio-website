@@ -2,15 +2,15 @@
   "name": "avinash_gurugubelli_portfolio",
   "homepage": "https://github.com/Avinashgurugubelli/my-portfolio-website",
   "private": false,
-  "version": "1.4.5",
+  "version": "1.4.6",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "sync-blog": "node scripts/syncBlogAndBuild.js",
+    "dev": "npm run sync-blog && vite",
     "build:app": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "sync-blog": "node scripts/syncBlogAndBuild.js",
     "build": "npm run build:app && npm run sync-blog"
   },
   "dependencies": {

@@ -114,7 +114,7 @@ const Navbar = () => {
                         >
                           {item.name}
                         </Link>
-                        <BlogsJumboMenu isVisible={showBlogsMenu} />
+                        {/* <BlogsJumboMenu isVisible={showBlogsMenu} /> */}
                       </div>
                     ) : (
                       <Link

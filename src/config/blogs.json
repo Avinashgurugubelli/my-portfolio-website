@@ -1,7 +1,7 @@
 {
     "categories": [
        {
-        "id": "object-oriented-programming",
+        "id": "oops", 
         "title": "Object Oriented Programming (OOPS)",
         "description": "Object-Oriented Programming (OOP) is a programming paradigm in computer science that relies on the concept of classes and objects. It is used to structure a software program into simple, reusable pieces of code blueprints (usually called classes), which are used to create individual instances of objects.",
         "image": "/placeholder.svg",
