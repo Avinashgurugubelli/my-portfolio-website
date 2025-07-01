@@ -2,14 +2,16 @@
   "name": "avinash_gurugubelli_portfolio",
   "homepage": "https://github.com/Avinashgurugubelli/my-portfolio-website",
   "private": false,
-  "version": "1.4.3",
+  "version": "1.4.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:app": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync-blog": "node scripts/syncBlogAndBuild.js",
+    "build": "npm run build:app && npm run sync-blog"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

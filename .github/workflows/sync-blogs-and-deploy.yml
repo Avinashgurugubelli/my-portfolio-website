@@ -9,14 +9,14 @@ on:
       - 'scripts/sdk-versions.json'
 
 permissions:
-  contents: write  # needed for uploading release asset
+  contents: write  # Needed for creating tags and uploading release assets
 
 jobs:
   sync-blog-and-build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout portfolio repo
+      # 1. Checkout repo
       - name: Checkout portfolio repo
         uses: actions/checkout@v3
 
@@ -30,21 +30,37 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Run sync and build script
-      - name: Run sync and build script
-        run: node scripts/syncBlogAndBuild.js
+      # 4. Run combined blog sync and build
+      - name: Run build and blog sync
+        run: npm run build:blog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5. Zip the dist folder
+      # 5. Extract version from package.json and set BLOG_VERSION
+      - name: Set BLOG_VERSION env variable from package.json
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "BLOG_VERSION=$VERSION" >> $GITHUB_ENV
+
+      # 6. Zip the dist folder
       - name: Zip dist folder
         run: |
           cd dist
-          zip -r ../dist.zip .  # creates dist.zip in root of repo
+          zip -r ../dist.zip .
 
-      # 6. Upload zipped dist to GitHub Release
-      - name: Upload dist.zip to Release
-        if: success()
+      # 7. Create Git tag if not already exists
+      - name: Create Git tag for release
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag "v${BLOG_VERSION}" || echo "Tag already exists"
+          git push origin "v${BLOG_VERSION}"
+        env:
+          BLOG_VERSION: ${{ env.BLOG_VERSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 8. Upload zip to GitHub Release
+      - name: Upload dist.zip to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.BLOG_VERSION }}

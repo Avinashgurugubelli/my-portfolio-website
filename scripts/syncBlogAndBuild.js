@@ -57,13 +57,13 @@ async function run() {
   await fs.createReadStream(zipPath).pipe(unzipper.Extract({ path: unzipPath })).promise();
   console.log(`✅ Unzipped to ${unzipPath}`);
 
-  // Step 1: Install dependencies
-  console.log(`📦 Installing dependencies...`);
-  execSync('npm install', { stdio: 'inherit' });
+  // // Step 1: Install dependencies - commented as we are running npn run build:app
+  // console.log(`📦 Installing dependencies...`);
+  // execSync('npm install', { stdio: 'inherit' });
 
-  // Step 2: Build the project
-  console.log(`🏗️  Building project...`);
-  execSync('npm run build', { stdio: 'inherit' });
+  // // Step 2: Build the project - - commented as we are running npn run build:app
+  // console.log(`🏗️  Building project...`);
+  // execSync('npm run build', { stdio: 'inherit' });
 
   // Step 3: Copy blog files to dist/blogs/
   if (!fs.existsSync(BLOGS_OUTPUT_DIR)) {
