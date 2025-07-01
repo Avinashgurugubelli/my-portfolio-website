@@ -32,7 +32,7 @@ jobs:
 
       # 4. Run combined blog sync and build
       - name: Run build and blog sync
-        run: npm run build:blog
+        run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
