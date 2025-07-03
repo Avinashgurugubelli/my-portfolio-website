@@ -151,7 +151,7 @@ const Blogs = () => {
                           ))}
                           {!category.children && category.indexUrl && (
                             <div className="text-sm text-muted-foreground">
-                              Click to explore nested structure...
+                              {/* Click to explore nested structure... */}
                             </div>
                           )}
                           {!category.children && !category.indexUrl && (
