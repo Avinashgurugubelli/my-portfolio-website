@@ -25,7 +25,7 @@ const Index = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen bg-background text-foreground relative"
+        className="min-h-screen bg-background text-foreground relative no-x-overflow"
       >
         <Navbar />
         <main className="pt-[120px]">

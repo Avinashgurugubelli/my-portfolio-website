@@ -4,7 +4,11 @@
 @tailwind utilities;
 
 /* Add this rule at the beginning of the file */
-#root {
+/* #root {
+  overflow-x: hidden;
+} */
+
+.no-x-overflow {
   overflow-x: hidden;
 }
 
