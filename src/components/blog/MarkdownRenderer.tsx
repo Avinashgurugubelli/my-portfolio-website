@@ -48,7 +48,7 @@ export const MarkdownRenderer = ({ content, onLinkClick }: MarkdownRendererProps
           },
           h6: ({ children, ...props }) => {
             const id = typeof children === 'string' 
-              ? children.toLowerCase().replace(/[^\w\s-]/g, '').replace /\s+/g, '-')
+              ? children.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
               : undefined;
             return <h6 id={id} {...props} className="scroll-mt-36">{children}</h6>;
           },
