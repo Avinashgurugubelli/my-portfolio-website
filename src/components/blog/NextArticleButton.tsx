@@ -39,16 +39,16 @@ export const NextArticleButton = ({ blogItems, currentItem, onItemClick }: NextA
   };
 
   const handleNextClick = (nextArticle: BlogItem) => {
-    // Call the item click handler
+    // Call the item click handler first
     onItemClick(nextArticle);
     
-    // Scroll to top of the article with proper offset for navbar
+    // Scroll to top immediately after content change
     setTimeout(() => {
       window.scrollTo({
-        top: 120, // Account for fixed navbar height
+        top: 0,
         behavior: 'smooth'
       });
-    }, 100); // Small delay to ensure content has updated
+    }, 50); // Reduced delay for faster response
   };
 
   const nextArticle = findNextArticle(blogItems, currentItem);

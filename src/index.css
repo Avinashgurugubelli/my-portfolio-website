@@ -197,3 +197,66 @@
     animation: gradientShift 3s ease infinite;
   }
 }
+
+/* Mobile content wrapping fixes */
+@layer components {
+  .prose {
+    @apply overflow-hidden;
+  }
+  
+  .prose pre {
+    @apply overflow-x-auto max-w-full;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  .prose code {
+    @apply break-words;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+  
+  .prose table {
+    @apply w-full overflow-x-auto block;
+    white-space: nowrap;
+  }
+  
+  .prose img {
+    @apply max-w-full h-auto;
+  }
+  
+  /* Fix for long words and URLs */
+  .prose p, .prose li, .prose td, .prose th {
+    @apply break-words;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Ensure code blocks don't overflow */
+  .prose pre code {
+    white-space: pre-wrap !important;
+    word-break: break-all;
+  }
+}
+
+/* Additional mobile fixes */
+@media (max-width: 768px) {
+  .prose {
+    @apply text-sm leading-relaxed;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  .prose pre {
+    @apply text-xs;
+    max-width: calc(100vw - 3rem);
+  }
+  
+  .prose table {
+    @apply text-xs;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: calc(100vw - 3rem);
+  }
+}
