@@ -1,17 +1,19 @@
-
 import { UserIcon, BookOpenIcon, CalendarIcon, ExternalLinkIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { BlogDirectory, BlogFile } from "@/models/blog";
+import { BlogDirectory, BlogFile, BlogItem } from "@/models/blog";
 import { BlogContent } from "./BlogContent";
 import { TagsDisplay } from "@/components/ui/TagsDisplay";
+import { NextArticleButton } from "./NextArticleButton";
 
 interface BlogArticleProps {
   selectedItem: BlogDirectory | BlogFile;
+  blogItems?: BlogItem[];
+  onItemClick?: (item: BlogItem) => void;
 }
 
-export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
+export const BlogArticle = ({ selectedItem, blogItems, onItemClick }: BlogArticleProps) => {
   const getSourceUrl = () => {
     // Check for sourceLink first - ensure it's a string
     if ('sourceLink' in selectedItem && selectedItem.sourceLink && typeof selectedItem.sourceLink === 'string') {
@@ -114,6 +116,15 @@ export const BlogArticle = ({ selectedItem }: BlogArticleProps) => {
         </header>
 
         <BlogContent item={selectedItem} />
+
+        {/* Next Article Button */}
+        {blogItems && onItemClick && (
+          <NextArticleButton
+            blogItems={blogItems}
+            currentItem={selectedItem}
+            onItemClick={onItemClick}
+          />
+        )}
       </article>
     </ScrollArea>
   );

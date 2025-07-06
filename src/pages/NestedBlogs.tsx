@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,6 +12,7 @@ import { BlogSidebar } from "@/components/blog/BlogSidebar";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { EmptyBlogState } from "@/components/blog/EmptyBlogState";
 import { MobileBlogMenu } from "@/components/blog/MobileBlogMenu";
+import { BottomMobileBlogMenu } from "@/components/blog/BottomMobileBlogMenu";
 
 const NestedBlogs = () => {
   const { "*": wildcardPath } = useParams();
@@ -194,7 +194,6 @@ const NestedBlogs = () => {
             <div className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
               <div className="p-4 border-b border-border">
                 <div className="flex flex-col gap-4 mb-4">
-                  {/* Header row with back button and mobile menu */}
                   <div className="flex items-center justify-between">
                     <Button
                       variant="outline"
@@ -214,7 +213,6 @@ const NestedBlogs = () => {
                     )}
                   </div>
                   
-                  {/* Title and description */}
                   <div className="flex-1">
                     <h1 className="text-2xl font-bold mb-2">Nested Blogs</h1>
                     <Tooltip>
@@ -232,7 +230,6 @@ const NestedBlogs = () => {
               </div>
 
               <div className="flex">
-                {/* Desktop Sidebar - Hidden on mobile */}
                 <div className="hidden lg:block w-80 border-r border-border">
                   <BlogSidebar 
                     blogItems={blogsData?.blogs as BlogItem[] || []}
@@ -241,15 +238,26 @@ const NestedBlogs = () => {
                   />
                 </div>
                 
-                {/* Content Area - Full width on mobile, remaining space on desktop */}
                 <div className="flex-1 min-h-[calc(100vh-200px)]">
                   {selectedItem ? (
-                    <BlogArticle selectedItem={selectedItem} />
+                    <BlogArticle 
+                      selectedItem={selectedItem}
+                      blogItems={blogsData?.blogs as BlogItem[] || []}
+                      onItemClick={handleItemClick}
+                    />
                   ) : (
                     <EmptyBlogState />
                   )}
                 </div>
               </div>
+
+              {blogsData && (
+                <BottomMobileBlogMenu 
+                  blogItems={blogsData.blogs as BlogItem[]}
+                  onItemClick={handleItemClick}
+                  selectedPath={selectedPath}
+                />
+              )}
             </div>
           </main>
           <Footer />

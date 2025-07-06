@@ -14,6 +14,7 @@ import { BlogArticle } from "@/components/blog/BlogArticle";
 import { EmptyBlogState } from "@/components/blog/EmptyBlogState";
 import blogsJson from "@/config/blogs.json";
 import { MobileBlogMenu } from "@/components/blog/MobileBlogMenu";
+import { BottomMobileBlogMenu } from "@/components/blog/BottomMobileBlogMenu";
 
 const BlogViewer = () => {
   const { categoryId, "*": wildcardPath } = useParams();
@@ -152,7 +153,6 @@ const BlogViewer = () => {
             <div className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
               <div className="p-4 border-b border-border">
                 <div className="flex flex-col gap-4 mb-4">
-                  {/* Header row with back button and mobile menu */}
                   <div className="flex items-center justify-between">
                     <Button
                       variant="outline"
@@ -163,6 +163,7 @@ const BlogViewer = () => {
                       <ArrowLeftIcon className="h-4 w-4" />
                       Back to Articles
                     </Button>
+                    {/* Keep top mobile menu for initial access */}
                     {blogItems.length > 0 && (
                       <MobileBlogMenu 
                         blogItems={blogItems}
@@ -200,10 +201,13 @@ const BlogViewer = () => {
                     />
                   </div>
                   
-                  {/* Content Area - Full width on mobile, remaining space on desktop */}
                   <div className="flex-1 min-h-[calc(100vh-200px)]">
                     {selectedItem ? (
-                      <BlogArticle selectedItem={selectedItem} />
+                      <BlogArticle 
+                        selectedItem={selectedItem} 
+                        blogItems={blogItems}
+                        onItemClick={handleItemClick}
+                      />
                     ) : (
                       <EmptyBlogState />
                     )}
@@ -213,6 +217,15 @@ const BlogViewer = () => {
                 <div className="flex items-center justify-center h-[400px]">
                   <p className="text-muted-foreground">No content available</p>
                 </div>
+              )}
+
+              {/* Bottom Mobile Menu */}
+              {blogItems.length > 0 && (
+                <BottomMobileBlogMenu 
+                  blogItems={blogItems}
+                  onItemClick={handleItemClick}
+                  selectedPath={selectedPath}
+                />
               )}
             </div>
           </main>
