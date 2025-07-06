@@ -38,6 +38,19 @@ export const NextArticleButton = ({ blogItems, currentItem, onItemClick }: NextA
     return null;
   };
 
+  const handleNextClick = (nextArticle: BlogItem) => {
+    // Call the item click handler
+    onItemClick(nextArticle);
+    
+    // Scroll to top of the article with proper offset for navbar
+    setTimeout(() => {
+      window.scrollTo({
+        top: 120, // Account for fixed navbar height
+        behavior: 'smooth'
+      });
+    }, 100); // Small delay to ensure content has updated
+  };
+
   const nextArticle = findNextArticle(blogItems, currentItem);
 
   if (!nextArticle) {
@@ -48,7 +61,7 @@ export const NextArticleButton = ({ blogItems, currentItem, onItemClick }: NextA
     <div className="mt-12 pt-8 border-t border-border">
       <div className="flex justify-end">
         <Button
-          onClick={() => onItemClick(nextArticle)}
+          onClick={() => handleNextClick(nextArticle)}
           className="gap-2 group"
           size="lg"
         >
