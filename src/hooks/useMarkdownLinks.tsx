@@ -17,7 +17,6 @@ export const useMarkdownLinks = (item: BlogDirectory | BlogFile) => {
       // Handle relative paths with ../
       if (href.startsWith('../')) {
         // Extract the folder and filename from the relative path
-        // Example: ../oops/01-introduction.md -> folder: oops, filename: 01-introduction.md
         const pathParts = href.split('/');
         const filename = pathParts[pathParts.length - 1]; // Get the last part (filename)
         const folderPath = pathParts.slice(1, -1); // Get middle parts (folder structure), excluding '../' and filename
@@ -25,12 +24,12 @@ export const useMarkdownLinks = (item: BlogDirectory | BlogFile) => {
         console.log("Relative path parts:", { pathParts, filename, folderPath });
         
         if (folderPath.length > 0) {
-          // For paths like ../oops/01-introduction.md
-          const targetFolder = folderPath[0]; // First folder after ../
+          // For paths like ../transactions/01-introduction.md
+          const targetFolder = BlogService.generateUrlSlug(folderPath[0]); // Convert folder name to URL format
           const fileSlug = BlogService.generateFileSlug(filename);
           
           // Navigate to the target folder with the file
-          const newUrl = `/blogs/${targetFolder}/${fileSlug}`;
+          const newUrl = `/blogs/${categoryId}/${targetFolder}/${fileSlug}`;
           console.log("Navigating to relative path:", newUrl);
           navigate(newUrl);
           return false;
@@ -57,12 +56,12 @@ export const useMarkdownLinks = (item: BlogDirectory | BlogFile) => {
       
       if (item.type === "file" && item.path) {
         // Get the directory structure from the current file's path
-        const pathParts = item.path.split('/');
-        // Remove the filename and the leading "/blogs" and category parts
-        const categoryIndex = pathParts.findIndex(part => part === categoryId);
-        if (categoryIndex !== -1) {
-          // Take everything after the category but before the filename
-          const directoryParts = pathParts.slice(categoryIndex + 1, -1);
+        const pathParts = item.path.split('/').filter(Boolean);
+        // Find where the category starts in the path
+        const categoryIndex = pathParts.findIndex(part => part === 'blogs');
+        if (categoryIndex !== -1 && categoryIndex + 2 < pathParts.length) {
+          // Take everything after 'blogs/category-name' but before the filename
+          const directoryParts = pathParts.slice(categoryIndex + 2, -1);
           console.log("Directory parts:", directoryParts);
           
           if (directoryParts.length > 0) {

@@ -64,19 +64,24 @@ export const useBlogNavigation = (
 
   const handleItemClick = useCallback((item: BlogItem) => {
     console.log("Item clicked:", item);
-    // Only update content, don't navigate
     setSelectedItem(item);
     setSelectedPath(item.type === "file" ? item.path : item.id);
     
-    // Update URL without navigation for deep linking support
-    const fullPath = BlogService.findItemPath(blogItems, item);
-    console.log("Generated full path for item:", fullPath);
+    // Generate correct URL path with parent directories
+    const parentPath = BlogService.findParentPath(blogItems, item);
+    const itemPath = BlogService.generateBlogPath(item);
     
-    if (fullPath) {
-      const urlPath = fullPath.join('/');
-      console.log("Updating URL to:", `/blogs/${categoryId}/${urlPath}`);
-      window.history.replaceState(null, '', `/blogs/${categoryId}/${urlPath}`);
+    let fullUrlPath = itemPath;
+    if (parentPath && parentPath.length > 0) {
+      fullUrlPath = [...parentPath, itemPath].join('/');
     }
+    
+    console.log("Generated full URL path:", fullUrlPath);
+    console.log("Parent path:", parentPath, "Item path:", itemPath);
+    
+    const newUrl = `/blogs/${categoryId}/${fullUrlPath}`;
+    console.log("Updating URL to:", newUrl);
+    window.history.replaceState(null, '', newUrl);
   }, [blogItems, categoryId]);
 
   return {

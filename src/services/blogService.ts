@@ -123,16 +123,40 @@ export class BlogService {
   }
 
   /**
-   * Find the full path hierarchy for a blog item
+   * Find the full path hierarchy for a blog item with correct parent traversal
    */
   static findItemPath(items: BlogItem[], targetItem: BlogItem, currentPath: string[] = []): string[] | null {
     for (const item of items) {
       if (item.id === targetItem.id) {
+        // Found the target item, return the path including this item
         return [...currentPath, this.generateBlogPath(item)];
       }
       
       if (item.type === "directory" && item.children) {
-        const result = this.findItemPath(item.children, targetItem, [...currentPath, this.generateBlogPath(item)]);
+        // Add current directory to path and search children
+        const childPath = [...currentPath, this.generateBlogPath(item)];
+        const result = this.findItemPath(item.children, targetItem, childPath);
+        if (result) return result;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Find parent directory path for constructing correct URLs
+   */
+  static findParentPath(items: BlogItem[], targetItem: BlogItem, parentPath: string[] = []): string[] | null {
+    for (const item of items) {
+      if (item.type === "directory" && item.children) {
+        // Check if target is a direct child
+        const directChild = item.children.find(child => child.id === targetItem.id);
+        if (directChild) {
+          return [...parentPath, this.generateBlogPath(item)];
+        }
+        
+        // Recursively search in subdirectories
+        const currentDirPath = [...parentPath, this.generateBlogPath(item)];
+        const result = this.findParentPath(item.children, targetItem, currentDirPath);
         if (result) return result;
       }
     }

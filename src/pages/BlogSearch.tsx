@@ -6,14 +6,14 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchHeader from "@/components/search/SearchHeader";
 import SearchResults from "@/components/search/SearchResults";
-import { useSearchBlogs } from "@/hooks/useSearchBlogs";
+import { useWebWorkerSearch } from "@/hooks/useWebWorkerSearch";
 import { BlogService } from "@/services/blogService";
 
 const BlogSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
-  const { searchResults, allBlogItems } = useSearchBlogs();
+  const { searchResults, isLoading } = useWebWorkerSearch();
 
   // Update URL when search changes
   useEffect(() => {
@@ -25,14 +25,13 @@ const BlogSearch = () => {
   }, [searchQuery, setSearchParams]);
 
   const handleResultClick = (result: any) => {
-    const categoryItems = allBlogItems.filter(r => r.categoryId === result.categoryId);
-    const fullPath = BlogService.findItemPath(categoryItems.map(r => r.item), result.item);
+    const categoryItems = result.allItems?.filter((r: any) => r.categoryId === result.categoryId) || [];
+    const fullPath = BlogService.findItemPath(categoryItems.map((r: any) => r.item), result.item);
     
     if (fullPath && fullPath.length > 0) {
       const urlPath = fullPath.join('/');
       const url = `/blogs/${result.categoryId}/${urlPath}`;
       console.log('Opening URL:', url);
-      // Navigate to the same tab instead of opening new tab to fix blank page issue
       navigate(url);
     } else {
       // Fallback: navigate to category
@@ -63,6 +62,7 @@ const BlogSearch = () => {
               searchQuery={searchQuery}
               results={results}
               onResultClick={handleResultClick}
+              isLoading={isLoading}
             />
           </div>
         </main>

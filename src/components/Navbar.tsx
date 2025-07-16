@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MenuIcon, XIcon, SearchIcon } from "lucide-react";
@@ -31,6 +32,13 @@ const Navbar = () => {
     if (isOpen) setIsOpen(false);
   };
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const handleNavClick = (e: React.MouseEvent, href: string, section: string) => {
     e.preventDefault();
     closeMenu();
@@ -41,19 +49,15 @@ const Navbar = () => {
     }
     
     if (href.startsWith('/#')) {
+      const sectionId = href.substring(2); // Remove '/#'
+      
       if (location.pathname !== '/') {
+        // Navigate to home first, then scroll
         navigate('/');
-        setTimeout(() => {
-          const element = document.querySelector(href.substring(1));
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 100);
+        setTimeout(() => scrollToSection(sectionId), 100);
       } else {
-        const element = document.querySelector(href.substring(1));
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
+        // Already on home, just scroll
+        scrollToSection(sectionId);
       }
     } else {
       navigate(href);
@@ -114,7 +118,6 @@ const Navbar = () => {
                         >
                           {item.name}
                         </Link>
-                        {/* <BlogsJumboMenu isVisible={showBlogsMenu} /> */}
                       </div>
                     ) : (
                       <Link
@@ -144,7 +147,6 @@ const Navbar = () => {
             </div>
 
             <div className="lg:hidden flex items-center gap-2">
-              {/* Mobile Search */}
               <form onSubmit={handleSearch} className="flex items-center">
                 <div className="relative">
                   <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
@@ -158,7 +160,6 @@ const Navbar = () => {
                 </div>
               </form>
               
-              {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
                 className="p-2 rounded-md text-foreground hover:bg-accent touch-manipulation"
@@ -180,19 +181,12 @@ const Navbar = () => {
           if (path === '/blogs' || path === '/nested-blogs') {
             navigate(path);
           } else if (path.startsWith('/#')) {
+            const sectionId = path.substring(2);
             if (location.pathname !== '/') {
               navigate('/');
-              setTimeout(() => {
-                const element = document.querySelector(path.substring(1));
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth' });
-                }
-              }, 100);
+              setTimeout(() => scrollToSection(sectionId), 100);
             } else {
-              const element = document.querySelector(path.substring(1));
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
+              scrollToSection(sectionId);
             }
           } else {
             navigate(path);
