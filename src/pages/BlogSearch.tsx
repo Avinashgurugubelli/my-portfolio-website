@@ -25,14 +25,45 @@ const BlogSearch = () => {
   }, [searchQuery, setSearchParams]);
 
   const handleResultClick = (result: any) => {
-    const categoryItems = result.allItems?.filter((r: any) => r.categoryId === result.categoryId) || [];
-    const fullPath = BlogService.findItemPath(categoryItems.map((r: any) => r.item), result.item);
+    console.log('Search result clicked:', result);
     
-    if (fullPath && fullPath.length > 0) {
-      const urlPath = fullPath.join('/');
-      const url = `/blogs/${result.categoryId}/${urlPath}`;
-      console.log('Opening URL:', url);
-      navigate(url);
+    // For nested blog items, we need to construct the proper URL path
+    if (result.item && result.item.path) {
+      const itemPath = result.item.path;
+      console.log('Item path:', itemPath);
+      
+      // Extract the path after the category to build the URL
+      // Example: "/blogs/system-design/01-general/predicate-and-index-range-locks.md"
+      // Should become: "general-system-design-principles/predicate-and-index-range-locks"
+      
+      const pathParts = itemPath.split('/').filter(Boolean);
+      console.log('Path parts:', pathParts);
+      
+      // Find the category index (e.g., "system-design")
+      const categoryIndex = pathParts.findIndex(part => part === result.categoryId);
+      
+      if (categoryIndex !== -1 && categoryIndex < pathParts.length - 1) {
+        // Get the parts after the category
+        const urlParts = pathParts.slice(categoryIndex + 1);
+        console.log('URL parts:', urlParts);
+        
+        // Convert each part to URL-friendly format
+        const convertedParts = urlParts.map(part => {
+          // Remove file extension and convert to slug
+          const cleanPart = part.replace(/\.(md|txt)$/i, '');
+          return BlogService.generateUrlSlug(cleanPart);
+        });
+        
+        const fullUrlPath = convertedParts.join('/');
+        const finalUrl = `/blogs/${result.categoryId}/${fullUrlPath}`;
+        
+        console.log('Navigating to:', finalUrl);
+        navigate(finalUrl);
+      } else {
+        // Fallback: navigate to category
+        console.log('Fallback to category:', result.categoryId);
+        navigate(`/blogs/${result.categoryId}`);
+      }
     } else {
       // Fallback: navigate to category
       navigate(`/blogs/${result.categoryId}`);

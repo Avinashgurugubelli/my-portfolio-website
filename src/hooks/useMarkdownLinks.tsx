@@ -16,31 +16,38 @@ export const useMarkdownLinks = (item: BlogDirectory | BlogFile) => {
       
       // Handle relative paths with ../
       if (href.startsWith('../')) {
-        // Extract the folder and filename from the relative path
-        const pathParts = href.split('/');
+        console.log("Processing relative path with ../");
+        
+        // Remove the ../ prefix and get the remaining path
+        const relativePath = href.replace(/^\.\.\//, '');
+        console.log("Relative path after removing ../:", relativePath);
+        
+        // Split the path to get folder and filename
+        const pathParts = relativePath.split('/');
         const filename = pathParts[pathParts.length - 1]; // Get the last part (filename)
-        const folderPath = pathParts.slice(1, -1); // Get middle parts (folder structure), excluding '../' and filename
+        const folderParts = pathParts.slice(0, -1); // Get all parts except filename
         
-        console.log("Relative path parts:", { pathParts, filename, folderPath });
+        console.log("Path analysis:", { pathParts, filename, folderParts });
         
-        if (folderPath.length > 0) {
-          // For paths like ../transactions/01-introduction.md
-          const targetFolder = BlogService.generateUrlSlug(folderPath[0]); // Convert folder name to URL format
-          const fileSlug = BlogService.generateFileSlug(filename);
-          
-          // Navigate to the target folder with the file
-          const newUrl = `/blogs/${categoryId}/${targetFolder}/${fileSlug}`;
-          console.log("Navigating to relative path:", newUrl);
-          navigate(newUrl);
-          return false;
-        } else {
-          // For paths like ../filename.md (sibling directory)
-          const fileSlug = BlogService.generateFileSlug(filename);
-          const newUrl = `/blogs/${categoryId}/${fileSlug}`;
-          console.log("Navigating to sibling file:", newUrl);
-          navigate(newUrl);
-          return false;
+        // Convert folder parts to URL format (remove numbering prefixes)
+        const urlFolderParts = folderParts.map(folder => {
+          const cleanFolder = folder.replace(/^\d+[-.]/, ''); // Remove numbering like "01-" or "01."
+          return BlogService.generateUrlSlug(cleanFolder);
+        });
+        
+        // Convert filename to URL format
+        const fileSlug = BlogService.generateFileSlug(filename);
+        
+        // Construct the full URL path
+        let fullUrlPath = fileSlug;
+        if (urlFolderParts.length > 0) {
+          fullUrlPath = [...urlFolderParts, fileSlug].join('/');
         }
+        
+        const newUrl = `/blogs/${categoryId}/${fullUrlPath}`;
+        console.log("Navigating to relative path:", newUrl);
+        navigate(newUrl);
+        return false;
       }
       
       // Handle same-directory relative paths (./filename.md or just filename.md)
@@ -57,18 +64,23 @@ export const useMarkdownLinks = (item: BlogDirectory | BlogFile) => {
       if (item.type === "file" && item.path) {
         // Get the directory structure from the current file's path
         const pathParts = item.path.split('/').filter(Boolean);
+        console.log("Current item path parts:", pathParts);
+        
         // Find where the category starts in the path
-        const categoryIndex = pathParts.findIndex(part => part === 'blogs');
-        if (categoryIndex !== -1 && categoryIndex + 2 < pathParts.length) {
-          // Take everything after 'blogs/category-name' but before the filename
-          const directoryParts = pathParts.slice(categoryIndex + 2, -1);
+        const categoryIndex = pathParts.findIndex(part => part === categoryId);
+        console.log("Category index:", categoryIndex);
+        
+        if (categoryIndex !== -1 && categoryIndex + 1 < pathParts.length - 1) {
+          // Take everything after the category but before the filename
+          const directoryParts = pathParts.slice(categoryIndex + 1, -1);
           console.log("Directory parts:", directoryParts);
           
           if (directoryParts.length > 0) {
-            // Convert directory names to URL format
-            const urlDirectoryParts = directoryParts.map(part => 
-              BlogService.generateUrlSlug(part.replace(/^\d+[-.]/, ''))
-            );
+            // Convert directory names to URL format (remove numbering prefixes)
+            const urlDirectoryParts = directoryParts.map(part => {
+              const cleanPart = part.replace(/^\d+[-.]/, '');
+              return BlogService.generateUrlSlug(cleanPart);
+            });
             fullPath = `${urlDirectoryParts.join('/')}/${fileSlug}`;
           } else {
             fullPath = fileSlug;
