@@ -1,5 +1,5 @@
 
-import { SearchResultCard } from "./SearchResultCard";
+import SearchResultCard from "./SearchResultCard";
 import { SearchPagination } from "./SearchPagination";
 import { SearchLoadingSkeleton } from "./SearchLoadingSkeleton";
 import { useState } from "react";
