@@ -1,0 +1,166 @@
+{
+  "label": "oops",
+  "type": "directory",
+  "title": "Object-Oriented Programming",
+  "description": "An overview of object-oriented programming concepts and principles.",
+  "author": "Avinash Gurugubelli",
+  "date": "2023-10-01",
+  "tags": [
+    "OOP",
+    "programming",
+    "design"
+  ],
+  "id": "object-oriented-programming",
+  "children": [
+    {
+      "id": "01-introduction-md",
+      "label": "01-introduction.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/01-introduction.md",
+      "path": "blogs/oops/01-introduction.md",
+      "date": "July 16, 2025",
+      "createdOn": "2025-07-16 14:03:18",
+      "author": "Avinash Gurugubelli",
+      "title": "Introduction to Object-Oriented Programming (OOP)",
+      "description": "An overview of the key concepts and principles of Object-Oriented Programming.",
+      "tags": [
+        "OOP",
+        "Programming",
+        "Software Development"
+      ],
+      "references": []
+    },
+    {
+      "id": "02-encapsulation-and-abstraction-md",
+      "label": "02-encapsulation-and-abstraction.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/02-encapsulation-and-abstraction.md",
+      "path": "blogs/oops/02-encapsulation-and-abstraction.md",
+      "date": "July 16, 2025",
+      "createdOn": "2025-07-16 14:03:18",
+      "author": "Avinash Gurugubelli",
+      "title": "Encapsulation and Abstraction",
+      "description": "A deep dive into the concepts of encapsulation and abstraction in Object-Oriented Programming.",
+      "tags": [
+        "OOP",
+        "Encapsulation",
+        "Abstraction",
+        "Software Development"
+      ],
+      "references": []
+    },
+    {
+      "id": "03-inheritance-md",
+      "label": "03-inheritance.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/03-inheritance.md",
+      "path": "blogs/oops/03-inheritance.md",
+      "date": "2023-10-01",
+      "createdOn": "2025-07-16 14:03:18",
+      "title": "Inheritance in OOP: When to Use and When to Avoid",
+      "description": "Learn about inheritance in Object-Oriented Programming, its benefits, pitfalls, and when to prefer composition over inheritance.",
+      "tags": [
+        "OOP",
+        "Inheritance",
+        "Java",
+        "Programming"
+      ],
+      "author": "Avinash Gurugubelli"
+    },
+    {
+      "id": "04-polymorphism-md",
+      "label": "04-polymorphism.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/04-polymorphism.md",
+      "path": "blogs/oops/04-polymorphism.md",
+      "date": "2023-10-01",
+      "createdOn": "2025-07-16 14:03:18",
+      "author": "Avinash Gurugubelli",
+      "title": "Polymorphism in Object-Oriented Programming",
+      "description": "A comprehensive guide to understanding polymorphism in object-oriented programming with Java examples.",
+      "tags": [
+        "polymorphism",
+        "OOP",
+        "Java",
+        "method overriding",
+        "method overloading"
+      ]
+    },
+    {
+      "id": "05-abstractclass-and-interface-md",
+      "label": "05-abstractClass-and-interface.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/05-abstractClass-and-interface.md",
+      "path": "blogs/oops/05-abstractClass-and-interface.md",
+      "date": "2023-10-01",
+      "createdOn": "2025-07-16 14:03:18",
+      "author": "Avinash Gurugubelli",
+      "title": "Abstract Class vs Interface in OOPS (With Java Examples)",
+      "description": "A comprehensive guide to understanding abstract classes and interfaces in Object-Oriented Programming with Java examples.",
+      "tags": [
+        "OOP",
+        "Abstract Class",
+        "Interface",
+        "Java"
+      ],
+      "references": []
+    },
+    {
+      "id": "06-class-diagrams-md",
+      "label": "06-class-diagrams.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/06-class-diagrams.md",
+      "path": "blogs/oops/06-class-diagrams.md",
+      "date": "2023-10-01",
+      "createdOn": "2025-07-16 14:03:18",
+      "author": "Avinash Gurugubelli",
+      "title": "Class Diagrams",
+      "description": "A comprehensive guide to understanding class diagrams in Object-Oriented Programming with Java examples.",
+      "tags": [
+        "OOPS",
+        "Class Diagrams",
+        "UML",
+        "Java"
+      ],
+      "references": []
+    },
+    {
+      "id": "07-class-relationships-in-oops-md",
+      "label": "07-class-relationships-in-oops.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/07-class-relationships-in-oops.md",
+      "path": "blogs/oops/07-class-relationships-in-oops.md",
+      "date": "2023-10-01",
+      "createdOn": "2025-07-16 14:03:18",
+      "author": "Avinash Gurugubelli",
+      "title": "Class Relationships in Object-Oriented Programming",
+      "description": "In object-oriented programming, classes often interact with each other. These **class relationships** define how objects are connected, organized, and collaborate to form a complete system. Understanding these relationships is essential for designing scalable and maintainable software.",
+      "tags": [
+        "OOPS",
+        "Class Diagrams",
+        "UML",
+        "",
+        ""
+      ],
+      "references": []
+    },
+    {
+      "id": "08-multiplicity-md",
+      "label": "08-multiplicity.md",
+      "type": "file",
+      "sourcePath": "https://github.com/Avinashgurugubelli/avi-tech-blogs/blob/main/src/blogs/oops/08-multiplicity.md",
+      "path": "blogs/oops/08-multiplicity.md",
+      "date": "2023-10-01",
+      "createdOn": "2025-07-16 14:03:18",
+      "author": "Avinash Gurugubelli",
+      "title": "Multiplicity",
+      "description": "Multiplicity defines how many instances of one class can be associated with **a single instance** of another class in a relationship. It sets constraints on **how many objects can participate** in the relationship.",
+      "tags": [
+        "OOPS",
+        "Class Diagrams",
+        "Multiplicity"
+      ],
+      "references": []
+    }
+  ]
+}
