@@ -38,12 +38,13 @@ export class BlogService {
   }
 
   /**
-   * Convert title to dash-separated URL format
+   * Convert title to dash-separated URL format, removing number prefixes
    */
   static generateUrlSlug(title: string): string {
     if (!title) return '';
     return title
       .toLowerCase()
+      .replace(/^\d+[-.]/, '') // Remove number prefixes like "07-" or "01."
       .replace(/[^\w\s-]/g, '') // Remove special characters except spaces and dashes
       .replace(/\s+/g, '-')     // Replace spaces with dashes
       .replace(/-+/g, '-')      // Replace multiple dashes with single dash
@@ -52,7 +53,7 @@ export class BlogService {
   }
 
   /**
-   * Convert filename to dash-separated format
+   * Convert filename to dash-separated format, removing number prefixes
    */
   static generateFileSlug(filename: string): string {
     if (!filename) return '';
@@ -112,7 +113,7 @@ export class BlogService {
   }
 
   /**
-   * Generate URL path for blog item using dash-separated format
+   * Generate URL path for blog item using dash-separated format, removing number prefixes
    */
   static generateBlogPath(item: BlogItem): string {
     if (item.type === "file" && item.path) {
@@ -158,6 +159,22 @@ export class BlogService {
         const currentDirPath = [...parentPath, this.generateBlogPath(item)];
         const result = this.findParentPath(item.children, targetItem, currentDirPath);
         if (result) return result;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Find blog item by actual file path from index.json
+   */
+  static findBlogItemByFilePath(items: BlogItem[], targetPath: string): BlogItem | null {
+    for (const item of items) {
+      if (item.type === "file" && item.path === targetPath) {
+        return item;
+      }
+      if (item.type === "directory" && item.children) {
+        const found = this.findBlogItemByFilePath(item.children, targetPath);
+        if (found) return found;
       }
     }
     return null;

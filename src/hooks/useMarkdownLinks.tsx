@@ -1,9 +1,9 @@
 
 import { useNavigate, useParams } from "react-router-dom";
-import { BlogDirectory, BlogFile } from "@/models/blog";
+import { BlogDirectory, BlogFile, BlogItem } from "@/models/blog";
 import { BlogService } from "@/services/blogService";
 
-export const useMarkdownLinks = (item: BlogDirectory | BlogFile) => {
+export const useMarkdownLinks = (item: BlogDirectory | BlogFile, blogItems: BlogItem[]) => {
   const navigate = useNavigate();
   const { categoryId } = useParams();
 
@@ -14,89 +14,72 @@ export const useMarkdownLinks = (item: BlogDirectory | BlogFile) => {
     if (href.endsWith('.md') && !href.startsWith('http')) {
       console.log("Processing relative markdown link:", href);
       
+      let targetPath = '';
+      
       // Handle relative paths with ../
       if (href.startsWith('../')) {
         console.log("Processing relative path with ../");
         
-        // Remove the ../ prefix and get the remaining path
-        const relativePath = href.replace(/^\.\.\//, '');
-        console.log("Relative path after removing ../:", relativePath);
+        if (item.type === "file" && item.path) {
+          // Get the current file's directory
+          const currentDirParts = item.path.split('/').slice(0, -1); // Remove filename
+          console.log("Current directory parts:", currentDirParts);
+          
+          // Process the relative path
+          const relativeParts = href.split('/');
+          let resultPath = [...currentDirParts];
+          
+          for (const part of relativeParts) {
+            if (part === '..') {
+              resultPath.pop(); // Go up one directory
+            } else if (part && part !== '.') {
+              resultPath.push(part);
+            }
+          }
+          
+          targetPath = '/' + resultPath.join('/');
+          console.log("Constructed target path:", targetPath);
+        }
+      } else {
+        // Handle same-directory relative paths
+        if (item.type === "file" && item.path) {
+          const currentDir = item.path.split('/').slice(0, -1).join('/');
+          targetPath = `${currentDir}/${href.replace('./', '')}`;
+          if (!targetPath.startsWith('/')) {
+            targetPath = '/' + targetPath;
+          }
+          console.log("Same directory target path:", targetPath);
+        }
+      }
+      
+      // Find the blog item using the actual file path
+      const foundItem = BlogService.findBlogItemByFilePath(blogItems, targetPath);
+      console.log("Found blog item by path:", foundItem);
+      
+      if (foundItem) {
+        // Generate the correct URL path using parent hierarchy
+        const parentPath = BlogService.findParentPath(blogItems, foundItem);
+        const itemPath = BlogService.generateBlogPath(foundItem);
         
-        // Split the path to get folder and filename
-        const pathParts = relativePath.split('/');
-        const filename = pathParts[pathParts.length - 1]; // Get the last part (filename)
-        const folderParts = pathParts.slice(0, -1); // Get all parts except filename
-        
-        console.log("Path analysis:", { pathParts, filename, folderParts });
-        
-        // Convert folder parts to URL format (remove numbering prefixes)
-        const urlFolderParts = folderParts.map(folder => {
-          const cleanFolder = folder.replace(/^\d+[-.]/, ''); // Remove numbering like "01-" or "01."
-          return BlogService.generateUrlSlug(cleanFolder);
-        });
-        
-        // Convert filename to URL format
-        const fileSlug = BlogService.generateFileSlug(filename);
-        
-        // Construct the full URL path
-        let fullUrlPath = fileSlug;
-        if (urlFolderParts.length > 0) {
-          fullUrlPath = [...urlFolderParts, fileSlug].join('/');
+        let fullUrlPath = itemPath;
+        if (parentPath && parentPath.length > 0) {
+          fullUrlPath = [...parentPath, itemPath].join('/');
         }
         
         const newUrl = `/blogs/${categoryId}/${fullUrlPath}`;
-        console.log("Navigating to relative path:", newUrl);
+        console.log("Navigating to:", newUrl);
         navigate(newUrl);
         return false;
-      }
-      
-      // Handle same-directory relative paths (./filename.md or just filename.md)
-      let filename = href.replace('./', '');
-      console.log("Processing same-directory filename:", filename);
-      
-      // Generate the basic slug
-      const fileSlug = BlogService.generateFileSlug(filename);
-      console.log("Generated file slug:", fileSlug);
-      
-      // Build the full nested path based on the current item's path structure
-      let fullPath = '';
-      
-      if (item.type === "file" && item.path) {
-        // Get the directory structure from the current file's path
-        const pathParts = item.path.split('/').filter(Boolean);
-        console.log("Current item path parts:", pathParts);
-        
-        // Find where the category starts in the path
-        const categoryIndex = pathParts.findIndex(part => part === categoryId);
-        console.log("Category index:", categoryIndex);
-        
-        if (categoryIndex !== -1 && categoryIndex + 1 < pathParts.length - 1) {
-          // Take everything after the category but before the filename
-          const directoryParts = pathParts.slice(categoryIndex + 1, -1);
-          console.log("Directory parts:", directoryParts);
-          
-          if (directoryParts.length > 0) {
-            // Convert directory names to URL format (remove numbering prefixes)
-            const urlDirectoryParts = directoryParts.map(part => {
-              const cleanPart = part.replace(/^\d+[-.]/, '');
-              return BlogService.generateUrlSlug(cleanPart);
-            });
-            fullPath = `${urlDirectoryParts.join('/')}/${fileSlug}`;
-          } else {
-            fullPath = fileSlug;
-          }
-        } else {
-          fullPath = fileSlug;
-        }
       } else {
-        fullPath = fileSlug;
+        console.log("Blog item not found for path:", targetPath);
+        // Fallback: try to extract filename and search by that
+        const filename = href.split('/').pop()?.replace('.md', '') || '';
+        const fileSlug = BlogService.generateFileSlug(filename + '.md');
+        const fallbackUrl = `/blogs/${categoryId}/${fileSlug}`;
+        console.log("Fallback navigation to:", fallbackUrl);
+        navigate(fallbackUrl);
+        return false;
       }
-      
-      const newUrl = `/blogs/${categoryId}/${fullPath}`;
-      console.log("Navigating to same-directory:", newUrl);
-      
-      navigate(newUrl);
-      return false;
     }
     return true;
   };

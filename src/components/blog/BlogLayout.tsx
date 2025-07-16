@@ -4,7 +4,6 @@ import { BlogSidebar } from "./BlogSidebar";
 import { BlogArticle } from "./BlogArticle";
 import { EmptyBlogState } from "./EmptyBlogState";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface BlogLayoutProps {
   blogItems: BlogItem[];
@@ -51,7 +50,7 @@ export const BlogLayout = ({ blogItems, selectedItem, selectedPath, onItemClick 
                 </h2>
               </div>
               
-              <ScrollArea className="h-[calc(100vh-300px)]">
+              <div className="overflow-y-auto h-[calc(100vh-300px)]">
                 <div className="p-4">
                   <BlogSidebar 
                     blogItems={blogItems}
@@ -59,7 +58,7 @@ export const BlogLayout = ({ blogItems, selectedItem, selectedPath, onItemClick 
                     selectedPath={selectedPath}
                   />
                 </div>
-              </ScrollArea>
+              </div>
             </div>
           </ResizablePanel>
           
