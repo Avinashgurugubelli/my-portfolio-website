@@ -64,7 +64,7 @@ export const useSimpleSearch = () => {
                 item: {
                   id: post.id,
                   type: "file",
-                  path: post.path || post.contentPath || '',
+                  path: post.contentPath || post.contentUrl || '',
                   title: post.title || '',
                   description: post.description,
                   date: post.date,
