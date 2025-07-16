@@ -14,6 +14,7 @@ export const useWebWorkerSearch = () => {
   const [isLoading, setIsLoading] = useState(true);
   const workerRef = useRef<Worker | null>(null);
   const [searchCache, setSearchCache] = useState<Map<string, SearchResult[]>>(new Map());
+  const [allItems, setAllItems] = useState<SearchResult[]>([]);
 
   useEffect(() => {
     // Initialize the web worker
@@ -23,11 +24,16 @@ export const useWebWorkerSearch = () => {
       });
 
       workerRef.current.onmessage = (event) => {
-        const { type, data, query } = event.data;
+        const { type, data, query, error } = event.data;
         
         if (type === 'SEARCH_RESULTS') {
           setSearchCache(prev => new Map(prev.set(query, data)));
         } else if (type === 'INIT_COMPLETE') {
+          setIsLoading(false);
+          setAllItems(data || []);
+          console.log('Search worker initialized successfully');
+        } else if (type === 'INIT_ERROR') {
+          console.error('Search worker initialization error:', error);
           setIsLoading(false);
         }
       };
@@ -73,6 +79,7 @@ export const useWebWorkerSearch = () => {
 
   return {
     searchResults,
-    isLoading
+    isLoading,
+    allItems
   };
 };

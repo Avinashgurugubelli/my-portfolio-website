@@ -4,6 +4,7 @@ import { BlogSidebar } from "./BlogSidebar";
 import { BlogArticle } from "./BlogArticle";
 import { EmptyBlogState } from "./EmptyBlogState";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface BlogLayoutProps {
   blogItems: BlogItem[];
@@ -25,7 +26,7 @@ export const BlogLayout = ({ blogItems, selectedItem, selectedPath, onItemClick 
     <div className="flex h-[calc(100vh-200px)]">
       {/* Mobile View - No resizable panels */}
       <div className="lg:hidden flex w-full">
-        <div className="flex-1 min-h-full">
+        <ScrollArea className="flex-1 min-h-full">
           {selectedItem ? (
             <BlogArticle 
               selectedItem={selectedItem} 
@@ -35,32 +36,38 @@ export const BlogLayout = ({ blogItems, selectedItem, selectedPath, onItemClick 
           ) : (
             <EmptyBlogState />
           )}
-        </div>
+        </ScrollArea>
       </div>
 
       {/* Desktop View - Resizable panels */}
       <div className="hidden lg:flex w-full">
         <ResizablePanelGroup direction="horizontal" className="w-full">
           <ResizablePanel defaultSize={25} minSize={20} maxSize={40}>
-            <BlogSidebar 
-              blogItems={blogItems}
-              onItemClick={onItemClick}
-              selectedPath={selectedPath}
-            />
+            <ScrollArea className="h-full">
+              <BlogSidebar 
+                blogItems={blogItems}
+                onItemClick={onItemClick}
+                selectedPath={selectedPath}
+              />
+            </ScrollArea>
           </ResizablePanel>
           
           <ResizableHandle withHandle />
           
           <ResizablePanel defaultSize={75} minSize={60}>
-            {selectedItem ? (
-              <BlogArticle 
-                selectedItem={selectedItem} 
-                blogItems={blogItems}
-                onItemClick={onItemClick}
-              />
-            ) : (
-              <EmptyBlogState />
-            )}
+            <ScrollArea className="h-full">
+              <div className="p-6">
+                {selectedItem ? (
+                  <BlogArticle 
+                    selectedItem={selectedItem} 
+                    blogItems={blogItems}
+                    onItemClick={onItemClick}
+                  />
+                ) : (
+                  <EmptyBlogState />
+                )}
+              </div>
+            </ScrollArea>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
