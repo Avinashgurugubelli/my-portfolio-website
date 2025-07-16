@@ -84,6 +84,7 @@ export type PersonalInfo = {
     type: "file";
     path: string;
     title: string;
+    sourcePath?: string; // Optional source path for local files
     description?: string;
     date?: string;
     createdOn?: string;
@@ -95,6 +96,7 @@ export type PersonalInfo = {
   export type BlogDirectory = {
     id: string;
     type: "directory";
+    sourcePath?: string; // Optional source path for local files
     title: string;
     description?: string;
     author?: string;

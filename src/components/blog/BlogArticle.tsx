@@ -54,7 +54,7 @@ export const BlogArticle = ({ selectedItem, blogItems, onItemClick }: BlogArticl
               </div>
             )}
             
-            {sourceUrl && (
+            {selectedItem.sourcePath && (
               <Button
                 variant="outline"
                 size="sm"
@@ -62,7 +62,7 @@ export const BlogArticle = ({ selectedItem, blogItems, onItemClick }: BlogArticl
                 className="h-8"
               >
                 <a 
-                  href={sourceUrl} 
+                  href={selectedItem.sourcePath} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
