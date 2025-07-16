@@ -15,22 +15,18 @@ const initializeIndex = async () => {
   try {
     console.log('Initializing search worker...');
     
-    // Fetch the blogs data
-    const response = await fetch('/config/blogs.json');
-    if (!response.ok) {
-      throw new Error(`Failed to fetch blogs data: ${response.status}`);
-    }
+    // Import the blogs data directly instead of fetching
+    const blogsData = await import('../config/blogs.json');
+    console.log('Blogs data loaded:', blogsData.default);
     
-    const blogsData = await response.json();
-    console.log('Blogs data fetched:', blogsData);
-    
-    if (!blogsData.categories || !Array.isArray(blogsData.categories)) {
+    const data = blogsData.default;
+    if (!data.categories || !Array.isArray(data.categories)) {
       throw new Error('Invalid blogs data structure - categories not found or not an array');
     }
 
     const allItems: SearchResult[] = [];
     
-    for (const category of blogsData.categories) {
+    for (const category of data.categories) {
       if (category.indexUrl) {
         // Fetch nested structure
         try {
