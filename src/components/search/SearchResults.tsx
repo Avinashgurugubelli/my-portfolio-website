@@ -78,6 +78,7 @@ export default function SearchResults({
             key={`${result.categoryId}-${result.item.id}-${index}`}
             result={result}
             searchQuery={searchQuery}
+            index={index}
             onClick={() => onResultClick(result)}
           />
         ))}
