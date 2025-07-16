@@ -29,4 +29,13 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
+  // Worker configuration
+  worker: {
+    format: 'es',
+    rollupOptions: {
+      output: {
+        format: 'es'
+      }
+    }
+  },
 }));

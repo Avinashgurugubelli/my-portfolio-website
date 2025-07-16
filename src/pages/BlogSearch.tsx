@@ -6,14 +6,14 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchHeader from "@/components/search/SearchHeader";
 import SearchResults from "@/components/search/SearchResults";
-import { useWebWorkerSearch } from "@/hooks/useWebWorkerSearch";
+import { useSimpleSearch } from "@/hooks/useSimpleSearch";
 import { BlogService } from "@/services/blogService";
 
 const BlogSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
-  const { searchResults, isLoading } = useWebWorkerSearch();
+  const { searchResults, isLoading } = useSimpleSearch();
 
   // Update URL when search changes
   useEffect(() => {

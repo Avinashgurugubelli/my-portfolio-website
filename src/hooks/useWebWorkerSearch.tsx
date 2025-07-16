@@ -19,7 +19,8 @@ export const useWebWorkerSearch = () => {
   useEffect(() => {
     // Initialize the web worker
     try {
-      workerRef.current = new Worker(new URL('../workers/searchWorker.ts', import.meta.url), {
+      // Use dynamic import instead of new URL() to avoid Vite worker bundling issues
+      workerRef.current = new Worker('/src/workers/searchWorker.ts', {
         type: 'module'
       });
 
