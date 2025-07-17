@@ -25,8 +25,8 @@ dist-ssr
 
 blog-temp
 
-# public/blogs/system-design
-# public/blogs/info.json
-# public/blogs/oops
-# public/blogs/design-patterns
-# public/blogs/solid-principles
+public/blogs/system-design
+public/blogs/info.json
+public/blogs/oops
+public/blogs/design-patterns
+public/blogs/solid-principles
