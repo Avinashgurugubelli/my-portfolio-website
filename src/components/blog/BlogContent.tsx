@@ -26,7 +26,7 @@ export const BlogContent = ({ item }: BlogContentProps) => {
 
   // Use custom hooks for hash navigation and markdown links
   useHashNavigation(content);
-  const { handleMarkdownLinkClick } = useMarkdownLinks(item);
+  const { handleMarkdownLinkClick } = useMarkdownLinks(item, []);
 
   if (isLoading) {
     return (
