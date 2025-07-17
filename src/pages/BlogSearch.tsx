@@ -12,23 +12,27 @@ import { BlogService } from "@/services/blogService";
 const BlogSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const queryFromUrl = searchParams.get('q') || '';
+  const [searchQuery, setSearchQuery] = useState(queryFromUrl);
   const { searchResults, isLoading } = useSimpleSearch();
 
-  // Sync searchQuery with URL parameters
+  // Sync searchQuery with URL parameters when URL changes
   useEffect(() => {
-    const queryFromUrl = searchParams.get('q') || '';
-    setSearchQuery(queryFromUrl);
+    const urlQuery = searchParams.get('q') || '';
+    if (urlQuery !== searchQuery) {
+      setSearchQuery(urlQuery);
+    }
   }, [searchParams]);
 
-  // Update URL when search changes
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      setSearchParams({ q: searchQuery });
+  // Update URL only when user types in the search box (not when syncing from URL)
+  const handleSearchChange = (newQuery: string) => {
+    setSearchQuery(newQuery);
+    if (newQuery.trim()) {
+      setSearchParams({ q: newQuery });
     } else {
       setSearchParams({});
     }
-  }, [searchQuery, setSearchParams]);
+  };
 
   const handleResultClick = (result: any) => {
     console.log('Search result clicked:', result);
@@ -92,7 +96,7 @@ const BlogSearch = () => {
           <div className="max-w-4xl mx-auto px-4">
             <SearchHeader 
               searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
+              onSearchChange={handleSearchChange}
             />
             
             <SearchResults
