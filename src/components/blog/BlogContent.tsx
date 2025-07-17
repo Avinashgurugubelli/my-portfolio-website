@@ -1,7 +1,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BlogDirectory, BlogFile } from "@/models/blog";
+import { BlogDirectory, BlogFile, BlogItem } from "@/models/blog";
 import { BlogService } from "@/services/blogService";
 import { useHashNavigation } from "@/hooks/useHashNavigation";
 import { useMarkdownLinks } from "@/hooks/useMarkdownLinks";
@@ -9,9 +9,10 @@ import { MarkdownRenderer } from "./MarkdownRenderer";
 
 interface BlogContentProps {
   item: BlogDirectory | BlogFile;
+  blogItems: BlogItem[];
 }
 
-export const BlogContent = ({ item }: BlogContentProps) => {
+export const BlogContent = ({ item, blogItems }: BlogContentProps) => {
   const { data: content, isLoading, error } = useQuery({
     queryKey: ['blogContent', item.type === "file" ? item.path : item.id],
     queryFn: async () => {
@@ -26,7 +27,7 @@ export const BlogContent = ({ item }: BlogContentProps) => {
 
   // Use custom hooks for hash navigation and markdown links
   useHashNavigation(content);
-  const { handleMarkdownLinkClick } = useMarkdownLinks(item, []);
+  const { handleMarkdownLinkClick } = useMarkdownLinks(item, blogItems);
 
   if (isLoading) {
     return (

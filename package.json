@@ -5,9 +5,10 @@
   "version": "1.5.1",
   "type": "module",
   "scripts": {
+    "create-symlink-blogs": "node scripts/createSymlinks.js",
     "sync-blog": "node scripts/syncBlogAndBuild.js",
     "start": "vite",
-    "dev": "npm run sync-blog && vite",
+    "dev": "npm run sync-blog && npm run create-symlink-blogs && vite",
     "build:app": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
