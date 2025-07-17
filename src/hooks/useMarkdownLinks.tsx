@@ -69,6 +69,9 @@ export const useMarkdownLinks = (item: BlogDirectory | BlogFile, blogItems: Blog
         const newUrl = `/blogs/${categoryId}/${fullUrlPath}`;
         console.log("Navigating to:", newUrl);
         navigate(newUrl);
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
         return false;
       } else {
         console.log("Blog item not found for path:", targetPath);
