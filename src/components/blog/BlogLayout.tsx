@@ -50,14 +50,12 @@ export const BlogLayout = ({ blogItems, selectedItem, selectedPath, onItemClick 
                 </h2>
               </div>
               
-              <div className="overflow-y-auto h-[calc(100vh-300px)]">
-                <div className="p-4">
-                  <BlogSidebar 
-                    blogItems={blogItems}
-                    onItemClick={onItemClick}
-                    selectedPath={selectedPath}
-                  />
-                </div>
+              <div className="p-4">
+                <BlogSidebar 
+                  blogItems={blogItems}
+                  onItemClick={onItemClick}
+                  selectedPath={selectedPath}
+                />
               </div>
             </div>
           </ResizablePanel>

@@ -35,13 +35,27 @@ const Navbar = () => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Calculate offset for fixed navbar (80px total: 40px contact ribbon + 64px navbar) plus padding
+      const offset = 140;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
   const handleNavClick = (e: React.MouseEvent, href: string, section: string) => {
     e.preventDefault();
     closeMenu();
+    
+    if (href === '/' && location.pathname === '/') {
+      // Already on home, scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     
     if (href === '/blogs' || href === '/nested-blogs') {
       navigate(href);
@@ -54,7 +68,7 @@ const Navbar = () => {
       if (location.pathname !== '/') {
         // Navigate to home first, then scroll
         navigate('/');
-        setTimeout(() => scrollToSection(sectionId), 100);
+        setTimeout(() => scrollToSection(sectionId), 200);
       } else {
         // Already on home, just scroll
         scrollToSection(sectionId);
