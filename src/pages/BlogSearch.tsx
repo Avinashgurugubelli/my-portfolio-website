@@ -12,8 +12,14 @@ import { BlogService } from "@/services/blogService";
 const BlogSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [searchQuery, setSearchQuery] = useState('');
   const { searchResults, isLoading } = useSimpleSearch();
+
+  // Sync searchQuery with URL parameters
+  useEffect(() => {
+    const queryFromUrl = searchParams.get('q') || '';
+    setSearchQuery(queryFromUrl);
+  }, [searchParams]);
 
   // Update URL when search changes
   useEffect(() => {
