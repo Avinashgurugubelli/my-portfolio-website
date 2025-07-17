@@ -32,14 +32,17 @@ const SearchResultCard = ({ result, searchQuery, index, onClick }: SearchResultC
   const highlightText = (text: string, query: string) => {
     if (!query.trim()) return text;
     
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    const parts = text.split(regex);
+    const terms = query.toLowerCase().split(/\s+/).filter(term => term.length > 0);
+    let highlightedText = text;
     
-    return parts.map((part, i) => 
-      regex.test(part) ? 
-        <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">{part}</mark> : 
-        part
-    );
+    terms.forEach(term => {
+      const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      highlightedText = highlightedText.replace(regex, (match) => 
+        `<mark class="bg-yellow-300 dark:bg-yellow-600 text-black dark:text-white px-1 rounded font-medium">${match}</mark>`
+      );
+    });
+    
+    return <span dangerouslySetInnerHTML={{ __html: highlightedText }} />;
   };
 
   return (

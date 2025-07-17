@@ -137,7 +137,8 @@ export const searchBlogItems = (allBlogItems: SearchResult[], searchQuery: strin
     return { ...result, relevanceScore: score };
   });
   
+  // Filter out results with very low scores and only return meaningful matches
   return scoredResults
-    .filter(result => result.relevanceScore > 0)
+    .filter(result => result.relevanceScore >= 2) // Increased threshold for more relevant results
     .sort((a, b) => b.relevanceScore - a.relevanceScore);
 };

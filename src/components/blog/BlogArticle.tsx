@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BlogItem } from "@/models/blog";
 import { BlogService } from "@/services/blogService";
 import { MarkdownRenderer } from "./MarkdownRenderer";
+import { NextArticleButton } from "./NextArticleButton";
 import { useMarkdownLinks } from "@/hooks/useMarkdownLinks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -61,6 +62,14 @@ export const BlogArticle = ({ selectedItem, blogItems, onItemClick }: BlogArticl
         content={content || ''} 
         onLinkClick={handleMarkdownLinkClick}
       />
+      
+      {selectedItem.type === "file" && (
+        <NextArticleButton 
+          blogItems={blogItems}
+          currentItem={selectedItem}
+          onItemClick={onItemClick}
+        />
+      )}
     </div>
   );
 };
