@@ -2,7 +2,7 @@
 import { BlogCategory, BlogsData, NestedBlogIndex, BlogItem } from "@/models/blog";
 
 // read json from /config/blogs.json
-import blobData  from './../config/blogs.json';
+import blobData from './../config/blogs.json';
 
 /**
  * Service for handling blog data operations
@@ -57,7 +57,7 @@ export class BlogService {
    */
   static generateFileSlug(filename: string): string {
     if (!filename) return '';
-    
+
     // Remove file extension and convert to slug
     const nameWithoutExt = filename.replace(/\.(md|txt)$/i, '');
     return this.generateUrlSlug(nameWithoutExt);
@@ -68,47 +68,47 @@ export class BlogService {
    */
   static findBlogItemByPath(items: BlogItem[], pathSegments: string[]): BlogItem | null {
     if (pathSegments.length === 0) return null;
-    
+
     console.log("Finding item by path segments:", pathSegments);
     const currentSegment = decodeURIComponent(pathSegments[0]);
     console.log("Current segment:", currentSegment);
-    
+
     const item = items.find(item => {
       // Multiple matching strategies
       const idMatch = item.id === currentSegment;
       const urlSlugMatch = this.generateUrlSlug(item.title) === currentSegment.toLowerCase();
       const titleMatch = item.title.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, '-') === currentSegment.toLowerCase();
       const directTitleMatch = item.title.toLowerCase() === currentSegment.toLowerCase();
-      
+
       // For files, also check filename-based matching
       if (item.type === "file") {
         const filename = item.path.split('/').pop() || '';
         const fileSlugMatch = this.generateFileSlug(filename) === currentSegment.toLowerCase();
         const pathMatch = item.path.toLowerCase().includes(currentSegment.toLowerCase());
-        
+
         console.log(`File ${item.id}: idMatch=${idMatch}, urlSlugMatch=${urlSlugMatch}, titleMatch=${titleMatch}, fileSlugMatch=${fileSlugMatch}, pathMatch=${pathMatch}`);
         return idMatch || urlSlugMatch || titleMatch || directTitleMatch || fileSlugMatch || pathMatch;
       }
-      
+
       console.log(`Directory ${item.id}: idMatch=${idMatch}, urlSlugMatch=${urlSlugMatch}, titleMatch=${titleMatch}, directTitleMatch=${directTitleMatch}`);
       return idMatch || urlSlugMatch || titleMatch || directTitleMatch;
     });
-    
+
     console.log("Found item:", item);
-    
+
     if (!item) {
       console.log("Item not found, available items:", items.map(i => ({ id: i.id, title: i.title, type: i.type, path: i.type === 'file' ? i.path : 'N/A' })));
       return null;
     }
-    
+
     if (pathSegments.length === 1) {
       return item;
     }
-    
+
     if (item.type === "directory" && item.children) {
       return this.findBlogItemByPath(item.children, pathSegments.slice(1));
     }
-    
+
     return null;
   }
 
@@ -132,7 +132,7 @@ export class BlogService {
         // Found the target item, return the path including this item
         return [...currentPath, this.generateBlogPath(item)];
       }
-      
+
       if (item.type === "directory" && item.children) {
         // Add current directory to path and search children
         const childPath = [...currentPath, this.generateBlogPath(item)];
@@ -154,7 +154,7 @@ export class BlogService {
         if (directChild) {
           return [...parentPath, this.generateBlogPath(item)];
         }
-        
+
         // Recursively search in subdirectories
         const currentDirPath = [...parentPath, this.generateBlogPath(item)];
         const result = this.findParentPath(item.children, targetItem, currentDirPath);
@@ -168,8 +168,13 @@ export class BlogService {
    * Find blog item by actual file path from index.json
    */
   static findBlogItemByFilePath(items: BlogItem[], targetPath: string): BlogItem | null {
+    // Normalize both paths by removing leading slashes
+    const normalizedTarget = targetPath.replace(/^\/+/, '');
     for (const item of items) {
-      if (item.type === "file" && item.path === targetPath) {
+      if (
+        item.type === "file" &&
+        item.path.replace(/^\/+/, '') === normalizedTarget
+      ) {
         return item;
       }
       if (item.type === "directory" && item.children) {
