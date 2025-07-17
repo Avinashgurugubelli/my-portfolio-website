@@ -59,7 +59,7 @@ export const SearchPagination = ({
           <SelectTrigger className="w-20">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background border border-border z-50">
             <SelectItem value="12">12</SelectItem>
             <SelectItem value="20">20</SelectItem>
             <SelectItem value="30">30</SelectItem>
