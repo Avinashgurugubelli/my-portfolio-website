@@ -1,6 +1,8 @@
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
+import Mermaid from '@/components/Mermaid';
+
 
 interface MarkdownRendererProps {
   content: string;
@@ -14,13 +16,13 @@ export const MarkdownRenderer = ({ content, onLinkClick }: MarkdownRendererProps
     if (typeof children === 'string') {
       text = children;
     } else if (Array.isArray(children)) {
-      text = children.map(child => 
+      text = children.map(child =>
         typeof child === 'string' ? child : child?.props?.children || ''
       ).join('');
     } else if (children?.props?.children) {
       text = children.props.children;
     }
-    
+
     return text
       .toLowerCase()
       .replace(/[^\w\s-]/g, '') // Remove special characters except hyphens
@@ -66,8 +68,8 @@ export const MarkdownRenderer = ({ content, onLinkClick }: MarkdownRendererProps
           // Custom code block renderer for mobile compatibility
           pre: ({ children, ...props }) => {
             return (
-              <pre 
-                {...props} 
+              <pre
+                {...props}
                 className="overflow-x-auto max-w-full whitespace-pre-wrap break-words bg-muted/30 p-4 rounded-lg text-sm"
               >
                 {children}
@@ -115,12 +117,12 @@ export const MarkdownRenderer = ({ content, onLinkClick }: MarkdownRendererProps
                       const offset = 140;
                       const elementPosition = element.getBoundingClientRect().top;
                       const offsetPosition = elementPosition + window.pageYOffset - offset;
-                      
+
                       window.scrollTo({
                         top: offsetPosition,
                         behavior: 'smooth'
                       });
-                      
+
                       // Update URL hash
                       window.history.pushState(null, '', href);
                     }
@@ -133,6 +135,20 @@ export const MarkdownRenderer = ({ content, onLinkClick }: MarkdownRendererProps
             }
             return <a href={href} {...props} className="break-words">{children}</a>;
           },
+          code: ({ node, className, children, ...props }) => {
+            const match = /language-(\w+)/.exec(className || '');
+            const lang = match?.[1];
+
+            if (lang === 'mermaid') {
+              return <Mermaid chart={String(children).trim()} />;
+            }
+
+            return (
+              <code className={className} {...props}>
+                {children}
+              </code>
+            );
+          }
         }}
       >
         {content || '# Content not found\n\nThe requested content could not be loaded.'}
