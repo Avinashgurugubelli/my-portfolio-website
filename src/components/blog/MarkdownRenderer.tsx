@@ -70,7 +70,7 @@ export const MarkdownRenderer = ({ content, onLinkClick }: MarkdownRendererProps
             return (
               <pre
                 {...props}
-                className="overflow-x-auto max-w-full whitespace-pre-wrap break-words bg-muted/30 p-4 rounded-lg text-sm"
+                className="overflow-x-auto max-w-full whitespace-pre-wrap break-words bg-secondary/50 p-4 rounded-lg text-sm border"
               >
                 {children}
               </pre>
