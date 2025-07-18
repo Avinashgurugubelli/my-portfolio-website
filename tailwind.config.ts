@@ -115,7 +115,7 @@ export default {
 							borderBottomColor: theme('colors.border'),
 						},
 						'td code': {
-							// backgroundColor: 'transparent',
+							backgroundColor: 'transparent',
 							padding: '0',
 							borderRadius: '0',
 							fontWeight: 'normal',
@@ -125,7 +125,7 @@ export default {
 						'td code::before': { content: 'none' },
 						'td code::after': { content: 'none' },
 						'li code': {
-							// backgroundColor: 'transparent',
+							backgroundColor: 'transparent',
 							padding: '0',
 							borderRadius: '0',
 							fontWeight: 'normal',
@@ -136,7 +136,7 @@ export default {
 						'li code::after': { content: 'none' },
 						// ...existing code...
 						'p code': {
-							// backgroundColor: theme('colors.muted.DEFAULT'), // Add a subtle background
+							backgroundColor: theme('colors.muted.DEFAULT'), // Add a subtle background
 							padding: '0.2em 0.4em', // Add some padding for readability
 							borderRadius: '0.25em',
 							fontWeight: 'normal',
@@ -213,7 +213,7 @@ export default {
 							borderBottomColor: theme('colors.border'),
 						},
 						'td code': {
-							// backgroundColor: 'transparent',
+							backgroundColor: 'transparent',
 							padding: '0',
 							borderRadius: '0',
 							fontWeight: 'normal',
@@ -223,7 +223,7 @@ export default {
 						'td code::before': { content: 'none' },
 						'td code::after': { content: 'none' },
 						'li code': {
-							// backgroundColor: 'transparent',
+							backgroundColor: 'transparent',
 							padding: '0',
 							borderRadius: '0',
 							fontWeight: 'normal',
@@ -233,7 +233,7 @@ export default {
 						'li code::before': { content: 'none' },
 						'li code::after': { content: 'none' },
 						'p code': {
-							// backgroundColor: theme('colors.muted.DEFAULT'), // Add a subtle background
+							backgroundColor: theme('colors.muted.DEFAULT'), // Add a subtle background
 							padding: '0.2em 0.4em', // Add some padding for readability
 							borderRadius: '0.25em',
 							fontWeight: 'normal',
