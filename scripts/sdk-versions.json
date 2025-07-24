@@ -4,7 +4,7 @@
     "description": "A collection of technical blogs covering various topics in software development, system design, and programming. etc.",
     "gitUrl": "https://github.com",
     "repo": "Avinashgurugubelli/avi-tech-blogs",
-    "version": "2.3.7",
+    "version": "2.3.8",
     "artifactPrefix": "blog-artifacts-v"
   }
 }
